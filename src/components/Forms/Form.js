@@ -1,11 +1,9 @@
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import React from "react";
 import {Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
-import {useNavigate} from "react-router-dom";
 function Form() {
-    const navigate = useNavigate();
   return (
     <Stack spacing={2} minWidth="50vw" justifyContent="center" alignItems="center">
         {/* setting routes for switching between the forms */}
@@ -13,13 +11,7 @@ function Form() {
         <Route index element={<Login />}/>
         <Route exact path="login" element={<Login />} />
         <Route exact path="register" element={<Register />} />
-      </Routes>
-      {/* buttons to switch between the forms */}
-      <Stack direction="row" spacing={2} justifyContent="center">
-        <Button variant="contained" disableRipple onClick={()=>{navigate('login')}}>Login</Button>
-        <Button variant="contained" color="secondary" disableRipple onClick={()=>{navigate('register')}}>Register</Button>
-      </Stack>
-      
+      </Routes>      
     </Stack>
   );
 }

@@ -1,30 +1,38 @@
 import {
   Alert,
   Button,
-  ButtonGroup,
+  Link,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 import { Box } from "@mui/system";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import Snackbar from "@mui/material/Snackbar";
+import {useNavigate} from 'react-router-dom'
 function Register() {
-
-  const [open,setOpen] = useState(false);
-  const [error,setError] = useState('');
-  const [message,setMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen(false);
-  }
+  };
   // FETCHING API
   const putData = async (values) => {
+    // clear any messages before hand
+    setMessage("");
+    setError("");
+    // setloading to true
+    setLoading(true);
     values.mobile_number.split("-").join();
     let url = "https://c2c-backend.vercel.app/user/signup";
     let response = await fetch(url, {
@@ -34,15 +42,24 @@ function Register() {
       },
       body: JSON.stringify(values),
     });
+
     let data = await response.json();
     if (data.success) {
+      // setloading to false
+      setLoading(false);
       // snackbar comes here
       setMessage(data.data.data);
       setOpen(true);
       console.log(data);
     } else {
+      // setloading to false
+      setLoading(false);
       // snackbar comes here
-      setError(data.data.error);
+      if (typeof data.data.error === "object") {
+        setError("Please fill all the fields correctly");
+      } else {
+        setError(data.data.error);
+      }
       setOpen(true);
       console.log(data);
     }
@@ -76,7 +93,7 @@ function Register() {
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
         display: "flex",
-        alignItems: "center",
+        alignItems: "left",
         justifyContent: "center",
         flexDirection: "column",
         margin: "2rem",
@@ -90,8 +107,8 @@ function Register() {
       onSubmit={formik.handleSubmit}
     >
       {/* FORM HEADING */}
-      <Typography variant="h6" m={2}>
-        Login Form
+      <Typography textAlign="center"variant="h6" m={2}>
+        Registration Form
       </Typography>
 
       {/* REGISTRATION NUMBER */}
@@ -103,7 +120,7 @@ function Register() {
         placeholder="Registration Number"
         onChange={formik.handleChange}
         value={formik.values.registration_number}
-        style={{ width: "100%" }}
+        style={{ width: "100%",margin:"0" }}
         size="medium"
         autoFocus
         InputLabelProps={{
@@ -144,10 +161,11 @@ function Register() {
           }}
         />
       </Stack>
-      
+
       {/* PHONE NUMBER */}
       <PhoneInput
         country={"in"}
+        placeholder ="+91 12345-66789"
         value={formik.values.mobile_number}
         inputProps={{
           id: "mobile_number",
@@ -171,7 +189,7 @@ function Register() {
         placeholder="Email"
         onChange={formik.handleChange}
         value={formik.values.email}
-        style={{ width: "100%", fontSize: "0.5rem" }}
+        style={{ width: "100%", fontSize: "0.5rem",margin:"0" }}
         size="medium"
         InputLabelProps={{
           shrink: true,
@@ -189,7 +207,7 @@ function Register() {
         placeholder="Password"
         onChange={formik.handleChange}
         value={formik.values.password}
-        style={{ width: "100%" }}
+        style={{ width: "100%",margin:"0" }}
         size="medium"
         autoComplete="current-password"
         InputLabelProps={{
@@ -198,19 +216,24 @@ function Register() {
       />
 
       {/* SUBMIT AND RESET BUTTONS */}
-      <ButtonGroup>
-
+      <Stack direction="row" spacing={2}>
         {/* SUBMIT BUTTON */}
         <Button
           type="submit"
           variant="contained"
           color="warning"
-          sx={{ width: "100px" }}
-          style={{ width: "100%" }}
           size="medium"
           autoComplete="on"
         >
-          Submit
+          {loading && (
+            <>
+              <CircularProgress thickness={6} color="inherit" size="1.2rem" />
+              <Typography variant="subtitle2" style={{ marginLeft: "0.5rem" }}>
+                Registering...
+              </Typography>
+            </>
+          )}
+          {!loading && "SUBMIT"}
         </Button>
 
         {/* RESET BUTTON */}
@@ -218,20 +241,31 @@ function Register() {
           type="reset"
           variant="contained"
           color="warning"
-          sx={{ width: "100px" }}
-          style={{ width: "100%" }}
           size="medium"
           onClick={formik.handleReset}
         >
           Reset
         </Button>
+      </Stack>
 
-      </ButtonGroup>
-      <Snackbar anchorOrigin={{ vertical:"bottom", horizontal:"center" }} open={open} autoHideDuration={2000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={error?"error":"success"} sx={{ width: '100%' }}>
-          {message?message:error}
+      {/* custom snackbar */}
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={error ? "error" : "success"}
+          sx={{ width: "100%" }}
+        >
+          {message ? message : error}
         </Alert>
       </Snackbar>
+      <Link component="button" style={{cursor: "pointer",width:"fit-content"}} onClick={()=>{navigate('/login')}} underline="always">
+        Existing User?
+      </Link>
     </Box>
   );
 }
