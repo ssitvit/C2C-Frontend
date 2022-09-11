@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 function Form() {
     const navigate = useNavigate();
   return (
-    <Stack spacing={4} minWidth="50vw">
+    <Stack spacing={2} minWidth="50vw" justifyContent="center" alignItems="center">
         {/* setting routes for switching between the forms */}
       <Routes>
         <Route index element={<Login />}/>

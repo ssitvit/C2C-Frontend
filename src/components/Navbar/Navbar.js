@@ -7,11 +7,11 @@ function Navbar() {
   return (
     <Box
       sx={{
-        padding: "1rem",
+        padding: "1.2rem",
         // backgroundColor: "#ddd",
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: "space-between",
       }}
     >
       <Logo />
