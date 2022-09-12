@@ -8,9 +8,9 @@ function Form() {
     <Stack spacing={2} minWidth="50vw" justifyContent="center" alignItems="center">
         {/* setting routes for switching between the forms */}
       <Routes>
-        <Route index element={<Login />}/>
-        <Route exact path="login" element={<Login />} />
+        <Route index element={<Register />}/>
         <Route exact path="register" element={<Register />} />
+        <Route exact path="login" element={<Login />} />
       </Routes>      
     </Stack>
   );
