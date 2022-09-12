@@ -28,11 +28,11 @@ function Register() {
   const [fetching, setFetching] = useState();
   const [validationObj, setValidationObj] = useState({
     university: {
-      error: true,
+      error: false,
       message: "",
     },
     registration_number: {
-      error: true,
+      error: false,
       message: "",
     },
     email: {
@@ -40,11 +40,11 @@ function Register() {
       message: "",
     },
     first_name: {
-      error: true,
+      error: false,
       message: "",
     },
     last_name: {
-      error: true,
+      error: false,
       message: "",
     },
     mobile_number: {
@@ -89,7 +89,6 @@ function Register() {
       // snackbar comes here
       setMessage(data.data.data);
       setOpen(true);
-      console.log(data);
       setTimeout(() => {
         navigate("/login");
       }, 800);
@@ -143,12 +142,8 @@ function Register() {
   // to check if there are any errors in
   const checkHandler = () => {
     for (let i in validationObj) {
-      if (validationObj[i].error) {
+      if (validationObj[i].error||formik.values[i]==="") {
         return false;
-      }else if(i==="mobile_number"){
-        if(formik.values[i]===""){
-          return false;
-        }
       }
     }
     return true;
@@ -331,7 +326,7 @@ function Register() {
         label="Registration Number"
         placeholder="Registration Number"
         onChange={handleOnChange}
-        value={formik.values.registration_number.trim()}
+        value={formik.values.registration_number.trim().toUpperCase()}
         style={{ width: "100%", margin: "0" }}
         size="medium"
         InputLabelProps={{
@@ -476,7 +471,7 @@ function Register() {
             <>
               <CircularProgress thickness={6} color="inherit" size="1.2rem" />
               <Typography variant="subtitle2" style={{ marginLeft: "0.5rem" }}>
-                Creating Account...
+                Creating Account..
               </Typography>
             </>
           )}

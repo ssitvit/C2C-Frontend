@@ -22,6 +22,7 @@ function Login() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
+
   const navigate = useNavigate();
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -40,15 +41,30 @@ function Login() {
   // FORM HANDLING LIBRARY
   const formik = useFormik({
     initialValues: {
-      registration_number: "",
+      email:"",
       password: "",
     },
     onSubmit: async (values) => {
-      // form validation
-      
+      if(values.email===""||values.password===""){
+        setOpen(true);
+        setError(true);
+        setMessage("Please fill all the fields");
+      }else if(!values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/)){
+        setOpen(true);
+        setError(true);
+        setMessage("Please Enter a valid email address");
+      }
+      else{
+        setLoading(true);
+      let url ="https://c2c-backend.vercel.app/user/login";
+      fetch(url,{
+        method: "POST",
+        headers:{ "Content-Type": "application/json"},
+        body:JSON.stringify(formik.values)
+      }).then(response =>response.json()).then(data=>{setLoading(false);}).catch(err =>{setLoading(false);console.log(err)})
+    } 
     },
   });
-
   // JSX
   return (
     // FORM COMPONENT
@@ -75,20 +91,23 @@ function Login() {
         Login
       </Typography>
 
-      {/* REGISTRATION NUMBER */}
+      {/* Email */}
       <TextField
         required
-        id="reg"
-        name="registration_number"
-        label="Registration Number"
-        placeholder="Registration Number"
+        id="email"
+        name="email"
+        label="Email ID"
+        placeholder="Email ID"
         onChange={formik.handleChange}
-        value={formik.values.registration_number}
+        value={formik.values.email.trim()}
         style={{ width: "100%",margin:"0" }}
         size="medium"
         autoFocus
         InputLabelProps={{
           shrink: true,
+        }}
+        InputProps={{
+          type:"email"
         }}
         autoComplete="username"
       />
@@ -101,7 +120,7 @@ function Login() {
         label="Password"
         placeholder="Password"
         onChange={formik.handleChange}
-        value={formik.values.password}
+        value={formik.values.password.trim()}
         style={{ width: "100%",margin:"0" }}
         size="medium"
         autoComplete="current-password"
@@ -138,7 +157,7 @@ function Login() {
             <>
               <CircularProgress thickness={6} color="inherit" size="1.2rem" />
               <Typography variant="subtitle2" style={{ marginLeft: "0.5rem" }}>
-                Creating Account...
+                Logging In...
               </Typography>
             </>
           )}
@@ -172,6 +191,8 @@ function Login() {
           {message ? message : error}
         </Alert>
       </Snackbar>}
+
+      {/* link to switch */}
       <Link component="button" style={{cursor: "pointer",width:"fit-content"}} onClick={()=>{navigate('/register')}} underline="always">
         Create an Account
       </Link>
