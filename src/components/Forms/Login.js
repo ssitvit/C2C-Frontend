@@ -1,3 +1,5 @@
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import {
   Alert,
   Button,
@@ -17,6 +19,8 @@ import Snackbar from "@mui/material/Snackbar";
 import {useNavigate} from 'react-router-dom'
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 function Login() {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -80,7 +84,7 @@ function Login() {
         padding: "0.2rem",
         gap: "1rem",
         borderRadius: "2rem",
-        width: "70%",
+        width: matches?"70%":"100%",
       }}
       noValidate
       autoComplete="on"

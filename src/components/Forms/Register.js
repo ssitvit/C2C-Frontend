@@ -7,6 +7,8 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import PhoneInput from "react-phone-input-2";
@@ -19,6 +21,8 @@ import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 function Register() {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -268,7 +272,7 @@ function Register() {
         padding: "0.2rem",
         gap: "1rem",
         borderRadius: "2rem",
-        width: "70%",
+        width: matches?"70%":"80%",
       }}
       noValidate
       autoComplete="on"
