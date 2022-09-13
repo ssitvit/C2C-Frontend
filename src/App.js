@@ -6,10 +6,11 @@ import NotFound from "./components/Notfound/NotFound";
 import UserDashboard from "./components/Dashboard/UserDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import CoodDashboard from "./components/Dashboard/CoodDashboard";
+import { Box } from "@mui/material";
 
 function App() {
   return (
-    <>
+    <Box minHeight="100vh">
       <Navbar />
       <Routes>
         <Route exact path="/*" element={<Home />}/>
@@ -19,7 +20,7 @@ function App() {
         <Route exact path="contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+      </Box>
   );
 }
 

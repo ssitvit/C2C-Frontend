@@ -10,6 +10,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import './style.css';
 import CircularProgress from "@mui/material/CircularProgress";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
@@ -102,6 +103,7 @@ function Register() {
       // snackbar comes here
       if (typeof data.data.error === "object") {
         setError("Please fill all the fields correctly");
+        console.log(data.data.error);
       } else {
         setError(data.data.error);
       }
@@ -122,6 +124,7 @@ function Register() {
       mobile_number: "",
     },
     onSubmit: async (values) => {
+      console.log(values)
       if (checkHandler()) {
         try {
           putData(values);
@@ -146,7 +149,7 @@ function Register() {
   // to check if there are any errors in
   const checkHandler = () => {
     for (let i in validationObj) {
-      if (validationObj[i].error||formik.values[i]==="") {
+      if (validationObj[i].error==="true"||formik.values[i]==="") {
         return false;
       }
     }
@@ -160,6 +163,7 @@ function Register() {
     let message = "";
     let name = e.target.name;
     let value = e.target.value;
+    console.log(value)
     // for first and last names
     if (name === "university") {
       if (value === "") {
@@ -285,27 +289,26 @@ function Register() {
 
       <Autocomplete
         disablePortal
-        autoSelect
         autoHighlight
         id="combo-box-demo"
         style={{ "&.input": { width: "100%" } }}
         options={universities}
         loading={fetching}
         loadingText="Loading..."
+        onChange={(e,v)=>{formik.setValues({...formik.values,university:v})}}
         renderInput={(params) => (
           <TextField
             required
             id="university"
             name="university"
-            label="University"
-            onChange={handleOnChange}
-            value={formik.values.university}
+            label="University"    
             error={validationObj.university.error}
             helperText={
               validationObj.university.error
                 ? validationObj.university.message
                 : ""
             }
+            value={formik.values?.university}
             {...params}
             InputLabelProps={{
               shrink: true,
@@ -316,6 +319,7 @@ function Register() {
           />
         )}
       />
+      
       {/* REGISTRATION NUMBER */}
       <TextField
         required
@@ -330,7 +334,7 @@ function Register() {
         label="Registration Number"
         placeholder="Registration Number"
         onChange={handleOnChange}
-        value={formik.values.registration_number.trim().toUpperCase()}
+        value={formik.values.registration_number.toUpperCase()}
         style={{ width: "100%", margin: "0" }}
         size="medium"
         InputLabelProps={{
@@ -386,6 +390,7 @@ function Register() {
       {/* PHONE NUMBER */}
       <PhoneInput
         country={"in"}
+        
         placeholder="+91 12345-66789"
         value={formik.values.mobile_number}
         inputProps={{
@@ -400,6 +405,7 @@ function Register() {
         inputStyle={{ width: "100%",borderColor:`${formik.values.mobile_number===""?"red":""}`,'_focus':{outline: "none"} }}
         buttonStyle={{ background: "none" }}
         localization="in"
+        
       />
 
       {/* EMAIL */}
@@ -466,7 +472,7 @@ function Register() {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
+          color="error"
           size="medium"
           autoComplete="on"
           disabled={loading}
@@ -486,7 +492,7 @@ function Register() {
         <Button
           type="reset"
           variant="contained"
-          color="primary"
+          color="error"
           size="medium"
           onClick={formik.handleReset}
         >

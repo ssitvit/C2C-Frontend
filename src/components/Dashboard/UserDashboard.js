@@ -3,8 +3,8 @@ import {useNavigate} from 'react-router-dom';
 function UserDashboard() {
   const navigate = useNavigate();
   useEffect(()=>{
-    if(!sessionStorage.getItem('token')){
-      navigate('/');
+    if(!document.cookie){
+      navigate('/login');
     }
   })
   return (

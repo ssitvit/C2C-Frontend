@@ -17,7 +17,8 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import Snackbar from "@mui/material/Snackbar";
 import {useNavigate} from 'react-router-dom'
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {Visibility, VisibilityOff } from "@mui/icons-material";
+
 function Login() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -65,8 +66,8 @@ function Login() {
         method: "POST",
         headers:{ "Content-Type": "application/json"},
         body:JSON.stringify(formik.values)
-      }).then(response =>response.json()).then(data=>{setLoading(false);}).catch(err =>{setLoading(false);console.log(err)})
-    } 
+      }).then(response =>response.json()).then(data=>{setLoading(false);console.log(data);document.cookie="hehehe";navigate('/dashboard/user')}).catch(err =>{setLoading(false);console.log(err)})
+    }
     },
   });
   // JSX
