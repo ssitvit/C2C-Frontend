@@ -82,14 +82,20 @@ function Login() {
         justifyContent: "center",
         flexDirection: "column",
         margin: "2rem",
-        padding: "0.2rem",
+        padding: "1.5rem",
         gap: "1rem",
         borderRadius: "2rem",
-        width: matches?"70%":"100%",
+        width: matches?"70%":"80%",
+        position:"relative",
+        transition:'0.3s all ease-in-out',
+        background: "white",
+        boxShadow:"10px 10px 5px 2px rgba(0,0,0,0.5)",
+        "&:hover":{boxShadow:"5px 5px 3px 2px rgba(0,0,0,0.5)"}
       }}
       noValidate
       autoComplete="on"
       onSubmit={formik.handleSubmit}
+      minWidth="27vw"
     >
       {/* FORM HEADING */}
       <Typography textAlign="center"variant="h6" m={2}>
@@ -153,7 +159,7 @@ function Login() {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
+          color="error"
           size="medium"
           autoComplete="on"
           disabled = {loading}
@@ -173,7 +179,7 @@ function Login() {
         <Button
           type="reset"
           variant="contained"
-          color="primary"
+          color="error"
           size="medium"
           onClick={formik.handleReset}
         >
@@ -198,7 +204,7 @@ function Login() {
       </Snackbar>}
 
       {/* link to switch */}
-      <Link component="button" style={{cursor: "pointer",width:"fit-content"}} onClick={()=>{navigate('/register')}} underline="always">
+      <Link component="button" style={{cursor: "pointer",width:"fit-content",color:"#CC0707"}} onClick={()=>{navigate('/register')}} underline="always">
         Create an Account
       </Link>
     </Box>

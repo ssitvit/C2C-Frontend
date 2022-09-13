@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
-import { Avatar, Tooltip } from "@mui/material";
+import { Avatar, Divider, Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
@@ -46,6 +46,7 @@ function Profile() {
         bgcolor: stringToColor(name),
         border: "none",
         cursor: "pointer",
+        color:"white"
       },
       children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
     };
@@ -65,6 +66,7 @@ function Profile() {
                 }}
               >Nanduri Jayant Vishnu
               </Typography>
+              <Divider/>
               <Typography
                 sx={{
                   p: 2,
@@ -74,7 +76,7 @@ function Profile() {
                 }}
               >vishnu@gmail.com
               </Typography>
-              <Button variant="contained" sx={{ width: "100%" }} onClick={()=>{navigate('user')}}>
+              <Button variant="contained" sx={{ width: "100%" }} onClick={()=>{navigate('/dashboard/user')}}>
                 Go To Dashboard
               </Button>
             </Paper>

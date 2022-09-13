@@ -244,7 +244,6 @@ function Register() {
       }
     }
   };
-
   // to fetch universities name from
   useEffect(() => {
     setFetching(true);
@@ -273,10 +272,15 @@ function Register() {
         justifyContent: "center",
         flexDirection: "column",
         margin: "2rem",
-        padding: "0.2rem",
+        padding: "1.5rem",
         gap: "1rem",
         borderRadius: "2rem",
         width: matches?"70%":"80%",
+        position:"relative",
+        transition:'0.3s all ease-in-out',
+        background: "white",
+        boxShadow:"10px 10px 5px 2px rgba(0,0,0,0.5)",
+        "&:hover":{boxShadow:"5px 5px 3px 2px rgba(0,0,0,0.5)"}
       }}
       noValidate
       autoComplete="on"
@@ -402,7 +406,7 @@ function Register() {
         }}
         specialLabel="Mobile Number"
         containerStyle={{ padding: "0" }}
-        inputStyle={{ width: "100%",borderColor:`${formik.values.mobile_number===""?"red":""}`,'_focus':{outline: "none"} }}
+        inputStyle={{ width: "100%",bakcgorundColor:"transparent",outline:"none",borderColor:`${formik.values.mobile_number===""?"red":""}`}}
         buttonStyle={{ background: "none" }}
         localization="in"
         
@@ -519,7 +523,7 @@ function Register() {
       )}
       <Link
         component="button"
-        style={{ cursor: "pointer", width: "fit-content" }}
+        style={{ cursor: "pointer", width: "fit-content",color:"#CC0707" }}
         onClick={() => {
           navigate("/login");
         }}
