@@ -32,7 +32,7 @@ function Register() {
   const [universities, setUniversities] = useState([]);
   const [fetching, setFetching] = useState();
   const [validationObj, setValidationObj] = useState({
-    university: {
+    universityName: {
       error: false,
       message: "",
     },
@@ -86,8 +86,8 @@ function Register() {
       },
       body: JSON.stringify(values),
     });
-
     let data = await response.json();
+    console.log(data);
     if (data.success) {
       // setloading to false
       setLoading(false);
@@ -102,8 +102,9 @@ function Register() {
       setLoading(false);
       // snackbar comes here
       if (typeof data.data.error === "object") {
-        setError("Please fill all the fields correctly");
         console.log(data.data.error);
+        setError("Please fill all the fields correctly");
+        
       } else {
         setError(data.data.error);
       }
@@ -115,7 +116,7 @@ function Register() {
   // FORM HANDLING LIBRARY
   const formik = useFormik({
     initialValues: {
-      university: "",
+      universityName: "",
       registration_number: "",
       first_name: "",
       last_name: "",
@@ -124,7 +125,7 @@ function Register() {
       mobile_number: "",
     },
     onSubmit: async (values) => {
-      console.log(values)
+      console.log(values);
       if (checkHandler()) {
         try {
           putData(values);
@@ -165,15 +166,15 @@ function Register() {
     let value = e.target.value;
     console.log(value)
     // for first and last names
-    if (name === "university") {
+    if (name === "universityName") {
       if (value === "") {
         error = true;
         message = "Field cannot be empty";
-        setValidationObj({ ...validationObj, university: { error, message } });
+        setValidationObj({ ...validationObj, universityName: { error, message } });
       } else {
         setValidationObj({
           ...validationObj,
-          university: { error: false, message: "" },
+          universityName: { error: false, message: "" },
         });
       }
     } else if (name === "registration_number") {
@@ -299,20 +300,20 @@ function Register() {
         options={universities}
         loading={fetching}
         loadingText="Loading..."
-        onChange={(e,v)=>{formik.setValues({...formik.values,university:v})}}
+        onChange={(e,v)=>{formik.setValues({...formik.values,universityName:v})}}
         renderInput={(params) => (
           <TextField
             required
-            id="university"
-            name="university"
-            label="University"    
-            error={validationObj.university.error}
+            id="universityName"
+            name="universityName"
+            label="UniversityName"    
+            error={validationObj.universityName.error}
             helperText={
-              validationObj.university.error
-                ? validationObj.university.message
+              validationObj.universityName.error
+                ? validationObj.universityName.message
                 : ""
             }
-            value={formik.values?.university}
+            value={formik.values?.universityName}
             {...params}
             InputLabelProps={{
               shrink: true,
@@ -406,7 +407,7 @@ function Register() {
         }}
         specialLabel="Mobile Number"
         containerStyle={{ padding: "0" }}
-        inputStyle={{ width: "100%",bakcgorundColor:"transparent",outline:"none",borderColor:`${formik.values.mobile_number===""?"red":""}`}}
+        inputStyle={{ width: "100%",bakcgorundColor:"transparent",outline:"none"}}
         buttonStyle={{ background: "none" }}
         localization="in"
         

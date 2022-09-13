@@ -31,7 +31,7 @@ function Home() {
       >
         <Logo width={220} height={101} />
         <Illustration />
-        <KeyboardDoubleArrowDownTwoToneIcon />
+        {matches && <KeyboardDoubleArrowDownTwoToneIcon color="white" />}
       </Stack>
       <Form />
       <Outlet />
