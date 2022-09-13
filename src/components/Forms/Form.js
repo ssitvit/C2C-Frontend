@@ -11,10 +11,10 @@ function Form() {
     <Stack spacing={2}  justifyContent="center" alignItems="center" minHeight={matches?"":"100vh"}>
         {/* setting routes for switching between the forms */}
       <Routes>
-        <Route index element={<Register />}/>
-        <Route exact path="/register" element={<Register />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
+        <Route exact path="/" element={<Register />}/>
+          <Route exact path="register" element={<Register />} />
+          <Route exact path="login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
       </Routes>
     </Stack>
   );

@@ -1,5 +1,5 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import {
   Alert,
   Button,
@@ -16,12 +16,12 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import Snackbar from "@mui/material/Snackbar";
-import {useNavigate} from 'react-router-dom'
-import {Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Login() {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -35,9 +35,9 @@ function Login() {
     }
     setOpen(false);
   };
-  
+
   const handleClickShowPassword = () => {
-    setShow((prevShow)=>!prevShow);
+    setShow((prevShow) => !prevShow);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -46,28 +46,42 @@ function Login() {
   // FORM HANDLING LIBRARY
   const formik = useFormik({
     initialValues: {
-      email:"",
+      email: "",
       password: "",
     },
     onSubmit: async (values) => {
-      if(values.email===""||values.password===""){
+      if (values.email === "" || values.password === "") {
         setOpen(true);
         setError(true);
         setMessage("Please fill all the fields");
-      }else if(!values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/)){
+      } else if (
+        !values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/)
+      ) {
         setOpen(true);
         setError(true);
         setMessage("Please Enter a valid email address");
-      }
-      else{
+      } else {
         setLoading(true);
-      let url ="https://c2c-backend.vercel.app/user/login";
-      fetch(url,{
-        method: "POST",
-        headers:{ "Content-Type": "application/json"},
-        body:JSON.stringify(formik.values)
-      }).then(response =>response.json()).then(data=>{setLoading(false);console.log(data);}).catch(err =>{setLoading(false);console.log(err)})
-    }
+        let url = "https://c2c-backend.vercel.app/user/login";
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formik.values),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setLoading(false);
+            if(data.success){
+              navigate("/dashboard/user");
+            }else{
+              console.log(data);
+            }
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log(err);
+          });
+      }
     },
   });
   // JSX
@@ -85,20 +99,20 @@ function Login() {
         padding: "1.5rem",
         gap: "1rem",
         borderRadius: "2rem",
-        width: matches?"70%":"80%",
-        position:"relative",
-        transition:'0.3s all ease-in-out',
+        width: matches ? "70%" : "80%",
+        position: "relative",
+        transition: "0.3s all ease-in-out",
         background: "white",
-        boxShadow:"10px 10px 5px 2px rgba(0,0,0,0.5)",
-        "&:hover":{boxShadow:"5px 5px 3px 2px rgba(0,0,0,0.5)"
-      }}}
+        boxShadow: "10px 10px 5px 2px rgba(0,0,0,0.5)",
+        "&:hover": { boxShadow: "5px 5px 3px 2px rgba(0,0,0,0.5)" },
+      }}
       noValidate
       autoComplete="on"
       onSubmit={formik.handleSubmit}
       minWidth="27vw"
     >
       {/* FORM HEADING */}
-      <Typography textAlign="center"variant="h6" m={2}>
+      <Typography textAlign="center" variant="h6" m={2}>
         Login
       </Typography>
 
@@ -111,14 +125,14 @@ function Login() {
         placeholder="Email ID"
         onChange={formik.handleChange}
         value={formik.values.email.trim()}
-        style={{ width: "100%",margin:"0" }}
+        style={{ width: "100%", margin: "0" }}
         size="medium"
         autoFocus
         InputLabelProps={{
           shrink: true,
         }}
         InputProps={{
-          type:"email"
+          type: "email",
         }}
         autoComplete="username"
       />
@@ -126,20 +140,20 @@ function Login() {
       <TextField
         required
         id="password"
-        type={show?"text":"password"}
+        type={show ? "text" : "password"}
         name="password"
         label="Password"
         placeholder="Password"
         onChange={formik.handleChange}
         value={formik.values.password.trim()}
-        style={{ width: "100%",margin:"0" }}
+        style={{ width: "100%", margin: "0" }}
         size="medium"
         autoComplete="current-password"
         InputLabelProps={{
           shrink: true,
         }}
         InputProps={{
-          endAdornment:(
+          endAdornment: (
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle password visibility"
@@ -149,7 +163,8 @@ function Login() {
               >
                 {!show ? <VisibilityOff /> : <Visibility />}
               </IconButton>
-            </InputAdornment>),
+            </InputAdornment>
+          ),
         }}
       />
 
@@ -162,7 +177,7 @@ function Login() {
           color="error"
           size="medium"
           autoComplete="on"
-          disabled = {loading}
+          disabled={loading}
         >
           {loading && (
             <>
@@ -188,23 +203,32 @@ function Login() {
       </Stack>
 
       {/* custom snackbar */}
-      {!loading &&<Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-      >
-        <Alert
+      {!loading && (
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={open}
+          autoHideDuration={2000}
           onClose={handleClose}
-          severity={error ? "error" : "success"}
-          sx={{ width: "100%" }}
         >
-          {message ? message : error}
-        </Alert>
-      </Snackbar>}
+          <Alert
+            onClose={handleClose}
+            severity={error ? "error" : "success"}
+            sx={{ width: "100%" }}
+          >
+            {message ? message : error}
+          </Alert>
+        </Snackbar>
+      )}
 
       {/* link to switch */}
-      <Link component="button" style={{cursor: "pointer",width:"fit-content",color:"#CC0707"}} onClick={()=>{navigate('/register')}} underline="always">
+      <Link
+        component="button"
+        style={{ cursor: "pointer", width: "fit-content", color: "#CC0707" }}
+        onClick={() => {
+          navigate("/register");
+        }}
+        underline="always"
+      >
         Create an Account
       </Link>
     </Box>

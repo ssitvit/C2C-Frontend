@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Contact from "./components/Contact/Contact";
 import Home from "./components/Home/Home";
-// import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 // import NotFound from "./components/Notfound/NotFound";
 import UserDashboard from "./components/Dashboard/UserDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
