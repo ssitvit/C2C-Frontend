@@ -24,8 +24,13 @@
 @keyframes anim2{
     from{
         width:0;
+        /* fill:red; */
+        fill:white;
     }
     to{
         width:100%;
+        /* fill:white; */
+        fill:red;
+        fill-opacity: 0.5;
     }
 }

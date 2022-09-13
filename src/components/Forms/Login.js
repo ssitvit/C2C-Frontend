@@ -90,8 +90,8 @@ function Login() {
         transition:'0.3s all ease-in-out',
         background: "white",
         boxShadow:"10px 10px 5px 2px rgba(0,0,0,0.5)",
-        "&:hover":{boxShadow:"5px 5px 3px 2px rgba(0,0,0,0.5)"}
-      }}
+        "&:hover":{boxShadow:"5px 5px 3px 2px rgba(0,0,0,0.5)"
+      }}}
       noValidate
       autoComplete="on"
       onSubmit={formik.handleSubmit}
