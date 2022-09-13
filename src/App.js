@@ -22,6 +22,7 @@ function App() {
         <Route exact path="dashboard/admin" element={<AdminDashboard />} />
         <Route exact path="dashboard/cood" element={<CoodDashboard />} />
         <Route exact path="contact" element={<Contact />} />
+        <Route exact path="verify/:id/:token" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Box>

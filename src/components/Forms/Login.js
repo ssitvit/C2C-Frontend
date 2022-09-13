@@ -66,7 +66,7 @@ function Login() {
         method: "POST",
         headers:{ "Content-Type": "application/json"},
         body:JSON.stringify(formik.values)
-      }).then(response =>response.json()).then(data=>{setLoading(false);console.log(data);document.cookie="hehehe";navigate('/dashboard/user')}).catch(err =>{setLoading(false);console.log(err)})
+      }).then(response =>response.json()).then(data=>{setLoading(false);console.log(data);}).catch(err =>{setLoading(false);console.log(err)})
     }
     },
   });

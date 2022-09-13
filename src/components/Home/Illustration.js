@@ -5,7 +5,7 @@ import { Stack } from '@mui/material'
 function Illustration() {
   return (
     <Stack direction="column" alignItems="center" justifyContent="center">
-        <PresentsText width={256} height={96}/>
+        <PresentsText width={206} height={96}/>
         <C2c/>
     </Stack>
   )

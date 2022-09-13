@@ -17,17 +17,17 @@ function Home() {
   });
   return (
     <Stack
-      direction="row"
+    direction={matches?"row":"column"}
       spacing={2}
       minHeight="100vh"
       alignItems="center"
       justifyContent="space-around"
     >
-      {matches && <Stack spacing={2} alignItems="center"
-      justifyContent="center">
+      <Stack spacing={2} alignItems="center"
+      justifyContent="center" height={matches?"":"100vh"}>
         <Logo width={220} height={101} />
         <Illustration/>
-      </Stack>}
+      </Stack>
         <Form />
       <Outlet />
     </Stack>
