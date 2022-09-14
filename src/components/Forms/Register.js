@@ -87,7 +87,6 @@ function Register() {
       body: JSON.stringify(values),
     });
     let data = await response.json();
-    console.log(data);
     if (data.success) {
       // setloading to false
       setLoading(false);
@@ -102,14 +101,12 @@ function Register() {
       setLoading(false);
       // snackbar comes here
       if (typeof data.data.error === "object") {
-        console.log(data.data.error);
         setError("Please fill all the fields correctly");
         
       } else {
         setError(data.data.error);
       }
       setOpen(true);
-      console.log(data);
     }
   };
 
@@ -125,7 +122,6 @@ function Register() {
       mobile_number: "",
     },
     onSubmit: async (values) => {
-      console.log(values);
       if (checkHandler()) {
         try {
           putData(values);
@@ -164,7 +160,6 @@ function Register() {
     let message = "";
     let name = e.target.name;
     let value = e.target.value;
-    console.log(value)
     // for first and last names
     if (name === "universityName") {
       if (value === "") {

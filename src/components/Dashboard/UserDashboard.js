@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react'
-import {useNavigate} from 'react-router-dom';
+import Navbar from '../Navbar/Navbar'
+// import {useNavigate} from 'react-router-dom';
 function UserDashboard() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(()=>{
-    if(!document.cookie){
-      navigate('/login');
-    }
+    // check if user exists
+    // if(!document.cookie){
+    //   navigate('/login');
+    // }
+    console.log("login successful");
   })
   return (
-    <div>UserDashboard</div>
+    <div>
+      <Navbar/>
+    </div>
   )
 }
 

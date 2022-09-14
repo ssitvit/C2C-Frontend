@@ -13,12 +13,12 @@ function NavLinks() {
       }}
     >
       <NavLink to="/" style={{textDecoration: "none"}}>
-        <Button variant="contained">
+        <Button color="error" variant="contained">
           Home
         </Button>
       </NavLink>
-      <NavLink to="contact" style={{textDecoration: "none"}}>
-        <Button variant="contained">Contact</Button>
+      <NavLink to="/contact" style={{textDecoration: "none"}}>
+        <Button color="error" variant="contained">Contact</Button>
       </NavLink>
     </Box>
   );

@@ -17,16 +17,16 @@ function Navbar() {
         // backgroundColor: "#ddd",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
         backgroundColor: "transparent",
         zIndex: 9999,
         paddingLeft: "2rem",
         paddingRight: "2rem",
       }}
     >
-      {document.cookie &&<Logo width={120} height={91}/>}
+      <Logo width={120} height={91}/>
       {matches && !document.cookie && <NavLinks />}
-      {document.cookie && <Profile />}
+      <Profile />
     </Box>
   );
 }

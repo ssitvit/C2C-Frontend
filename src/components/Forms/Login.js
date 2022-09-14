@@ -71,10 +71,10 @@ function Login() {
           .then((response) => response.json())
           .then((data) => {
             setLoading(false);
+            console.log(data);
             if(data.success){
               navigate("/dashboard/user");
             }else{
-              console.log(data);
             }
           })
           .catch((err) => {

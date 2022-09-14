@@ -13,6 +13,7 @@ function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState();
+  // const [arrowRef, setArrowRef] = React.useState(null);
   const navigate = useNavigate();
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
@@ -46,14 +47,20 @@ function Profile() {
         bgcolor: stringToColor(name),
         border: "none",
         cursor: "pointer",
-        color:"white"
+        color: "white",
       },
       children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
     };
   }
   return (
     <div>
-      <Popper open={open} anchorEl={anchorEl} placement={placement} transition sx={{marginRight:"2rem"}}>
+      <Popper
+        open={open}
+        anchorEl={anchorEl}
+        placement={placement}
+        transition
+        sx={{ offset: "2rem" }}
+      >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper sx={{ padding: "2" }}>
@@ -64,9 +71,10 @@ function Profile() {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-              >Nanduri Jayant Vishnu
+              >
+                Nanduri Jayant Vishnu
               </Typography>
-              <Divider/>
+              <Divider />
               <Typography
                 sx={{
                   p: 2,
@@ -74,9 +82,17 @@ function Profile() {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-              >vishnu@gmail.com
+              >
+                vishnu@gmail.com
               </Typography>
-              <Button variant="contained" sx={{ width: "100%" }} onClick={()=>{navigate('/dashboard/user')}}>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "100%" }}
+                onClick={() => {
+                  navigate("/dashboard/user");
+                }}
+              >
                 Go To Dashboard
               </Button>
             </Paper>
