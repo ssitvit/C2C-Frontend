@@ -8,7 +8,7 @@
 @keyframes anim {
     to{
         stroke-dashoffset:0%;
-        fill:white;
+        fill:transparent;
     }
 }
 
@@ -19,6 +19,30 @@
 
 #line:hover{
     width:0;
+}
+
+#svg2 path{
+    fill-opacity: 0;
+    animation :anim3 2s linear forwards;
+}
+
+#svg2{
+    animation: anim4 5s ease-in-out infinite forwards;
+}
+@keyframes anim3{
+    to{
+        fill-opacity:1;
+        transform:translateZ(0,0%);
+    }
+}
+
+@keyframes anim4{
+    50%{
+        transform:translate(0,-6%);
+    }
+    100%{
+        transform:translate(0,0);
+    }
 }
 
 @keyframes anim2{

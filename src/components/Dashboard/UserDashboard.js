@@ -20,8 +20,8 @@ function UserDashboard() {
     <div>
       <Navbar />
       <Routes>
-        <Route exact path="" element={<TestStarter/>}/>
-          <Route exact path="/dashboard/user/exam/:id" element={<Editor/>}/>
+        <Route exact path="/" element={<TestStarter/>}/>
+          <Route exact path="exam/:id" element={<Editor/>}/>
       </Routes>
     </div>
   );

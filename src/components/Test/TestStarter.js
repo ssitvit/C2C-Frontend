@@ -1,4 +1,5 @@
 import {
+  Button,
   Divider,
   Stack,
   Typography,
@@ -6,11 +7,12 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ExamIcon from "../Icons/ExamIcon";
-import RoundStarter from "./RoundStarter";
 function TestStarter() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const navigate = useNavigate();
   return (
     <Stack
       direction="row"
@@ -27,7 +29,11 @@ function TestStarter() {
         {/* divider */}
         <Divider color="white" />
         {/* round starter button*/}
-        <RoundStarter />
+        <Stack color="white" width="fit-content">
+        <Button variant="contained" color="warning" width="fit-content" sx={{margin:"2rem"}} onClick={()=>{navigate('exam/1')}}>
+            Click here to start your test.
+        </Button>
+    </Stack>
 
         {/* test results */}
         <Typography variant="h4" component="h1" color="white">
@@ -36,7 +42,11 @@ function TestStarter() {
         {/* divider */}
         <Divider color="white" />
         {/* test result generator */}
-        <RoundStarter />
+        <Stack color="white" width="fit-content">
+        <Button variant="contained" color="warning" width="fit-content" sx={{margin:"2rem"}} onClick={()=>{navigate('exam/1')}}>
+            Click here to start your test.
+        </Button>
+    </Stack>
       </Stack>
       {/* divider */}
       {/* which round to begin */}

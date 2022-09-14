@@ -15,11 +15,11 @@ function App() {
   return (
     // <ThemeProvider theme={darkTheme}>
     //   <CssBaseline/>
-    <Box minHeight="100vh" sx={{background:"url('https://wallpaperaccess.com/full/848775.jpg')"}}>
+    <Box minHeight="100vh" sx={{background:"url('https://wallpapercrafter.com/desktop/95116-abstract-dark-black-minimalism-minimalist-hd-4k.jpg')"}}>
       {/* <Navbar /> */}
       <Routes>
         <Route exact path="/*" element={<Home />}/>
-        <Route exact path="/dashboard/user" element={<UserDashboard />} />
+        <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
         <Route exact path="/dashboard/admin" element={<AdminDashboard />} />
         <Route exact path="/dashboard/cood" element={<CoodDashboard />} />
         <Route exact path="/contact" element={<Contact />} />

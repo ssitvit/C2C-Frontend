@@ -13,7 +13,7 @@ function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   // const [arrowRef, setArrowRef] = React.useState(null);
   const navigate = useNavigate();
   const handleClick = (newPlacement) => (event) => {
@@ -54,17 +54,16 @@ function Profile() {
     };
   }
   React.useEffect(() => {
-    setLoading(true);
-    let url = "";
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error);
-      });
+    // setLoading(true);
+    // let url = "";
+    // fetch(url)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }, []);
   return (
     <div>
@@ -120,11 +119,11 @@ function Profile() {
         <Skeleton animation="wave" variant="circular" width={40} height={40} />
       )}
       {!loading && (
-        <Tooltip title="Nanduri Jayant Vishnu">
+        <Tooltip title="Nanduri Jayant Vishnu" sx={{ margin: "2rem" }}>
           <Avatar
             {...stringAvatar("Nanduri Jayant Vishnu")}
             component="button"
-            onClick={handleClick("bottom")}
+            onClick={handleClick("bottom-start")}
           />
         </Tooltip>
       )}

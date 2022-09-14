@@ -22,6 +22,7 @@ function Verify() {
           setVerified(true);
         }else{
             setLoading(false);
+            setVerified(false);
         }
       })
       .catch((err) => console.log(err));
@@ -29,14 +30,14 @@ function Verify() {
   return (
     <Stack color="white" minHeight="100vh" alignItems="center" justifyContent="center">
         {loading && <CircularProgress />}
-        {verified && 
+        {verified && !loading &&
         <Typography>
             "Verified Successfully!"
-            <Link component="button" onClick={()=>{navigate('/login')}}>Login Now</Link>
+            <Link component="button" variant="filled" onClick={()=>{navigate('/login')}}>Login Now</Link>
             </Typography>}
-        {!verified && <Typography>"Invalid Link!"</Typography>}
+        {!verified &&!loading && <Typography>"Invalid Link!"</Typography>}
     </Stack>
-  );
+  )
 }
 
 export default Verify;
