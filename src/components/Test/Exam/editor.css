@@ -1,0 +1,6 @@
+.outline:focus{
+    outline:none;
+}
+.outline{
+    word-wrap: break-word;
+}

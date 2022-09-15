@@ -2,7 +2,7 @@ import React, { useEffect} from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import TestStarter from "../Test/TestStarter";
-import Editor from "../Test/Exam/Editor";
+import Exam from "../Test/Exam/Exam";
 // import {useNavigate} from 'react-router-dom';
 function UserDashboard() {
 
@@ -21,7 +21,7 @@ function UserDashboard() {
       <Navbar />
       <Routes>
         <Route exact path="/" element={<TestStarter/>}/>
-          <Route exact path="exam/:id" element={<Editor/>}/>
+          <Route exact path="exam/:id" element={<Exam/>}/>
       </Routes>
     </div>
   );
