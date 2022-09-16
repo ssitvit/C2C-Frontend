@@ -38,13 +38,13 @@ function Exam() {
       <Stack direction={matches?"row":"column"} alignItems="center" justifyContent="center" spacing={8} >
         <iframe
         sandbox="allow-scripts"
-        style={{ width:"80%",border:"none",height:"500px",color: "white",backgroundColor: "rgba(255,255,255,0.3",margin:"2rem"}}
+        style={{ width:"80%",border:"none",height:"300px",color: "white",backgroundColor: "rgba(255,255,255,0.3",margin:"2rem"}}
         srcDoc={userObj}
         title="userResponse"
       />
       <iframe
         sandbox="allow-scripts"
-        style={{ width:"80%",border:"none",height:"500px",color: "white",backgroundColor: "rgba(255,255,255,0.3"}}
+        style={{ width:"80%",border:"none",height:"300px",color: "white",backgroundColor: "rgba(255,255,255,0.3"}}
         srcDoc={userObj}
         title="userResponse2"
       />

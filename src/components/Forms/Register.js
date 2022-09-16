@@ -10,7 +10,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import './style.css';
+import "./style.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
@@ -21,14 +21,18 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 function Register() {
+  // const fs = require('fs');
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [other, setOther] = useState(true);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [fetching, setFetching] = useState();
   const [validationObj, setValidationObj] = useState({
@@ -57,6 +61,10 @@ function Register() {
       message: "",
     },
     password: {
+      error: false,
+      message: "",
+    },
+    cpassword: {
       error: false,
       message: "",
     },
@@ -95,14 +103,13 @@ function Register() {
       setOpen(true);
       setTimeout(() => {
         navigate("/login");
-      }, 800);
+      }, 1000);
     } else {
       // setloading to false
       setLoading(false);
       // snackbar comes here
       if (typeof data.data.error === "object") {
         setError("Please fill all the fields correctly");
-        
       } else {
         setError(data.data.error);
       }
@@ -120,6 +127,7 @@ function Register() {
       email: "",
       password: "",
       mobile_number: "",
+      cpassword: "",
     },
     onSubmit: async (values) => {
       if (checkHandler()) {
@@ -130,7 +138,7 @@ function Register() {
         }
       } else {
         setError(true);
-        setMessage("Please fill the details correctly");
+        setMessage("Invalid Entries");
         setOpen(true);
       }
     },
@@ -140,13 +148,16 @@ function Register() {
   const handleClickShowPassword = () => {
     setShow((prevShow) => !prevShow);
   };
+  const handleClickShowPassword2 = () => {
+    setShow2((prevShow) => !prevShow);
+  };
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   // to check if there are any errors in
   const checkHandler = () => {
     for (let i in validationObj) {
-      if (validationObj[i].error==="true"||formik.values[i]==="") {
+      if (validationObj[i].error === "true" || formik.values[i] === "") {
         return false;
       }
     }
@@ -161,18 +172,7 @@ function Register() {
     let name = e.target.name;
     let value = e.target.value;
     // for first and last names
-    if (name === "universityName") {
-      if (value === "") {
-        error = true;
-        message = "Field cannot be empty";
-        setValidationObj({ ...validationObj, universityName: { error, message } });
-      } else {
-        setValidationObj({
-          ...validationObj,
-          universityName: { error: false, message: "" },
-        });
-      }
-    } else if (name === "registration_number") {
+    if (name === "registration_number") {
       if (value === "") {
         error = true;
         message = "Field cannot be empty";
@@ -224,8 +224,18 @@ function Register() {
         });
       }
     } else if (name === "password") {
+      if (value !== formik.values.cpassword) {
+        error = true;
+        message = "Passwords must match!";
+        setValidationObj({ ...validationObj, cpassword: { error, message } });
+      } else {
+        setValidationObj({
+          ...validationObj,
+          cpassword: { error: false, message: "" },
+        });
+      }
       if (
-        !value.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/)
+        !value.match(/^(?=.*\d)(?=.*[!@#$%^&*_-])(?=.*[a-z])(?=.*[A-Z]).{8,}$/)
       ) {
         error = true;
         message = value
@@ -238,12 +248,23 @@ function Register() {
           password: { error: false, message: "" },
         });
       }
+    } else if (name === "cpassword") {
+      if (value !== formik.values.password) {
+        error = true;
+        message = "Passwords must match!";
+        setValidationObj({ ...validationObj, cpassword: { error, message } });
+      } else {
+        setValidationObj({
+          ...validationObj,
+          cpassword: { error: false, message: "" },
+        });
+      }
     }
   };
   // to fetch universities name from
   useEffect(() => {
     setFetching(true);
-    fetch("http://universities.hipolabs.com/search?country=india")
+    fetch("./universities.json")
       .then((response) => response.json())
       .then((data) => {
         let array = [];
@@ -258,7 +279,6 @@ function Register() {
   }, []);
   // JSX
   return (
-    // FORM COMPONENT
     <Box
       component="form"
       sx={{
@@ -271,12 +291,12 @@ function Register() {
         padding: "1.5rem",
         gap: "1rem",
         borderRadius: "2rem",
-        width: matches?"70%":"80%",
-        position:"relative",
-        transition:'0.3s all ease-in-out',
+        width: matches ? "70%" : "80%",
+        position: "relative",
+        transition: "0.3s all ease-in-out",
         background: "white",
-        boxShadow:"10px 10px 5px 2px rgba(0,0,0,0.5)",
-        "&:hover":{boxShadow:"5px 5px 3px 2px rgba(0,0,0,0.5)"}
+        boxShadow: "10px 10px 5px 2px rgba(0,0,0,0.5)",
+        "&:hover": { boxShadow: "5px 5px 3px 2px rgba(0,0,0,0.5)" },
       }}
       noValidate
       autoComplete="on"
@@ -295,13 +315,24 @@ function Register() {
         options={universities}
         loading={fetching}
         loadingText="Loading..."
-        onChange={(e,v)=>{formik.setValues({...formik.values,universityName:v})}}
+        onChange={(e, v) => {
+          if (v) {
+            setOther(false);
+            formik.setValues({ ...formik.values, universityName: v });
+            setValidationObj({
+              ...validationObj,
+              universityName: { error: false, message: "" },
+            });
+          } else {
+            setOther(true);
+          }
+        }}
         renderInput={(params) => (
           <TextField
             required
             id="universityName"
             name="universityName"
-            label="UniversityName"    
+            label="UniversityName"
             error={validationObj.universityName.error}
             helperText={
               validationObj.universityName.error
@@ -319,7 +350,50 @@ function Register() {
           />
         )}
       />
-      
+
+      {/* OTHER UNIVERSITIES */}
+      <TextField
+        disabled={!other}
+        required
+        id="universityName"
+        name="universityName"
+        label="Other Universities"
+        error={validationObj.universityName.error}
+        helperText={
+          validationObj.universityName.error
+            ? validationObj.universityName.message
+            : ""
+        }
+        value={formik.values?.universityName}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        style={{ width: "100%", margin: "0" }}
+        placeholder="University"
+        onChange={(e) => {
+          if (!e.target.value) {
+            setValidationObj({
+              ...validationObj,
+              universityName: {
+                error: true,
+                message: "Field Cannot be empty",
+              },
+            });
+          } else {
+            setValidationObj({
+              ...validationObj,
+              universityName: {
+                error: false,
+                message: "",
+              },
+            });
+          }
+          formik.setValues({
+            ...formik.values,
+            universityName: e.target.value,
+          });
+        }}
+      />
       {/* REGISTRATION NUMBER */}
       <TextField
         required
@@ -390,24 +464,49 @@ function Register() {
       {/* PHONE NUMBER */}
       <PhoneInput
         country={"in"}
-        
         placeholder="+91 12345-66789"
         value={formik.values.mobile_number}
         inputProps={{
           id: "mobile_number",
           name: "mobile_number",
-          onChange: formik.handleChange,
+          onChange: (e) => {
+            formik.handleChange(e);
+            if (!e.target.value || e.target.value.length < 15) {
+              setValidationObj({
+                ...validationObj,
+                mobile_number: {
+                  error: true,
+                  message: "Invalid Phone Number",
+                },
+              });
+            } else {
+              setValidationObj({
+                ...validationObj,
+                mobile_number: {
+                  error: false,
+                  message: "",
+                },
+              });
+            }
+          },
           required: true,
           // label: "Mobile Number"
         }}
         specialLabel="Mobile Number"
         containerStyle={{ padding: "0" }}
-        inputStyle={{ width: "100%",bakcgorundColor:"transparent",outline:"none"}}
+        inputStyle={{
+          width: "100%",
+          bakcgorundColor: "transparent",
+          outline:"none !important" ,
+          '&:focus':{outline:"none !important"},
+          borderColor: validationObj.mobile_number.error?"red":"",
+        }}
         buttonStyle={{ background: "none" }}
         localization="in"
-        
       />
-
+      {validationObj.mobile_number.error && (
+        <Typography variant="body2" color="error" sx={{fontSize:"12px",marginTop:"-10px"}}>{validationObj.mobile_number.message}</Typography>
+      )}
       {/* EMAIL */}
       <TextField
         error={validationObj.email.error}
@@ -466,6 +565,41 @@ function Register() {
         }}
       />
 
+      {/* confirm password */}
+      <TextField
+        required
+        error={validationObj.cpassword.error}
+        helperText={
+          validationObj.cpassword.error ? validationObj.cpassword.message : ""
+        }
+        id="cpassword"
+        type={show2 ? "text" : "password"}
+        name="cpassword"
+        label="Confirm Password"
+        placeholder="Password"
+        onChange={handleOnChange}
+        value={formik.values.cpassword}
+        style={{ width: "100%", margin: "0" }}
+        size="medium"
+        autoComplete="current-password"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword2}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {!show2 ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
       {/* SUBMIT AND RESET BUTTONS */}
       <Stack direction="row" spacing={2}>
         {/* SUBMIT BUTTON */}
@@ -519,7 +653,7 @@ function Register() {
       )}
       <Link
         component="button"
-        style={{ cursor: "pointer", width: "fit-content",color:"#CC0707" }}
+        style={{ cursor: "pointer", width: "fit-content", color: "#CC0707" }}
         onClick={() => {
           navigate("/login");
         }}

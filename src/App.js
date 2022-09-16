@@ -8,14 +8,11 @@ import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import CoodDashboard from "./components/Dashboard/CoodDashboard";
 import { Box } from "@mui/material";
 import Verify from "./components/Verification/Verify";
-
-
-
 function App() {
   return (
     // <ThemeProvider theme={darkTheme}>
     //   <CssBaseline/>
-    <Box minHeight="100vh" sx={{background:"url('https://wallpaperaccess.com/full/3048388.jpg')"}}>
+    <Box minHeight="100vh" sx={{background:"black"}}>
       {/* <Navbar /> */}
       <Routes>
         <Route exact path="/*" element={<Home />}/>

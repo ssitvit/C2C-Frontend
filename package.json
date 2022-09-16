@@ -17,6 +17,7 @@
     "@uiw/react-codemirror": "^4.12.2",
     "codemirror": "^6.0.1",
     "formik": "^2.2.9",
+    "fs": "^0.0.1-security",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",

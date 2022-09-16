@@ -27,6 +27,7 @@ function Login() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
+  const [verified, setVerified] = useState(true);
 
   const navigate = useNavigate();
   const handleClose = (event, reason) => {
@@ -42,6 +43,29 @@ function Login() {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const resendEmail = async () => {
+    setError("");
+    setMessage("");
+    console.log(JSON.stringify({ email: formik.values.email }));
+    let url = "https://c2c-backend.vercel.app/user/sendEmailAgain";
+    let response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: formik.values.email }),
+    });
+    let data = await response.json();
+    if (data.success) {
+      setOpen(true);
+      setMessage(data.data.data);
+    } else {
+      setVerified(false);
+      setOpen(true);
+      setError(data.data.error);
+    }
   };
   // FORM HANDLING LIBRARY
   const formik = useFormik({
@@ -65,16 +89,20 @@ function Login() {
         let url = "https://c2c-backend.vercel.app/user/login";
         fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": "true"
+          },
           body: JSON.stringify(formik.values),
         })
           .then((response) => response.json())
           .then((data) => {
             setLoading(false);
-            if(data.success){
-              navigate("/dashboard/user");
-            }else{
-              console.log(data);
+            console.log(data);
+            if (data.success) {
+              navigate('/dashboard/user');
             }
           })
           .catch((err) => {
@@ -201,7 +229,16 @@ function Login() {
           Reset
         </Button>
       </Stack>
-
+      {!verified && (
+        <Alert
+          severity="warning"
+          sx={{ display: "flex", alignItems: "center" }}
+        >
+          <Button size="small" color="warning" onClick={resendEmail}>
+            Resend Verification Link
+          </Button>
+        </Alert>
+      )}
       {/* custom snackbar */}
       {!loading && (
         <Snackbar

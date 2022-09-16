@@ -6,14 +6,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
-import { Avatar, Divider, Skeleton, Tooltip } from "@mui/material";
+import { Avatar, Box, ButtonGroup, Divider, Skeleton, Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useFetch } from "../Hooks/useFetch";
 
 function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState();
-  const [loading, setLoading] = React.useState(false);
   // const [arrowRef, setArrowRef] = React.useState(null);
   const navigate = useNavigate();
   const handleClick = (newPlacement) => (event) => {
@@ -53,18 +53,12 @@ function Profile() {
       children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
     };
   }
+  const { data, isLoading, error } = useFetch(
+    "https://c2c-backend.vercel.app/user/checkauth"
+  );
   React.useEffect(() => {
-    // setLoading(true);
-    // let url = "";
-    // fetch(url)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  }, []);
+    console.log(error);
+  }, [error]);
   return (
     <div>
       <Popper
@@ -83,11 +77,29 @@ function Profile() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  margin: 0,
                 }}
               >
-                {!loading &&
+                {!isLoading &&
                   //profile data comes here only
-                  "Nanduri Jayant Vishnu"}
+                  data.data.data.first_name + " " + data.data.data.last_name}
+              </Typography>
+              <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}>
+              <Avatar
+                {...stringAvatar(data.data.data.first_name+" "+data.data.data.last_name)} sx={{cursor: "normal"}}
+              />
+              </Box>
+              <Typography
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "10px",
+                  margin: 0,
+                }}
+              >
+                {!isLoading && data.data.data.universityName}
               </Typography>
               <Divider />
               <Typography
@@ -98,12 +110,14 @@ function Profile() {
                   justifyContent: "center",
                 }}
               >
-                {!loading && "vishnu@gmail.com"}
+                {!isLoading && data.data.data.email}
               </Typography>
+              <Divider />
+              <ButtonGroup orientation="vertical" width="100%">
               <Button
                 variant="contained"
                 color="error"
-                sx={{ width: "100%" }}
+                sx={{ width: "100%",borderRadius:"0" }}
                 onClick={(event) => {
                   setOpen((prev) => !prev);
                   navigate("/dashboard/user");
@@ -111,22 +125,34 @@ function Profile() {
               >
                 Go To Dashboard
               </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "100%",borderRadius:"0" }}
+                onClick={(event) => {
+                  setOpen((prev) => !prev);
+
+                }}
+              >
+                Logout
+              </Button>
+              </ButtonGroup>
             </Paper>
           </Fade>
         )}
       </Popper>
-      {loading && (
+      {isLoading && (
         <Skeleton animation="wave" variant="circular" width={40} height={40} />
       )}
-      {!loading && (
+      {!isLoading && data && (
         <Tooltip title="Nanduri Jayant Vishnu" sx={{ margin: "2rem" }}>
           <Avatar
-            {...stringAvatar("Nanduri Jayant Vishnu")}
+            {...stringAvatar(data.data.data.first_name+" "+data.data.data.last_name)}
             component="button"
             onClick={handleClick("bottom-start")}
           />
         </Tooltip>
-      )}
+        )}
     </div>
   );
 }
