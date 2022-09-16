@@ -142,7 +142,7 @@ function Profile() {
                 >
                   Go To Dashboard
                 </Button>
-                <Divider sx={{backgroundColor:"white"}} />
+                <Divider sx={{ backgroundColor: "white" }} />
                 <Button
                   variant="contained"
                   color="error"
@@ -154,15 +154,15 @@ function Profile() {
                         method: "GET",
                         credentials: "include",
                         headers: {
-                          "Content-Type": "application/json",
-                          "Access-Control-Allow-Credentials": "true",
+                          "Content-Type": "application/json"
+                          // "Access-Control-Allow-Credentials": "true",
                         }
                       }
                     );
                     let data = await response.json();
                     console.log(data);
-                    if(data.success){
-                      navigate('/login');
+                    if (data.success) {
+                      navigate("/login");
                     }
                   }}
                 >
