@@ -6,7 +6,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
-import { Avatar, Box, ButtonGroup, Divider, Skeleton, Tooltip } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  ButtonGroup,
+  Divider,
+  Skeleton,
+  Tooltip,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
 
@@ -84,10 +91,20 @@ function Profile() {
                   //profile data comes here only
                   data.data.data.first_name + " " + data.data.data.last_name}
               </Typography>
-              <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%"}}>
-              <Avatar
-                {...stringAvatar(data.data.data.first_name+" "+data.data.data.last_name)} sx={{cursor: "normal"}}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <Avatar
+                  {...stringAvatar(
+                    data.data.data.first_name + " " + data.data.data.last_name
+                  )}
+                  sx={{ cursor: "normal" }}
+                />
               </Box>
               <Typography
                 sx={{
@@ -113,29 +130,43 @@ function Profile() {
                 {!isLoading && data.data.data.email}
               </Typography>
               <Divider />
-              <ButtonGroup orientation="vertical" width="100%">
-              <Button
-                variant="contained"
-                color="error"
-                sx={{ width: "100%",borderRadius:"0" }}
-                onClick={(event) => {
-                  setOpen((prev) => !prev);
-                  navigate("/dashboard/user");
-                }}
-              >
-                Go To Dashboard
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                sx={{ width: "100%",borderRadius:"0" }}
-                onClick={(event) => {
-                  setOpen((prev) => !prev);
-
-                }}
-              >
-                Logout
-              </Button>
+              <ButtonGroup orientation="vertical" sx={{ width: "100%" }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{ width: "100%", borderRadius: "0" }}
+                  onClick={(event) => {
+                    setOpen((prev) => !prev);
+                    navigate("/dashboard/user");
+                  }}
+                >
+                  Go To Dashboard
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{ width: "100%", borderRadius: "0" }}
+                  onClick={async (event) => {
+                    let response = await fetch(
+                      "https://c2c-backend.vercel.app/user/logout",
+                      {
+                        method: "GET",
+                        credentials: "include",
+                        headers: {
+                          "Content-Type": "application/json",
+                          "Access-Control-Allow-Credentials": "true",
+                        },
+                      }
+                    );
+                    let data = await response.json();
+                    console.log(data);
+                    if(data.success){
+                      navigate('/');
+                    }
+                  }}
+                >
+                  Logout
+                </Button>
               </ButtonGroup>
             </Paper>
           </Fade>
@@ -147,12 +178,14 @@ function Profile() {
       {!isLoading && data && (
         <Tooltip title="Nanduri Jayant Vishnu" sx={{ margin: "2rem" }}>
           <Avatar
-            {...stringAvatar(data.data.data.first_name+" "+data.data.data.last_name)}
+            {...stringAvatar(
+              data.data.data.first_name + " " + data.data.data.last_name
+            )}
             component="button"
             onClick={handleClick("bottom-start")}
           />
         </Tooltip>
-        )}
+      )}
     </div>
   );
 }
