@@ -87,13 +87,14 @@ function Login() {
       } else {
         setLoading(true);
         let url = "https://c2c-backend.vercel.app/user/login";
+        try{
         fetch(url, {
           method: "POST",
           credentials: "include",
           headers:{
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": "true"
+            // "Access-Control-Allow-Credentials": "true"
           },
           body: JSON.stringify(formik.values),
         })
@@ -109,7 +110,7 @@ function Login() {
             setLoading(false);
             console.log(err);
           });
-      }
+      }catch(err){console.log(err)}}
     },
   });
   // JSX

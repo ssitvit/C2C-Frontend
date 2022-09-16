@@ -11,6 +11,7 @@ function UserDashboard() {
       let url = "https://c2c-backend.vercel.app/user/checkauth";
       let response = await fetch(url,{
         method:"GET",
+        
         credentials:"include",
         headers: {
           "Content-Type": "application/json",
@@ -18,14 +19,11 @@ function UserDashboard() {
         }
       });
       let data = await response.json();
-      if (data.success) {
-        console.log(data);
-      }else{
-        navigate('/');
-        console.log(data);
+      if (!data.success) {
+        navigate('/login');
       }
     };
-    getDetails();
+    try{getDetails()}catch(err){console.log(err)}
   });
   return (
     <div>

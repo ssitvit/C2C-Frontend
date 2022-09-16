@@ -142,6 +142,7 @@ function Profile() {
                 >
                   Go To Dashboard
                 </Button>
+                <Divider sx={{backgroundColor:"white"}} />
                 <Button
                   variant="contained"
                   color="error"
@@ -155,7 +156,7 @@ function Profile() {
                         headers: {
                           "Content-Type": "application/json",
                           "Access-Control-Allow-Credentials": "true",
-                        },
+                        }
                       }
                     );
                     let data = await response.json();
