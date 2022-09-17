@@ -75,6 +75,9 @@ function Login() {
       password: "",
     },
     onSubmit: async (values) => {
+      setError(false);
+      setMessage('');
+      setVerified(true);
       if (values.email === "" || values.password === "") {
         setOpen(true);
         setError(true);
@@ -107,6 +110,10 @@ function Login() {
               setMessage("Logged In Successfully");
               setTimeout(()=>{navigate('/dashboard/user')},1000);
               document.cookie='authentication=true;SameSite=none;Secure=true;';
+            }else if(data.data.error==="Email Not verified"){
+              setVerified(false);
+              setError(data.data.error);
+              setOpen(true); 
             }else if(data.data.error){
               setError(data.data.error);
               setOpen(true); 
