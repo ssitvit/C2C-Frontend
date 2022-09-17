@@ -6,25 +6,11 @@ import Exam from "../Test/Exam/Exam";
 import { useNavigate } from "react-router-dom";
 function UserDashboard() {
   const navigate = useNavigate();
-  useEffect(() => {
-    const getDetails = async () => {
-      let url = "https://c2c-backend.vercel.app/user/checkauth";
-      let response = await fetch(url,{
-        method:"GET",
-        
-        credentials:"include",
-        headers: {
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Credentials':'true',
-        }
-      });
-      let data = await response.json();
-      if (!data.success) {
-        navigate('/login');
-      }
-    };
-    try{getDetails()}catch(err){console.log(err)}
-  });
+  useEffect(()=>{
+    if(!document.cookie){
+      navigate('/login');
+    }
+  })
   return (
     <div>
       <Navbar />

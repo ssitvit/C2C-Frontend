@@ -1,28 +1,17 @@
 import { Stack,Button, useMediaQuery, useTheme, Skeleton } from "@mui/material";
 import React from "react";
-import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Form from "../Forms/Form";
 import Logo from "../Icons/Logo";
-import { useFetch } from "../Hooks/useFetch";
 import Illustration from "./Illustration";
 
 function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const {data, isLoading, error} = useFetch('https://c2c-backend.vercel.app/user/checkauth');
-  useEffect(() => {
-    if(data.success){
-      navigate('/dashboard/user');
-    }else if(error){
-      console.log(error);
-    }
-  });
   return (
     <>
-    {isLoading && <Skeleton/>}
-    {!isLoading &&
+    <Skeleton/>
       <Stack
         direction={matches ? "row" : "column"}
         spacing={2}
@@ -45,7 +34,7 @@ function Home() {
         </Stack>
         <Form />
       </Stack>
-      }<Outlet />
+      <Outlet />
     </>
   );
 }

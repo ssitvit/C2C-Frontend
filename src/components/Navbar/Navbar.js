@@ -25,7 +25,7 @@ function Navbar() {
       }}
     >
       <Logo width={120} height={91}/>
-      {matches && !document.cookie && <NavLinks />}
+      {matches && <NavLinks />}
       <Profile />
     </Box>
   );

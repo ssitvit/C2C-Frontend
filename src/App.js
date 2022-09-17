@@ -8,22 +8,21 @@ import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import CoodDashboard from "./components/Dashboard/CoodDashboard";
 import { Box } from "@mui/material";
 import Verify from "./components/Verification/Verify";
+import { CookiesProvider } from "react-cookie";
 function App() {
   return (
-    // <ThemeProvider theme={darkTheme}>
-    //   <CssBaseline/>
-    <Box minHeight="100vh" sx={{background:"black"}}>
-      {/* <Navbar /> */}
-      <Routes>
-        <Route exact path="/*" element={<Home />}/>
-        <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
-        <Route exact path="/dashboard/admin" element={<AdminDashboard />} />
-        <Route exact path="/dashboard/cood" element={<CoodDashboard />} />
-        <Route exact path="/contact" element={<Contact />} />
-        <Route exact path="/user/verify/:id/:token" element={<Verify />} />
-      </Routes>
+    <CookiesProvider>
+      <Box minHeight="100vh" sx={{ background: "black" }}>
+        <Routes>
+          <Route exact path="/*" element={<Home />} />
+          <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
+          <Route exact path="/dashboard/admin" element={<AdminDashboard />} />
+          <Route exact path="/dashboard/cood" element={<CoodDashboard />} />
+          <Route exact path="/contact" element={<Contact />} />
+          <Route exact path="/user/verify/:id/:token" element={<Verify />} />
+        </Routes>
       </Box>
-      // </ThemeProvider>
+    </CookiesProvider>
   );
 }
 

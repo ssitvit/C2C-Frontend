@@ -7,22 +7,61 @@ import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
 import {
+  Alert,
   Avatar,
   Box,
   ButtonGroup,
+  CircularProgress,
   Divider,
   Skeleton,
+  Snackbar,
   Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
+import { useEffect } from "react";
 
 function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
   const [placement, setPlacement] = React.useState();
-  // const [arrowRef, setArrowRef] = React.useState(null);
+  const [deleting, setDeleting] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [message, setMessage] = React.useState("");
   const navigate = useNavigate();
+  // const [arrowRef, setArrowRef] = React.useState(null);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen2(false);
+  };
+  const onLogout = async (event) => {
+    setDeleting(true);
+    setErrorMessage("");
+    setMessage("");
+    let response = await fetch("https://c2c-backend.vercel.app/user/logout", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": "true",
+      },
+    });
+    let data = await response.json();
+    console.log(data);
+    if (data.success) {
+      setDeleting(false);
+      setOpen2(true);
+      setMessage(data.data.data);
+      document.cookie = "authentication=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    }
+  };
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
     setOpen((prev) => placement !== newPlacement || !prev);
@@ -63,9 +102,11 @@ function Profile() {
   const { data, isLoading, error } = useFetch(
     "https://c2c-backend.vercel.app/user/checkauth"
   );
-  React.useEffect(() => {
-    console.log(error);
-  }, [error]);
+  useEffect(() => {
+    if ((data && (!data.success || !document.cookie)) || error) {
+      navigate("/login");
+    }
+  }, [data, navigate, error]);
   return (
     <div>
       <Popper
@@ -147,26 +188,24 @@ function Profile() {
                   variant="contained"
                   color="error"
                   sx={{ width: "100%", borderRadius: "0" }}
-                  onClick={async (event) => {
-                    let response = await fetch(
-                      "https://c2c-backend.vercel.app/user/logout",
-                      {
-                        method: "GET",
-                        credentials: "include",
-                        headers: {
-                          "Content-Type": "application/json"
-                          // "Access-Control-Allow-Credentials": "true",
-                        }
-                      }
-                    );
-                    let data = await response.json();
-                    console.log(data);
-                    if (data.success) {
-                      navigate("/login");
-                    }
-                  }}
+                  onClick={onLogout}
                 >
-                  Logout
+                  {!deleting && "Logout"}
+                  {deleting && (
+                    <>
+                      <CircularProgress
+                        thickness={6}
+                        color="inherit"
+                        size="1.2rem"
+                      />
+                      <Typography
+                        variant="subtitle2"
+                        style={{ marginLeft: "0.5rem" }}
+                      >
+                        Logging Out...
+                      </Typography>
+                    </>
+                  )}
                 </Button>
               </ButtonGroup>
             </Paper>
@@ -186,6 +225,22 @@ function Profile() {
             onClick={handleClick("bottom-start")}
           />
         </Tooltip>
+      )}
+      {!isLoading && (
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={open2}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity={errorMessage ? "error" : "success"}
+            sx={{ width: "100%" }}
+          >
+            {message ? message : errorMessage}
+          </Alert>
+        </Snackbar>
       )}
     </div>
   );

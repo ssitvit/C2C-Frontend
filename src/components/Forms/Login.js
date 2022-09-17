@@ -22,6 +22,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 function Login() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -98,12 +99,21 @@ function Login() {
           },
           body: JSON.stringify(formik.values),
         })
-          .then((response) => response.json())
+          .then(response=>response.json())
           .then((data) => {
             setLoading(false);
-            console.log(data);
             if (data.success) {
-              navigate('/dashboard/user');
+              setOpen(true);
+              setMessage("Logged In Successfully");
+              setTimeout(()=>{navigate('/dashboard/user')},1000);
+              document.cookie='authentication=true;SameSite=none;Secure=true;';
+            }else if(data.data.error){
+              setError(data.data.error);
+              setOpen(true); 
+            }
+            else{
+              setError("Some error occurred while logging you in. Please Try again Later");
+              setOpen(true);
             }
           })
           .catch((err) => {
@@ -230,6 +240,8 @@ function Login() {
           Reset
         </Button>
       </Stack>
+
+      {/* RESEND BUTTON */}
       {!verified && (
         <Alert
           severity="warning"
