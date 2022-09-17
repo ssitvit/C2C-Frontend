@@ -1,7 +1,8 @@
 import { Stack,Button, useMediaQuery, useTheme, Skeleton } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Form from "../Forms/Form";
+import { useFetch } from "../Hooks/useFetch";
 import Logo from "../Icons/Logo";
 import Illustration from "./Illustration";
 
@@ -9,6 +10,14 @@ function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const { data, isLoading, error } = useFetch(
+    "https://c2c-backend.vercel.app/user/checkauth"
+  );
+  useEffect(()=>{
+    if(data && error){
+      navigate('/dashboard/user');
+    }
+  })
   return (
     <>
     <Skeleton/>

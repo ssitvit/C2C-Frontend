@@ -19,11 +19,13 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import InputAdornment from "@mui/material/InputAdornment";
 import Snackbar from "@mui/material/Snackbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Register() {
   // const fs = require('fs');
+  const params = useParams();
+  const refrealValue = params.id;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [open, setOpen] = useState(false);
@@ -128,6 +130,7 @@ function Register() {
       password: "",
       mobile_number: "",
       cpassword: "",
+      refreal:refrealValue
     },
     onSubmit: async (values) => {
       if (checkHandler()) {
@@ -507,6 +510,7 @@ function Register() {
       {validationObj.mobile_number.error && (
         <Typography variant="body2" color="error" sx={{fontSize:"12px",marginTop:"-10px"}}>{validationObj.mobile_number.message}</Typography>
       )}
+
       {/* EMAIL */}
       <TextField
         error={validationObj.email.error}

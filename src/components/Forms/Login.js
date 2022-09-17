@@ -49,7 +49,6 @@ function Login() {
   const resendEmail = async () => {
     setError("");
     setMessage("");
-    console.log(JSON.stringify({ email: formik.values.email }));
     let url = "https://c2c-backend.vercel.app/user/sendEmailAgain";
     let response = await fetch(url, {
       method: "POST",
@@ -104,12 +103,11 @@ function Login() {
         })
           .then(response=>response.json())
           .then((data) => {
-            setLoading(false);
             if (data.success) {
               setOpen(true);
               setMessage("Logged In Successfully");
+              // document.cookie='authentication=true;SameSite=none;Secure=true;';
               setTimeout(()=>{navigate('/dashboard/user')},1000);
-              document.cookie='authentication=true;SameSite=none;Secure=true;';
             }else if(data.data.error==="Email Not verified"){
               setVerified(false);
               setError(data.data.error);
@@ -131,6 +129,7 @@ function Login() {
     },
   });
   // JSX
+
   return (
     // FORM COMPONENT
     <Box

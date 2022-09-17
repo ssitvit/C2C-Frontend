@@ -6,6 +6,10 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
+import AlternateEmailTwoToneIcon from "@mui/icons-material/AlternateEmailTwoTone";
+import AttachEmailTwoToneIcon from "@mui/icons-material/AttachEmailTwoTone";
+import SendTwoToneIcon from "@mui/icons-material/SendTwoTone";
+import SchoolTwoToneIcon from "@mui/icons-material/SchoolTwoTone";
 import {
   Alert,
   Avatar,
@@ -51,12 +55,10 @@ function Profile() {
       },
     });
     let data = await response.json();
-    console.log(data);
     if (data.success) {
-      setDeleting(false);
       setOpen2(true);
       setMessage(data.data.data);
-      document.cookie = "authentication=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      // document.cookie = "authentication=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
       setTimeout(() => {
         navigate("/login");
       }, 1000);
@@ -103,7 +105,7 @@ function Profile() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   useEffect(() => {
-    if ((data && (!data.success || !document.cookie)) || error) {
+    if ((data && !data.success) || error) {
       navigate("/login");
     }
   }, [data, navigate, error]);
@@ -118,96 +120,67 @@ function Profile() {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ padding: "2" }}>
+            <Paper
+              sx={{
+                padding: "2",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
               <Typography
                 sx={{
-                  p: 2,
+                  fontSize: "12px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  margin: 0,
+                  padding:"1.2rem"
                 }}
               >
-                {!isLoading &&
-                  //profile data comes here only
-                  data.data.data.first_name + " " + data.data.data.last_name}
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <Avatar
-                  {...stringAvatar(
-                    data.data.data.first_name + " " + data.data.data.last_name
-                  )}
-                  sx={{ cursor: "normal" }}
-                />
-              </Box>
-              <Typography
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "10px",
-                  margin: 0,
-                }}
-              >
-                {!isLoading && data.data.data.universityName}
+                {!isLoading && (
+                  <>
+                    {data.data.data.email}
+                  </>
+                )}
               </Typography>
               <Divider />
-              <Typography
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+              <Divider />
+              <Button
+                variant="contained"
+                color="grey"
+                sx={{ width: "100%", borderRadius: "0" }}
+                onClick={(event) => {
+                  setOpen((prev) => !prev);
+                  navigate("/dashboard/user");
                 }}
               >
-                {!isLoading && data.data.data.email}
-              </Typography>
-              <Divider />
-              <ButtonGroup orientation="vertical" sx={{ width: "100%" }}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  sx={{ width: "100%", borderRadius: "0" }}
-                  onClick={(event) => {
-                    setOpen((prev) => !prev);
-                    navigate("/dashboard/user");
-                  }}
-                >
-                  Go To Dashboard
-                </Button>
-                <Divider sx={{ backgroundColor: "white" }} />
-                <Button
-                  variant="contained"
-                  color="error"
-                  sx={{ width: "100%", borderRadius: "0" }}
-                  onClick={onLogout}
-                >
-                  {!deleting && "Logout"}
-                  {deleting && (
-                    <>
-                      <CircularProgress
-                        thickness={6}
-                        color="inherit"
-                        size="1.2rem"
-                      />
-                      <Typography
-                        variant="subtitle2"
-                        style={{ marginLeft: "0.5rem" }}
-                      >
-                        Logging Out...
-                      </Typography>
-                    </>
-                  )}
-                </Button>
-              </ButtonGroup>
+                Go To Dashboard
+              </Button>
+              <Divider sx={{ backgroundColor: "white" }} />
+              <Button
+                variant="contained"
+                disabled={deleting}
+                sx={{ width: "100%", borderRadius: "0" }}
+                onClick={onLogout}
+              >
+                {!deleting && "Logout"}
+                {deleting && (
+                  <>
+                    <CircularProgress
+                      thickness={6}
+                      color="inherit"
+                      size="1.2rem"
+                    />
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Logging Out...
+                    </Typography>
+                  </>
+                )}
+              </Button>
             </Paper>
           </Fade>
         )}
@@ -216,7 +189,10 @@ function Profile() {
         <Skeleton animation="wave" variant="circular" width={40} height={40} />
       )}
       {!isLoading && data && (
-        <Tooltip title="Nanduri Jayant Vishnu" sx={{ margin: "2rem" }}>
+        <Tooltip
+          title={data.data.data.first_name + " " + data.data.data.last_name}
+          sx={{ margin: "2rem" }}
+        >
           <Avatar
             {...stringAvatar(
               data.data.data.first_name + " " + data.data.data.last_name

@@ -13,6 +13,7 @@ function Form() {
       <Routes>
         <Route exact path="/" element={<Register />}/>
           <Route exact path="register" element={<Register />} />
+          <Route exact path="register/:id" element={<Register />} />
           <Route exact path="login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
       </Routes>

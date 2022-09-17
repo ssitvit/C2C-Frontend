@@ -1,7 +1,6 @@
 import { Box } from "@mui/system";
 import React from "react";
 import Logo from "../Icons/Logo";
-import NavLinks from "./NavLinks";
 import Profile from './Profile';
 import {useMediaQuery,
 useTheme,
@@ -25,7 +24,7 @@ function Navbar() {
       }}
     >
       <Logo width={120} height={91}/>
-      {matches && <NavLinks />}
+      {/* {matches && <NavLinks />} */}
       <Profile />
     </Box>
   );
