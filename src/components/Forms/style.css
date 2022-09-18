@@ -3,3 +3,14 @@
     font-size: 0.8rem !important;
     left:10px !important;
 }
+.gravitas-img img{
+    animation: animation 0.3s all ease-in-out forwards;
+}
+@keyframes animation {
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}

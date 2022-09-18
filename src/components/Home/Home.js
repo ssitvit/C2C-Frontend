@@ -7,6 +7,7 @@ import {
 import React, { useEffect } from "react";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Form from "../Forms/Form";
+import Gravitas from "../Forms/Gravitas";
 import Login from "../Forms/Login";
 import Register from "../Forms/Register";
 import { useFetch } from "../Hooks/useFetch";
@@ -35,14 +36,16 @@ function Home() {
           alignItems="center"
           justifyContent="space-around"
         >
+
           <Stack
             spacing={2}
             alignItems="center"
             justifyContent="center"
             height={matches ? "" : "100vh"}
           >
-            <Logo width={220} height={101} />
+            <Logo width={220} height={95} />
             <Illustration />
+          <Gravitas/>
           </Stack>
           <Form />
         </Stack>
@@ -53,7 +56,7 @@ function Home() {
           spacing={2}
           minHeight="100vh"
           alignItems="center"
-          justifyContent="space-around"
+          justifyContent="center"
         >
           <Routes>
             <Route
@@ -66,7 +69,7 @@ function Home() {
                   justifyContent="center"
                   height={matches ? "" : "100vh"}
                 >
-                  <Logo width={220} height={101} />
+                  <Logo width={215} height={95} />
                   <Illustration />
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Button
@@ -88,11 +91,14 @@ function Home() {
                       Register
                     </Button>
                   </Stack>
+                    <Gravitas/>
                 </Stack>
               }
             />
             <Route exact path="/form/login" element={<Login/>}/>
+            <Route exact path="/login" element={<Login/>}/>
             <Route exact path="/form/register" element={<Register/>}/>
+            <Route exact path="/register" element={<Register/>}/>
           </Routes>
         </Stack>
       )}
