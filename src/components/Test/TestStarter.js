@@ -2,39 +2,68 @@ import {
   Box,
   Button,
   Chip,
-  Divider,
+  Fade,
+  Modal,
   Skeleton,
   Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useCallback, useRef } from "react";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import TimerIcon from "@mui/icons-material/Timer";
+import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 import ExamIcon from "../Icons/ExamIcon";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  borderRadius: "1.2rem",
+  boxShadow: 24,
+  p: 4,
+};
 function TestStarter() {
   const navigate = useNavigate();
+  const { width, height } = useWindowSize();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const { data, isLoading, error } = useFetch(
     "https://c2c-backend.vercel.app/user/checkauth"
   );
+  // const round1Time = new Date();
   const round1Time = new Date("Sep 30, 2022 14:00:00");
-  const round3Time = new Date("Sep 30, 2022 16:00:00");
-  const round2Time = new Date("Sep 30, 2022 18:00:00");
+  const round2Time = new Date("Sep 30, 2022 16:00:00");
+  const round3Time = new Date("Sep 30, 2022 18:00:00");
+
+  // store (current time - current round time) in sessionStorage
+
+  sessionStorage.setItem("round1Time", round1Time);
+  sessionStorage.setItem("round2Time", round2Time);
+  sessionStorage.setItem("round3Time", round3Time);
+
   const [timer, setTimer] = useState(0);
-
+  const [open, setOpen] = useState(false);
   const Ref = useRef(null);
-
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
-    const days = Math.floor((total / 1000 /60 / 60 /24));
+    const days = Math.floor(total / 1000 / 60 / 60 / 24);
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+
     return {
       total,
       days,
@@ -47,13 +76,10 @@ function TestStarter() {
   const startTimer = (e) => {
     let { total, days, hours, minutes, seconds } = getTimeRemaining(e);
     if (total >= 0) {
-      // update the timer
-      // check if less than 10 then we need to
-      // add '0' at the beginning of the variable
       setTimer(
         (days > 9 ? days : "0" + days) +
-        " : " +
-        (hours > 9 ? hours : "0" + hours) +
+          " : " +
+          (hours > 9 ? hours : "0" + hours) +
           " : " +
           (minutes > 9 ? minutes : "0" + minutes) +
           " : " +
@@ -66,8 +92,7 @@ function TestStarter() {
     // If you adjust it you should also need to
     // adjust the Endtime formula we are about
     // to code next
-    setTimer("00 : 00 : 00 : 00 ");
-
+    setTimer("00 : 00 : 00 : 00");
     // If you try to remove this line the
     // updating of timer Variable will be
     // after 1000ms or 1sec
@@ -80,27 +105,24 @@ function TestStarter() {
 
   const getDeadTime = (n) => {
     let deadline = round1Time;
-    if(n===1)deadline=round1Time;
-    if(n===2)deadline=round2Time;
-    if(n===3)deadline=round3Time;
-    else deadline=Date.now();
+    if (n === 1) deadline = round1Time;
+    else if (n === 2) deadline = round2Time;
+    else if (n === 3) deadline = round3Time;
+    else deadline = new Date();
+    sessionStorage.setItem("startTime", deadline);
     // This is where you need to adjust if
     // you entend to add more time
-    deadline.setSeconds(deadline.getSeconds()+10);
+    // deadline.setSeconds(deadline.getSeconds());
     return deadline;
   };
-
-  // We can use useEffect so that when the component
-  // mount the timer will start as soon as possible
-
-  // We put empty array to act as componentDid
-  // mount only
   useEffect(() => {
-    if(data){
-    clearTimer(getDeadTime(data.data.round1?1:data.data.round2?2:3));}
-    // clearTimer(getDeadTime(data.data.round1?1:data.data.round2?2:3));}
+    // if (data) {
+    //   console.log(data);
+    //   clearTimer(getDeadTime(data.data.data.round1 ? 1 : data.data.data.round2 ? 2 : 3));
+    //   // clearTimer(getDeadTime(1));
+    // }
+    clearTimer(getDeadTime(new Date().getTime()< round1Time.getTime()?1:(new Date().getTime()<round2Time.getTime()?2:3)));
   }, [data]);
-
   return (
     <Stack
       marginLeft="2rem"
@@ -109,6 +131,7 @@ function TestStarter() {
       alignItems="center"
       justifyContent="space-between"
     >
+      {/* left side */}
       <Stack
         spacing={4}
         alignItems="center"
@@ -119,25 +142,196 @@ function TestStarter() {
         sx={{ fontFamily: "Vercel", textAlign: "center" }}
       >
         <Typography variant="h2">Welcome to Code2Clone!</Typography>
-        <Box sx={{display:"flex", justifyContent: "center",alignItems: "center",gap:"2rem",flexDirection:"column"}}>
-          <div>
-          Next Round Begins in {" "}
-          </div>
-          {data && (
-            <Chip label={timer} color="primary" sx={{fontSize:"30px",padding:"2rem",fontFamily:"monospace"}}>
-            </Chip>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "2rem",
+            flexDirection: "column",
+          }}
+        >
+          {data && !((new Date().getTime() < round1Time.getTime() + 60000 * 45 && new Date().getTime() > round1Time.getTime()) ||
+            ( new Date().getTime() < round2Time.getTime() + 60000 * 45  && new Date().getTime() > round2Time.getTime())||
+            (new Date().getTime() < round3Time.getTime() + 60000 * 45 && new Date().getTime() > round3Time.getTime())) && (
+            <>
+              <div>Next Round Begins in </div>
+              <Chip
+                label={timer}
+                color="primary"
+                sx={{
+                  fontSize: "30px",
+                  padding: "2rem",
+                  fontFamily: "monospace",
+                }}
+              ></Chip>
+            </>
           )}
-          {!data && <Skeleton height="50px"/>}
+          {!data && <Skeleton height="50px" width="100px" />}
         </Box>
+        
         <Stack direction="row" spacing={4}>
-          {timer==="00 : 00 : 00 : 00" && <Button color="primary" variant="contained">
-            Start Cloning
-          </Button>}
-          <Button color="secondary" variant="contained">
-            View Results
-          </Button>
+          {!isLoading && ((new Date().getTime() < round1Time.getTime() + 60000 * 45 && new Date().getTime() > round1Time.getTime()) ||
+            ( new Date().getTime() < round2Time.getTime() + 60000 * 45  && new Date().getTime() > round2Time.getTime())||
+            (new Date().getTime() < round3Time.getTime() + 60000 * 45 && new Date().getTime() > round3Time.getTime())) && (
+            <>
+              <Button color="primary" variant="contained" size="large">
+                Start Cloning
+              </Button>
+            </>
+          )}
+          {!isLoading &&(new Date().getTime() > round1Time.getTime() + 60000 * 45 ||
+            new Date().getTime() > round2Time.getTime() + 60000 * 45 ||
+            new Date().getTime() > round3Time.getTime() + 60000 * 45) && (
+            <>
+              <Button
+                color="secondary"
+                variant="contained"
+                size="large"
+                onClick={handleOpen}
+              >
+                View Results
+              </Button>
+            </>
+          )}
+
+          {/* MODAL */}
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+          >
+            {/* <Confetti width={width} height={height} tweenDuration={2000}/> */}
+            <Fade in={open}>
+              <Box sx={style}>
+                <Typography
+                  id="transition-modal-title"
+                  variant="h4"
+                  component="h2"
+                  sx={{ width: "100%", textAlign: "center" }}
+                >
+                  Round-Wise Results
+                </Typography>
+                {data && (
+                  <Typography
+                    component="div"
+                    id="transition-modal-description"
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      gap: "2rem",
+                    }}
+                  >
+                    <Box
+                      component="div"
+                      w="100%"
+                      textAlign="center"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "1.2rem",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography variant="h6">Round 1</Typography>
+                      <Typography>
+                        {new Date().getTime() > round1Time.getTime() + 60000 * 65
+                          ? data.data.data.round2
+                            ? "Qualified"
+                            : "Disqualified"
+                          : "Yet to be disclosed"}
+                      </Typography>
+                      {new Date().getTime() > round1Time.getTime() + 60000 * 65 ? (
+                        data.data.data.round2 ? (
+                          <CheckCircleIcon color="success" />
+                        ) : (
+                          <CancelIcon color="error" />
+                        )
+                      ) : (
+                        <TimerIcon color="warning" />
+                      )}
+                    </Box>
+                    <Box
+                      component="div"
+                      textAlign="center"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "1.2rem",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography variant="h6">Round 2</Typography>
+                      <Typography>
+                        {new Date().getTime() >
+                        round2Time.getTime() + 60000 * 65
+                          ? data.data.data.round3
+                            ? "Qualified"
+                            : "Disqualified"
+                          : "Yet to be disclosed"}
+                      </Typography>
+                      {new Date().getTime() >
+                      round2Time.getTime() + 60000 * 65 ? (
+                        data.data.data.round3 ? (
+                          <CheckCircleIcon color="success" />
+                        ) : (
+                          <CancelIcon color="error" />
+                        )
+                      ) : (
+                        <TimerIcon color="warning" />
+                      )}
+                    </Box>
+                    <Box
+                      component="div"
+                      w="100%"
+                      textAlign="center"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "1.2rem",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography variant="h6">Round 3</Typography>
+                      <Typography>
+                        {new Date().getTime() >
+                        round3Time.getTime() + 60000 * 65
+                          ? data.data.data.round3
+                            ? "Qualified"
+                            : "Disqualified"
+                          : "Yet to be disclosed"}
+                      </Typography>
+                      {new Date().getTime() >
+                      round3Time.getTime() + 60000 * 65 ? (
+                        data.data.data.round3 ? (
+                          <CheckCircleIcon color="success" />
+                        ) : (
+                          <CancelIcon color="error" />
+                        )
+                      ) : (
+                        <>
+                          <TimerIcon color="warning" />
+                        </>
+                      )}
+                    </Box>
+                  </Typography>
+                )}
+              </Box>
+            </Fade>
+          </Modal>
         </Stack>
+
       </Stack>
+
+      {/* right side */}
       <Stack
         spacing={4}
         alignItems="center"
@@ -149,6 +343,7 @@ function TestStarter() {
         <Typography variant="h4" sx={{ fontFamily: "Vercel" }}>
           Leaderboard
         </Typography>
+        <ExamIcon />
       </Stack>
     </Stack>
   );

@@ -6,15 +6,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
-import AlternateEmailTwoToneIcon from "@mui/icons-material/AlternateEmailTwoTone";
-import AttachEmailTwoToneIcon from "@mui/icons-material/AttachEmailTwoTone";
-import SendTwoToneIcon from "@mui/icons-material/SendTwoTone";
-import SchoolTwoToneIcon from "@mui/icons-material/SchoolTwoTone";
 import {
   Alert,
   Avatar,
-  Box,
-  ButtonGroup,
   CircularProgress,
   Divider,
   Skeleton,
@@ -48,6 +42,7 @@ function Profile() {
     setMessage("");
     let response = await fetch("https://c2c-backend.vercel.app/user/logout", {
       method: "GET",
+      // mode:"no-cors",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",

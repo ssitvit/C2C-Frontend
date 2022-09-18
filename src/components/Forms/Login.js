@@ -94,6 +94,7 @@ function Login() {
         fetch(url, {
           method: "POST",
           credentials: "include",
+          // mode:"no-cors",
           headers:{
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -129,7 +130,6 @@ function Login() {
     },
   });
   // JSX
-
   return (
     // FORM COMPONENT
     <Box
