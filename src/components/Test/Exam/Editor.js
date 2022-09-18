@@ -43,9 +43,9 @@ function Editor(props) {
     setValue(value);
   }, [type]);
   return (
-    <Stack width="50%" style={{border:"1px solid grey",padding:"2rem",paddingTop:"0"}}>
+    <Stack width="100%" style={{border:"1px solid grey",paddingTop:"0"}}>
       <Typography variant="h4" color="white" margin="0.5rem">
-        {type.charAt(0).toUpperCase() + type.substr(1).toLowerCase()}
+        {type.toUpperCase()}
       </Typography>
       {/* <TextareaAutosize
         className="outline"

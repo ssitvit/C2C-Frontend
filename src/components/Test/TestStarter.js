@@ -21,6 +21,7 @@ import { useFetch } from "../Hooks/useFetch";
 // import useWindowSize from "react-use/lib/useWindowSize";
 // import Confetti from "react-confetti";
 import ExamIcon from "../Icons/ExamIcon";
+import Instructions from "./Exam/Instructions";
 const style = {
   position: "absolute",
   top: "50%",
@@ -42,7 +43,7 @@ function TestStarter() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
-  const round1Time = new Date("Sep 30, 2022 14:00:00");
+  const round1Time = new Date("Sep 18, 2022 19:00:00");
   const round2Time = new Date("Sep 30, 2022 16:00:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
 
@@ -217,7 +218,7 @@ function TestStarter() {
               </Button>
             </>
           )}
-          {!isLoading && getCurrentRound() === "0" && (
+          {!isLoading && getCurrentRound() === "0" && !getCurrentRound() === "1" && (
             <>
               <Button
                 color="secondary"
@@ -387,7 +388,8 @@ function TestStarter() {
                     >
                       Instructions for the exam
                     </Typography>
-                    <Box sx={{ width: "100%", textAlign: "right" }}>
+                    <Instructions/>
+                    <Box sx={{ width: "100%", textAlign: "center" }}>
                       <Button variant="contained" onClick={handleCloning}>
                         Start Now
                       </Button>
@@ -413,7 +415,7 @@ function TestStarter() {
         <Typography variant="h4" sx={{ fontFamily: "Vercel" }}>
           Leaderboard
         </Typography>
-        <ExamIcon />
+        {/* <ExamIcon /> */}
       </Stack>
     </Stack>
   );

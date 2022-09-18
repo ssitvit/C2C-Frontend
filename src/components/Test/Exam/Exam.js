@@ -1,4 +1,11 @@
-import { Stack, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Editor from "./Editor";
@@ -35,46 +42,73 @@ function Exam() {
   }, [htmlObj, cssObj]);
   return (
     <Stack direction="column" alignItems="center" spacing={2}>
-      <Stack
-        direction={matches ? "row" : "column"}
-        alignItems="center"
-        justifyContent="center"
-        width="90%"
-      >
-        <Editor type="html" obj={htmlObj} setObj={setHtmlObj} />
-        <Editor type="css" obj={cssObj} setObj={setCssObj} />
+      <Stack direction="column" alignItems="center" spacing={2} width="100%">
+        <Box sx={{ color: "white" }}>
+          <Typography>Timer</Typography>
+        </Box>
+        <Stack
+          direction={matches ? "row" : "column"}
+          alignItems="center"
+          justifyContent="center"
+          spacing={8}
+          width="100%"
+        >
+          {/* Question */}
+          <Box
+            style={{
+              width: "100%",
+              border: "none",
+              height: "500px",
+              color: "white",
+              backgroundColor: "white",
+            }}
+            
+          ></Box>
+          {/* USER RESPONSE */}
+          <iframe
+            sandbox="allow-scripts"
+            style={{
+              width: "100%",
+              border: "none",
+              height: "500px",
+              color: "white",
+              background: "white",
+              margin: "2rem",
+            }}
+            srcDoc={userObj}
+            title="userResponse"
+          />
+        </Stack>
+        <Stack
+          direction={matches ? "row" : "column"}
+          alignItems="center"
+          justifyContent="center"
+          width="100%"
+        >
+          <Editor type="html" obj={htmlObj} setObj={setHtmlObj} />
+          <Editor type="css" obj={cssObj} setObj={setCssObj} />
+        </Stack>
       </Stack>
       <Stack
-        direction={matches ? "row" : "column"}
+        direction="row"
+        justifyContent="space-between"
         alignItems="center"
-        justifyContent="center"
-        spacing={8}
+        spacing={2}
+        sx={{ padding: "2rem" }}
       >
-        <iframe
-          sandbox="allow-scripts"
-          style={{
-            width: "80%",
-            border: "none",
-            height: "300px",
-            color: "white",
-            backgroundColor: "rgba(255,255,255,0.3",
-            margin: "2rem",
-          }}
-          srcDoc={userObj}
-          title="userResponse"
-        />
-        <iframe
-          sandbox="allow-scripts"
-          style={{
-            width: "80%",
-            border: "none",
-            height: "300px",
-            color: "white",
-            backgroundColor: "rgba(255,255,255,0.3",
-          }}
-          srcDoc={userObj}
-          title="userResponse2"
-        />
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
+          <Button variant="contained" color="error">
+            Submit
+          </Button>
+          <Button variant="contained" color="error">
+            Next
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
