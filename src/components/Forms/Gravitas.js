@@ -13,5 +13,4 @@ function Gravitas() {
     </div>
   )
 }
-
 export default Gravitas
