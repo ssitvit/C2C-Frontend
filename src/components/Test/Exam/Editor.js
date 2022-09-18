@@ -39,9 +39,9 @@ function Editor(props) {
     setObj(value);
   });
   const onChange = React.useCallback((value, viewUpdate) => {
-    console.log("value:", value);
+    sessionStorage.setItem(type, value);
     setValue(value);
-  }, []);
+  }, [type]);
   return (
     <Stack width="50%" style={{border:"1px solid grey",padding:"2rem",paddingTop:"0"}}>
       <Typography variant="h4" color="white" margin="0.5rem">

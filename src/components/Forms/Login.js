@@ -281,7 +281,7 @@ function Login() {
         component="button"
         style={{ cursor: "pointer", width: "fit-content", color: "#CC0707" }}
         onClick={() => {
-          navigate("/register");
+          matches?navigate("/register"):navigate('/form/register');
         }}
         underline="always"
       >

@@ -659,7 +659,7 @@ function Register() {
         component="button"
         style={{ cursor: "pointer", width: "fit-content", color: "#CC0707" }}
         onClick={() => {
-          navigate("/login");
+          matches?navigate("/login"):navigate("/form/login");
         }}
         underline="always"
       >

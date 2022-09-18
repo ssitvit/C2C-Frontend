@@ -18,8 +18,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
-import useWindowSize from "react-use/lib/useWindowSize";
-import Confetti from "react-confetti";
+// import useWindowSize from "react-use/lib/useWindowSize";
+// import Confetti from "react-confetti";
 import ExamIcon from "../Icons/ExamIcon";
 const style = {
   position: "absolute",
@@ -35,10 +35,10 @@ const style = {
 };
 function TestStarter() {
   const navigate = useNavigate();
-  const { width, height } = useWindowSize();
+  // const { width, height } = useWindowSize();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const { data, isLoading, error } = useFetch(
+  const { data, isLoading } = useFetch(
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
@@ -54,9 +54,13 @@ function TestStarter() {
 
   const [timer, setTimer] = useState(0);
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const Ref = useRef(null);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
+
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const days = Math.floor(total / 1000 / 60 / 60 / 24);
@@ -72,7 +76,30 @@ function TestStarter() {
       seconds,
     };
   };
-
+  const handleCloning = ()=>{
+    console.log(data.data.data[`round${getCurrentRound()}`])
+    
+    if(data.data.data[`round${getCurrentRound()}`]){
+      navigate('exam/1');
+    }
+    else{
+      console.log("not allowed");
+    }
+  }
+  const getCurrentRound = () => {
+    const currentRound =
+      new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
+      new Date().getTime() > round1Time.getTime()
+        ? "1"
+        : new Date().getTime() < round2Time.getTime() + 60000 * 45 &&
+          new Date().getTime() > round2Time.getTime()
+        ? "2"
+        : new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
+          new Date().getTime() > round1Time.getTime()
+        ? "3"
+        : "0";
+    return currentRound;
+  };
   const startTimer = (e) => {
     let { total, days, hours, minutes, seconds } = getTimeRemaining(e);
     if (total >= 0) {
@@ -121,8 +148,17 @@ function TestStarter() {
     //   clearTimer(getDeadTime(data.data.data.round1 ? 1 : data.data.data.round2 ? 2 : 3));
     //   // clearTimer(getDeadTime(1));
     // }
-    clearTimer(getDeadTime(new Date().getTime()< round1Time.getTime()?1:(new Date().getTime()<round2Time.getTime()?2:3)));
+    clearTimer(
+      getDeadTime(
+        new Date().getTime() < round1Time.getTime()
+          ? 1
+          : new Date().getTime() < round2Time.getTime()
+          ? 2
+          : 3
+      )
+    );
   }, [data]);
+
   return (
     <Stack
       marginLeft="2rem"
@@ -151,9 +187,7 @@ function TestStarter() {
             flexDirection: "column",
           }}
         >
-          {data && !((new Date().getTime() < round1Time.getTime() + 60000 * 45 && new Date().getTime() > round1Time.getTime()) ||
-            ( new Date().getTime() < round2Time.getTime() + 60000 * 45  && new Date().getTime() > round2Time.getTime())||
-            (new Date().getTime() < round3Time.getTime() + 60000 * 45 && new Date().getTime() > round3Time.getTime())) && (
+          {data && getCurrentRound() === "0" && (
             <>
               <div>Next Round Begins in </div>
               <Chip
@@ -169,20 +203,21 @@ function TestStarter() {
           )}
           {!data && <Skeleton height="50px" width="100px" />}
         </Box>
-        
+
         <Stack direction="row" spacing={4}>
-          {!isLoading && ((new Date().getTime() < round1Time.getTime() + 60000 * 45 && new Date().getTime() > round1Time.getTime()) ||
-            ( new Date().getTime() < round2Time.getTime() + 60000 * 45  && new Date().getTime() > round2Time.getTime())||
-            (new Date().getTime() < round3Time.getTime() + 60000 * 45 && new Date().getTime() > round3Time.getTime())) && (
+          {!isLoading && getCurrentRound() !== "0" && (
             <>
-              <Button color="primary" variant="contained" size="large">
+              <Button
+                color="primary"
+                variant="contained"
+                size="large"
+                onClick={handleOpen2}
+              >
                 Start Cloning
               </Button>
             </>
           )}
-          {!isLoading &&(new Date().getTime() > round1Time.getTime() + 60000 * 45 ||
-            new Date().getTime() > round2Time.getTime() + 60000 * 45 ||
-            new Date().getTime() > round3Time.getTime() + 60000 * 45) && (
+          {!isLoading && getCurrentRound() === "0" && (
             <>
               <Button
                 color="secondary"
@@ -196,6 +231,7 @@ function TestStarter() {
           )}
 
           {/* MODAL */}
+          {/* RESULTS */}
           <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
@@ -241,13 +277,15 @@ function TestStarter() {
                     >
                       <Typography variant="h6">Round 1</Typography>
                       <Typography>
-                        {new Date().getTime() > round1Time.getTime() + 60000 * 65
+                        {new Date().getTime() >
+                        round1Time.getTime() + 60000 * 65
                           ? data.data.data.round2
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
-                      {new Date().getTime() > round1Time.getTime() + 60000 * 65 ? (
+                      {new Date().getTime() >
+                      round1Time.getTime() + 60000 * 65 ? (
                         data.data.data.round2 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
@@ -327,8 +365,39 @@ function TestStarter() {
               </Box>
             </Fade>
           </Modal>
-        </Stack>
 
+          {/* INSTRUCTIONS FOR EXAM */}
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open2}
+            onClose={handleClose2}
+            closeAfterTransition
+          >
+            {/* <Confetti width={width} height={height} tweenDuration={2000}/> */}
+            <Fade in={open2}>
+              <Box sx={style}>
+                {data && (
+                  <>
+                    <Typography
+                      id="transition-modal-title"
+                      variant="h4"
+                      component="h2"
+                      sx={{ width: "100%", textAlign: "center" }}
+                    >
+                      Instructions for the exam
+                    </Typography>
+                    <Box sx={{ width: "100%", textAlign: "right" }}>
+                      <Button variant="contained" onClick={handleCloning}>
+                        Start Now
+                      </Button>
+                    </Box>
+                  </>
+                )}
+              </Box>
+            </Fade>
+          </Modal>
+        </Stack>
       </Stack>
 
       {/* right side */}
@@ -340,6 +409,7 @@ function TestStarter() {
         width="50%"
         color="white"
       >
+        {/* <Confetti height={height} width={width}/> */}
         <Typography variant="h4" sx={{ fontFamily: "Vercel" }}>
           Leaderboard
         </Typography>

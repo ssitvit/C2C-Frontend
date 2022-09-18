@@ -6,8 +6,7 @@ import Editor from "./Editor";
 function Exam() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-    const htmlTemplate=
-    `<!DOCTYPE html>
+  const htmlTemplate = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -19,35 +18,63 @@ function Exam() {
         <!-- Start writing your code here -->
         
     </body>
-    </html>`
-    const [htmlObj,setHtmlObj] = useState(htmlTemplate);
-    const [cssObj,setCssObj] = useState(null);
-    const [userObj,setUserObj] = useState("Hi everyone");
-    
-    useEffect(()=>{
-        const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
-        setUserObj(finalObj);
-    },[htmlObj,cssObj])
-    console.log(userObj);
+    </html>`;
+  const [htmlObj, setHtmlObj] = useState(
+    sessionStorage.getItem("html")
+      ? sessionStorage.getItem("html")
+      : htmlTemplate
+  );
+  const [cssObj, setCssObj] = useState(
+    sessionStorage.getItem("css") ? sessionStorage.getItem("css") : null
+  );
+  const [userObj, setUserObj] = useState("Hi everyone");
+
+  useEffect(() => {
+    const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
+    setUserObj(finalObj);
+  }, [htmlObj, cssObj]);
   return (
     <Stack direction="column" alignItems="center" spacing={2}>
-      <Stack direction={matches?"row":"column"} alignItems="center" justifyContent="center" width="90%">
-        <Editor type="html" obj ={htmlObj} setObj={setHtmlObj}/>
-        <Editor type="css" obj ={cssObj} setObj={setCssObj}/>
+      <Stack
+        direction={matches ? "row" : "column"}
+        alignItems="center"
+        justifyContent="center"
+        width="90%"
+      >
+        <Editor type="html" obj={htmlObj} setObj={setHtmlObj} />
+        <Editor type="css" obj={cssObj} setObj={setCssObj} />
       </Stack>
-      <Stack direction={matches?"row":"column"} alignItems="center" justifyContent="center" spacing={8} >
+      <Stack
+        direction={matches ? "row" : "column"}
+        alignItems="center"
+        justifyContent="center"
+        spacing={8}
+      >
         <iframe
-        sandbox="allow-scripts"
-        style={{ width:"80%",border:"none",height:"300px",color: "white",backgroundColor: "rgba(255,255,255,0.3",margin:"2rem"}}
-        srcDoc={userObj}
-        title="userResponse"
-      />
-      <iframe
-        sandbox="allow-scripts"
-        style={{ width:"80%",border:"none",height:"300px",color: "white",backgroundColor: "rgba(255,255,255,0.3"}}
-        srcDoc={userObj}
-        title="userResponse2"
-      />
+          sandbox="allow-scripts"
+          style={{
+            width: "80%",
+            border: "none",
+            height: "300px",
+            color: "white",
+            backgroundColor: "rgba(255,255,255,0.3",
+            margin: "2rem",
+          }}
+          srcDoc={userObj}
+          title="userResponse"
+        />
+        <iframe
+          sandbox="allow-scripts"
+          style={{
+            width: "80%",
+            border: "none",
+            height: "300px",
+            color: "white",
+            backgroundColor: "rgba(255,255,255,0.3",
+          }}
+          srcDoc={userObj}
+          title="userResponse2"
+        />
       </Stack>
     </Stack>
   );
