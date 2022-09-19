@@ -45,6 +45,7 @@ function Profile() {
       method: "GET",
       // mode:"no-cors",
       credentials: "include",
+      cache:"reload",
       headers: {
         "Content-Type": "application/json",
         // "Access-Control-Allow-Credentials": "true",
@@ -55,9 +56,9 @@ function Profile() {
       setOpen2(true);
       setMessage(data.data.data);
       document.cookie='header=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=None;';
-      // setTimeout(() => {
-      //   navigate("/login");
-      // }, 1000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     }
   };
   const handleClick = (newPlacement) => (event) => {
