@@ -43,7 +43,7 @@ function TestStarter() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
-  const round1Time = new Date("Sep 18, 2022 19:00:00");
+  const round1Time = new Date("Sep 19, 2022 15:00:00");
   const round2Time = new Date("Sep 30, 2022 16:00:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
 
@@ -77,16 +77,15 @@ function TestStarter() {
       seconds,
     };
   };
-  const handleCloning = ()=>{
-    console.log(data.data.data[`round${getCurrentRound()}`])
-    
-    if(data.data.data[`round${getCurrentRound()}`]){
-      navigate('exam/1');
-    }
-    else{
+  const handleCloning = () => {
+    console.log(data.data.data[`round${getCurrentRound()}`]);
+
+    if (data.data.data[`round${getCurrentRound()}`]) {
+      navigate("exam/1");
+    } else {
       console.log("not allowed");
     }
-  }
+  };
   const getCurrentRound = () => {
     const currentRound =
       new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
@@ -143,12 +142,8 @@ function TestStarter() {
     // deadline.setSeconds(deadline.getSeconds());
     return deadline;
   };
+
   useEffect(() => {
-    // if (data) {
-    //   console.log(data);
-    //   clearTimer(getDeadTime(data.data.data.round1 ? 1 : data.data.data.round2 ? 2 : 3));
-    //   // clearTimer(getDeadTime(1));
-    // }
     clearTimer(
       getDeadTime(
         new Date().getTime() < round1Time.getTime()
@@ -218,18 +213,20 @@ function TestStarter() {
               </Button>
             </>
           )}
-          {!isLoading && getCurrentRound() === "0" && !getCurrentRound() === "1" && (
-            <>
-              <Button
-                color="secondary"
-                variant="contained"
-                size="large"
-                onClick={handleOpen}
-              >
-                View Results
-              </Button>
-            </>
-          )}
+          {!isLoading &&
+            getCurrentRound() === "0" &&
+            !getCurrentRound() === "1" && (
+              <>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="large"
+                  onClick={handleOpen}
+                >
+                  View Results
+                </Button>
+              </>
+            )}
 
           {/* MODAL */}
           {/* RESULTS */}
@@ -388,7 +385,7 @@ function TestStarter() {
                     >
                       Instructions for the exam
                     </Typography>
-                    <Instructions/>
+                    <Instructions />
                     <Box sx={{ width: "100%", textAlign: "center" }}>
                       <Button variant="contained" onClick={handleCloning}>
                         Start Now

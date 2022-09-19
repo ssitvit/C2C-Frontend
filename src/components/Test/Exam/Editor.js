@@ -3,34 +3,11 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
-import { color} from '@uiw/codemirror-extensions-color';
-import { createTheme } from '@uiw/codemirror-themes';
+import { color, colorView, colorTheme } from "@uiw/codemirror-extensions-color";
+import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
 import { html } from "@codemirror/lang-html";
 import { css } from "@codemirror/lang-css";
-import { tags as t } from '@lezer/highlight';
 import "./editor.css";
-
-const myTheme = createTheme({
-  dark: 'dark',
-  settings: {
-    background: '#000',
-    foreground: 'white',
-    caret: 'white',
-    selection: '#250101',
-    selectionMatch: '#a1a1a1',
-    gutterBackground: '#000',
-    gutterForeground: '#4D4D4C',
-    gutterBorder: '#000',
-    lineHighlight: '#232323',
-  },
-  styles: [
-    { tag: t.comment, color: 'green' },
-    { tag: t.definition(t.typeName), color: '#194a7b' },
-    { tag: t.typeName, color: '#194a7b' },
-    { tag: t.tagName, color: 'orange' },
-    { tag: t.variableName, color: '#1a00db' },
-  ],
-});
 
 function Editor(props) {
   const { type, obj, setObj } = props;
@@ -38,13 +15,21 @@ function Editor(props) {
   useEffect(() => {
     setObj(value);
   });
-  const onChange = React.useCallback((value, viewUpdate) => {
-    sessionStorage.setItem(type, value);
-    setValue(value);
-  }, [type]);
+  const onChange = React.useCallback(
+    (value, viewUpdate) => {
+      sessionStorage.setItem(type, value);
+      setValue(value);
+    },
+    [type]
+  );
   return (
-    <Stack width="100%" style={{border:"1px solid grey",paddingTop:"0"}}>
-      <Typography variant="h4" color="white" margin="0.5rem">
+    <Stack width="100%" style={{ paddingTop: "0" }}>
+      <Typography
+        variant="h4"
+        color="white"
+        margin="0.5rem"
+        sx={{ fontFamily: "Audiowide" }}
+      >
         {type.toUpperCase()}
       </Typography>
       {/* <TextareaAutosize
@@ -64,15 +49,18 @@ function Editor(props) {
         }}
       /> */}
       <CodeMirror
-      className="outline"
+        className="outline"
         value={value ? value : ""}
         maxHeight="50vh"
         minHeight="50vh"
         width="100%"
-        extensions={[type==="html"?html({ jsx: true }):css({ jsx: true }),color]}
+        extensions={[
+          type === "html" ? html({ jsx: true }) : css({ jsx: true }),
+          color,
+        ]}
         onChange={onChange}
-        placeholder={type==="html"?"Enter Html":"Enter Css"}
-        theme={myTheme}
+        placeholder={type === "html" ? "Enter Html" : "Enter Css"}
+        theme={githubDark}
       />
     </Stack>
   );

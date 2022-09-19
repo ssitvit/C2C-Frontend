@@ -9,6 +9,7 @@ export const useFetch = (url, method, body) => {
       setLoading(true);
       let response = await fetch(url, {
         method: method,
+        // mode:"no-cors",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +26,7 @@ export const useFetch = (url, method, body) => {
         setLoading(false);
       }
     };
-    fetchData();
+    try{fetchData()}catch(err){setError(err)};
   }, [url, method, body]);
   return { data, isLoading, error };
 };

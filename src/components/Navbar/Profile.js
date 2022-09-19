@@ -46,14 +46,16 @@ function Profile() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": "true",
+        // "Access-Control-Allow-Credentials": "true",
       },
     });
     let data = await response.json();
     if (data.success) {
       setOpen2(true);
       setMessage(data.data.data);
+      document.execCommand("ClearAuthenticationCache");
       // document.cookie = "authentication=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      document.cookie='header=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=None;';
       setTimeout(() => {
         navigate("/login");
       }, 1000);
@@ -100,6 +102,7 @@ function Profile() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   useEffect(() => {
+    console.log(error,data);
     if ((data && !data.success) || error) {
       navigate("/login");
     }
@@ -153,7 +156,7 @@ function Profile() {
                 Go To Dashboard
               </Button>
               <Divider sx={{ backgroundColor: "white" }} />
-              <Button
+              {/* <Button
                 variant="contained"
                 disabled={deleting}
                 sx={{ width: "100%", borderRadius: "0" }}
@@ -175,7 +178,7 @@ function Profile() {
                     </Typography>
                   </>
                 )}
-              </Button>
+              </Button> */}
             </Paper>
           </Fade>
         )}

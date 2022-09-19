@@ -110,10 +110,12 @@ function Login() {
               // document.cookie='authentication=true;SameSite=none;Secure=true;';
               setTimeout(()=>{navigate('/dashboard/user')},1000);
             }else if(data.data.error==="Email Not verified"){
+              setLoading(false);
               setVerified(false);
               setError(data.data.error);
               setOpen(true); 
             }else if(data.data.error){
+              setLoading(false);
               setError(data.data.error);
               setOpen(true); 
             }
