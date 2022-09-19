@@ -12,7 +12,7 @@ import { CookiesProvider } from "react-cookie";
 function App() {
   return (
     <CookiesProvider>
-      <Box minHeight="100vh" sx={{ background: "#182747" }}>
+      <Box minHeight="100vh" sx={{ background: "black" }}>
         <Routes>
           <Route exact path="/*" element={<Home />} />
           <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
