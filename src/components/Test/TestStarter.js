@@ -43,7 +43,7 @@ function TestStarter() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
-  const round1Time = new Date("Sep 19, 2022 22:00:00");
+  const round1Time = new Date("Sep 20, 2022 00:05:00");
   const round2Time = new Date("Sep 30, 2022 16:00:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
 
