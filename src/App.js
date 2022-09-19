@@ -9,10 +9,11 @@ import CoodDashboard from "./components/Dashboard/CoodDashboard";
 import { Box } from "@mui/material";
 import Verify from "./components/Verification/Verify";
 import { CookiesProvider } from "react-cookie";
+import NotFound from "./components/Notfound/NotFound";
 function App() {
   return (
     <CookiesProvider>
-      <Box minHeight="100vh" sx={{ background: "black" }}>
+      <Box minHeight="100vh" sx={{ background: 'url("https://wallpapercave.com/wp/wp6994803.jpg")',backgroundSize:"cover" }}>
         <Routes>
           <Route exact path="/*" element={<Home />} />
           <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
@@ -20,7 +21,7 @@ function App() {
           <Route exact path="/dashboard/cood" element={<CoodDashboard />} />
           <Route exact path="/contact" element={<Contact />} />
           <Route exact path="/user/verify/:id/:token" element={<Verify />} />
-          <Route exact path="*" element={<Verify />} />
+          <Route exact path="/*" element={<NotFound/>} />
         </Routes>
       </Box>
     </CookiesProvider>

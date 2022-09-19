@@ -23,11 +23,14 @@ function Exam(props) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [qnum, setQnum] = useState(0);
+  const [qLinks,setQlinks] = useState([]);
   const htmlTemplate = `<!DOCTYPE html>
-    <html lang="en">
+  <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,7 +82,7 @@ function Exam(props) {
       body: JSON.stringify({
         html: htmlObj,
         css: cssObj,
-        round: round,
+        round: qLinks.length===1?round:10*round+qnum,
       }),
     });
     let data = await response.json();
@@ -87,6 +90,8 @@ function Exam(props) {
       setOpen(true);
       setMessage("Code Submitted Successfully");
       setLoading(false);
+      if(qLinks.length===1||(qnum+1)%qLinks.length===0){setTimeout(() => {navigate('/dashbord/user')})}
+      else{setQnum(prev=>prev+1);sessionStorage.clear()}
     } else {
       setOpen(true);
       setErrorMessage(data.data.error);
@@ -94,6 +99,7 @@ function Exam(props) {
       console.log(data);
     }
   };
+
   useEffect(() => {
     console.log(data);
     setErrorMessage("");
@@ -104,10 +110,33 @@ function Exam(props) {
       setTimeout(() => {
         navigate("/dashboard/user");
       }, 2000);
-    }
+    }else{
     const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
     setUserObj(finalObj);
-  }, [htmlObj, cssObj, data, error, navigate]);
+    setLoading2(true);
+    let getqArray = async ()=>{
+      let url = "https://c2c-backend.vercel.app/save/getimage";
+      let response = await fetch(url,{
+        method:"POST",
+        credentials: "include",
+        headers:{"Content-Type": "application/json"},
+        body: JSON.stringify({"round":round})
+      });
+      let data = await response.json();
+      if(data.success){
+        setLoading2(false);
+        setQlinks(data.data.data);
+        console.log(data.data.data);
+      }else{
+        setLoading2(false);
+        setOpen(true);
+        setErrorMessage("Could not fetch Question");
+      }
+    };
+    getqArray();
+
+  }
+  }, [htmlObj, cssObj, data, error, navigate,round]);
   return (
     <>
       {(isLoading || error) && (
@@ -159,16 +188,17 @@ function Exam(props) {
                 }}
               >
                 <Typography variant="h4" sx={{ color: "white",fontFamily:"Audiowide" }}>
-                  Question
+                  Question {qnum+1}
                 </Typography>
                 <Box
                   style={{
                     width: "100%",
-                    color: "white",
+                    color: "black",
                     backgroundColor: "white",
                     height: "500px",
-                  }}
-                ></Box>
+                  }}>
+                    <img src={qLinks[qnum]} alt="" height="100%" width="100%"/>
+                  </Box>
               </Stack>
               {/* USER RESPONSE */}
               <Stack
@@ -227,9 +257,6 @@ function Exam(props) {
                     </Typography>
                   </>
                 )}
-              </Button>
-              <Button variant="contained" color="error">
-                Next
               </Button>
             </Stack>
           </Stack>

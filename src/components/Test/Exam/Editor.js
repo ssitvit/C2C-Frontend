@@ -3,11 +3,12 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
-import { color, colorView, colorTheme } from "@uiw/codemirror-extensions-color";
+import { color} from "@uiw/codemirror-extensions-color";
 import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
 import { html } from "@codemirror/lang-html";
 import { css } from "@codemirror/lang-css";
 import "./editor.css";
+
 
 function Editor(props) {
   const { type, obj, setObj } = props;

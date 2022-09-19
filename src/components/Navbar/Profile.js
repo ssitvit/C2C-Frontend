@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
+
 import {
   Alert,
   Avatar,
@@ -53,8 +54,6 @@ function Profile() {
     if (data.success) {
       setOpen2(true);
       setMessage(data.data.data);
-      document.execCommand("ClearAuthenticationCache");
-      // document.cookie = "authentication=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
       document.cookie='header=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=None;';
       setTimeout(() => {
         navigate("/login");
@@ -156,7 +155,7 @@ function Profile() {
                 Go To Dashboard
               </Button>
               <Divider sx={{ backgroundColor: "white" }} />
-              {/* <Button
+              <Button
                 variant="contained"
                 disabled={deleting}
                 sx={{ width: "100%", borderRadius: "0" }}
@@ -178,7 +177,7 @@ function Profile() {
                     </Typography>
                   </>
                 )}
-              </Button> */}
+              </Button>
             </Paper>
           </Fade>
         )}

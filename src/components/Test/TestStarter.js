@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
 // import useWindowSize from "react-use/lib/useWindowSize";
 // import Confetti from "react-confetti";
-import ExamIcon from "../Icons/ExamIcon";
+// import ExamIcon from "../Icons/ExamIcon";
 import Instructions from "./Exam/Instructions";
 const style = {
   position: "absolute",
@@ -43,7 +43,7 @@ function TestStarter() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
-  const round1Time = new Date("Sep 30, 2022 14:00:00");
+  const round1Time = new Date("Sep 19, 2022 22:00:00");
   const round2Time = new Date("Sep 30, 2022 16:00:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
 
@@ -61,7 +61,6 @@ function TestStarter() {
   const handleClose = () => setOpen(false);
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
-
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const days = Math.floor(total / 1000 / 60 / 60 / 24);
@@ -81,7 +80,7 @@ function TestStarter() {
     console.log(data.data.data[`round${getCurrentRound()}`]);
 
     if (data.data.data[`round${getCurrentRound()}`]) {
-      navigate("exam/1");
+      navigate(`exam/${getCurrentRound()}`);
     } else {
       console.log("not allowed");
     }
@@ -105,12 +104,12 @@ function TestStarter() {
     if (total >= 0) {
       setTimer(
         (days > 9 ? days : "0" + days) +
-          " : " +
+          ` d : ` +
           (hours > 9 ? hours : "0" + hours) +
-          " : " +
+          ` h : ` +
           (minutes > 9 ? minutes : "0" + minutes) +
-          " : " +
-          (seconds > 9 ? seconds : "0" + seconds)
+          ` m : ` +
+          (seconds > 9 ? seconds : "0" + seconds) + "s"
       );
     }
   };
@@ -153,6 +152,7 @@ function TestStarter() {
           : 3
       )
     );
+
   }, [data]);
 
   return (
@@ -197,7 +197,7 @@ function TestStarter() {
               ></Chip>
             </>
           )}
-          {!data && <Skeleton height="50px" width="100px" />}
+          {!data && <Skeleton height="100px" width="500px" />}
         </Box>
 
         <Stack direction="row" spacing={4}>
