@@ -4,7 +4,7 @@ import './style.css'
 function Gravitas() {
   return (
     <div style={{color: 'white', display: 'flex',alignItems: 'center',justifyContent: 'center',flexDirection:"column"}}>
-        <Typography>
+        <Typography sx={{fontFamily: "Audiowide"}}>
         Do not forget to register on 
         </Typography>
         <Link className="gravitas-img" href="https://gravitas.vit.ac.in/">

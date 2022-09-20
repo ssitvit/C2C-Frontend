@@ -127,8 +127,6 @@ function Profile() {
                 alignItems: "center",
                 justifyContent: "center",
                 flexDirection: "column",
-                background:"black",
-                color:"white"
               }}
             >
               <Typography
@@ -178,7 +176,7 @@ function Profile() {
                     />
                     <Typography
                       variant="subtitle2"
-                      style={{ marginLeft: "0.5rem" }}
+                      style={{ marginLeft: "0.5rem",fontFamily:"Audiowide" }}
                     >
                       Logging Out...
                     </Typography>

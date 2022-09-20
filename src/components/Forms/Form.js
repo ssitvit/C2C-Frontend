@@ -4,7 +4,6 @@ import {Route, Routes } from "react-router-dom";
 import NotFound from "../Notfound/NotFound";
 import Login from "./Login";
 import Register from "./Register";
-import Gravitas from "./Gravitas";
 function Form() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
