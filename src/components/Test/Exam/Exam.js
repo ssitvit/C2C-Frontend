@@ -10,7 +10,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../Hooks/useFetch";
@@ -28,7 +28,8 @@ function Exam(props) {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [qnum, setQnum] = useState(0);
-  const [qLinks,setQlinks] = useState([]);
+  const [qLinks, setQlinks] = useState([]);
+  const [timer, setTimer] = useState();
   const htmlTemplate = `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -82,7 +83,7 @@ function Exam(props) {
       body: JSON.stringify({
         html: htmlObj,
         css: cssObj,
-        round: qLinks.length===1?round:10*round+qnum,
+        round: qLinks.length === 1 ? round : 10 * round + qnum,
       }),
     });
     let data = await response.json();
@@ -90,8 +91,14 @@ function Exam(props) {
       setOpen(true);
       setMessage("Code Submitted Successfully");
       setLoading(false);
-      if(qLinks.length===1||(qnum+1)%qLinks.length===0){setTimeout(() => {navigate('/dashbord/user')})}
-      else{setQnum(prev=>prev+1);sessionStorage.clear()}
+      if (qLinks.length === 1 || (qnum + 1) % qLinks.length === 0) {
+        setTimeout(() => {
+          navigate("/dashbord/user");
+        });
+      } else {
+        setQnum((prev) => prev + 1);
+        sessionStorage.clear();
+      }
     } else {
       setOpen(true);
       setErrorMessage(data.data.error);
@@ -99,7 +106,7 @@ function Exam(props) {
       console.log(data);
     }
   };
-
+  
   useEffect(() => {
     console.log(data);
     setErrorMessage("");
@@ -110,33 +117,32 @@ function Exam(props) {
       setTimeout(() => {
         navigate("/dashboard/user");
       }, 2000);
-    }else{
-    const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
-    setUserObj(finalObj);
-    setLoading2(true);
-    let getqArray = async ()=>{
-      let url = "https://c2c-backend.vercel.app/save/getimage";
-      let response = await fetch(url,{
-        method:"POST",
-        credentials: "include",
-        headers:{"Content-Type": "application/json"},
-        body: JSON.stringify({"round":round})
-      });
-      let data = await response.json();
-      if(data.success){
-        setLoading2(false);
-        setQlinks(data.data.data);
-        console.log(data.data.data);
-      }else{
-        setLoading2(false);
-        setOpen(true);
-        setErrorMessage("Could not fetch Question");
-      }
-    };
-    getqArray();
-
-  }
-  }, [htmlObj, cssObj, data, error, navigate,round]);
+    } else {
+      const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
+      setUserObj(finalObj);
+      setLoading2(true);
+      let getqArray = async () => {
+        let url = "https://c2c-backend.vercel.app/save/getimage";
+        let response = await fetch(url, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ round: round }),
+        });
+        let data = await response.json();
+        if (data.success) {
+          setLoading2(false);
+          setQlinks(data.data.data);
+          console.log(data.data.data);
+        } else {
+          setLoading2(false);
+          setOpen(true);
+          setErrorMessage("Could not fetch Question");
+        }
+      };
+      getqArray();
+    }
+  }, [htmlObj, cssObj, data, error, navigate, round]);
   return (
     <>
       {(isLoading || error) && (
@@ -160,14 +166,18 @@ function Exam(props) {
                 marginRight: "2rem",
               }}
             >
-              <Typography>Timer</Typography>
+              <Typography>{timer}</Typography>
             </Box>
             <Stack
               direction={matches ? "row" : "column"}
               alignItems="center"
               justifyContent="center"
               // width="100%"
-              sx={{marginLeft:"2rem",marginRight:"2rem",marginBottom:"2rem"}}
+              sx={{
+                marginLeft: "2rem",
+                marginRight: "2rem",
+                marginBottom: "2rem",
+              }}
             >
               <Editor type="html" obj={htmlObj} setObj={setHtmlObj} />
               <Editor type="css" obj={cssObj} setObj={setCssObj} />
@@ -177,9 +187,8 @@ function Exam(props) {
               alignItems="center"
               justifyContent="center"
               spacing={8}
-              sx={{marginLeft:"2rem",marginRight:"2rem"}}
+              sx={{ marginLeft: "2rem", marginRight: "2rem" }}
             >
-
               {/* Question */}
               <Stack
                 style={{
@@ -187,8 +196,11 @@ function Exam(props) {
                   border: "none",
                 }}
               >
-                <Typography variant="h4" sx={{ color: "white",fontFamily:"Audiowide" }}>
-                  Question {qnum+1}
+                <Typography
+                  variant="h4"
+                  sx={{ color: "white", fontFamily: "Audiowide" }}
+                >
+                  Question {qnum + 1}
                 </Typography>
                 <Box
                   style={{
@@ -196,9 +208,10 @@ function Exam(props) {
                     color: "black",
                     backgroundColor: "white",
                     height: "500px",
-                  }}>
-                    <img src={qLinks[qnum]} alt="" height="100%" width="100%"/>
-                  </Box>
+                  }}
+                >
+                  <img src={qLinks[qnum]} alt="" height="100%" width="100%" />
+                </Box>
               </Stack>
               {/* USER RESPONSE */}
               <Stack
@@ -207,7 +220,10 @@ function Exam(props) {
                   border: "none",
                 }}
               >
-                <Typography variant="h4" sx={{ color: "white",fontFamily:"Audiowide" }}>
+                <Typography
+                  variant="h4"
+                  sx={{ color: "white", fontFamily: "Audiowide" }}
+                >
                   Your Output
                 </Typography>
                 <iframe
@@ -225,7 +241,6 @@ function Exam(props) {
                 />
               </Stack>
             </Stack>
-            
           </Stack>
           <Stack
             direction="row"

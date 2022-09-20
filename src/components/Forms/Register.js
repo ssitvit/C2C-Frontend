@@ -21,7 +21,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
+import EmailIcon from "@mui/icons-material/Email";
+import KeyIcon from "@mui/icons-material/Key";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import NumbersIcon from "@mui/icons-material/Numbers";
+import SchoolTwoToneIcon from '@mui/icons-material/SchoolTwoTone';
 function Register() {
   // const fs = require('fs');
   const params = useParams();
@@ -88,34 +92,41 @@ function Register() {
     // setloading to true
     setLoading(true);
     values.mobile_number.split("-").join();
-    let url = "https://c2c-backend.vercel.app/user/signup";
-    let response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-    let data = await response.json();
-    if (data.success) {
-      // setloading to false
-      setLoading(false);
-      // snackbar comes here
-      setMessage(data.data.data);
-      setOpen(true);
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
-    } else {
-      // setloading to false
-      setLoading(false);
-      // snackbar comes here
-      if (typeof data.data.error === "object") {
-        setError("Please fill all the fields correctly");
+    let url = `https://${process.env.REACT_APP_BASE_URL}/user/signup`;
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      let data = await response.json();
+      if (data.success) {
+        // setloading to false
+        setLoading(false);
+        // snackbar comes here
+        setMessage(data.data.data);
+        setOpen(true);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       } else {
-        setError(data.data.error);
+        // setloading to false
+        setLoading(false);
+        // snackbar comes here
+        if (typeof data.data.error === "object") {
+          setError("Please fill all the fields correctly");
+        } else {
+          setError(data.data.error);
+        }
+        setOpen(true);
       }
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
       setOpen(true);
+      setError("Something went wrong. Please try again later.");
     }
   };
 
@@ -130,7 +141,7 @@ function Register() {
       password: "",
       mobile_number: "",
       cpassword: "",
-      refreal:refrealValue
+      refreal: refrealValue,
     },
     onSubmit: async (values) => {
       if (checkHandler()) {
@@ -417,6 +428,13 @@ function Register() {
         InputLabelProps={{
           shrink: true,
         }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <NumbersIcon />
+            </InputAdornment>
+          ),
+        }}
       />
 
       {/* first name last name */}
@@ -441,6 +459,13 @@ function Register() {
           InputLabelProps={{
             shrink: true,
           }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircleIcon />
+              </InputAdornment>
+            ),
+          }}
         />
 
         {/* LAST NAME */}
@@ -460,6 +485,13 @@ function Register() {
           size="medium"
           InputLabelProps={{
             shrink: true,
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircleIcon />
+              </InputAdornment>
+            ),
           }}
         />
       </Stack>
@@ -500,15 +532,21 @@ function Register() {
         inputStyle={{
           width: "100%",
           bakcgorundColor: "transparent",
-          outline:"none !important" ,
-          '&:focus':{outline:"none !important"},
-          borderColor: validationObj.mobile_number.error?"red":"",
+          outline: "none !important",
+          "&:focus": { outline: "none !important" },
+          borderColor: validationObj.mobile_number.error ? "red" : "",
         }}
         buttonStyle={{ background: "none" }}
         localization="in"
       />
       {validationObj.mobile_number.error && (
-        <Typography variant="body2" color="error" sx={{fontSize:"12px",marginTop:"-10px"}}>{validationObj.mobile_number.message}</Typography>
+        <Typography
+          variant="body2"
+          color="error"
+          sx={{ fontSize: "12px", marginTop: "-10px" }}
+        >
+          {validationObj.mobile_number.message}
+        </Typography>
       )}
 
       {/* EMAIL */}
@@ -529,6 +567,13 @@ function Register() {
         size="medium"
         InputLabelProps={{
           shrink: true,
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmailIcon />
+            </InputAdornment>
+          ),
         }}
         autoComplete="email"
       />
@@ -554,6 +599,11 @@ function Register() {
           shrink: true,
         }}
         InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <KeyIcon />
+            </InputAdornment>
+          ),
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
@@ -590,6 +640,11 @@ function Register() {
           shrink: true,
         }}
         InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <KeyIcon />
+            </InputAdornment>
+          ),
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
@@ -659,7 +714,7 @@ function Register() {
         component="button"
         style={{ cursor: "pointer", width: "fit-content", color: "#CC0707" }}
         onClick={() => {
-          matches?navigate("/login"):navigate("/form/login");
+          matches ? navigate("/login") : navigate("/form/login");
         }}
         underline="always"
       >

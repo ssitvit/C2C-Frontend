@@ -18,6 +18,8 @@ import { useFormik } from "formik";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import EmailIcon from '@mui/icons-material/Email';
+import KeyIcon from '@mui/icons-material/Key';
 
 function Login() {
   const theme = useTheme();
@@ -27,6 +29,7 @@ function Login() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [show, setShow] = useState(false);
   const [verified, setVerified] = useState(true);
 
@@ -47,24 +50,34 @@ function Login() {
   };
 
   const resendEmail = async () => {
+    setLoading2(true);
     setError("");
     setMessage("");
-    let url = "https://c2c-backend.vercel.app/user/sendEmailAgain";
-    let response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: formik.values.email }),
-    });
-    let data = await response.json();
-    if (data.success) {
+    let url = `https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`;
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: formik.values.email }),
+      });
+      let data = await response.json();
+      if (data.success) {
+        setLoading2(false);
+        setOpen(true);
+        setMessage(data.data.data);
+      } else {
+        setLoading2(false);
+        setVerified(false);
+        setOpen(true);
+        setError(data.data.error);
+      }
+    } catch (err) {
+      console.log(err);
+      setLoading2(false);
       setOpen(true);
-      setMessage(data.data.data);
-    } else {
-      setVerified(false);
-      setOpen(true);
-      setError(data.data.error);
+      setError("Something Went Wrong. Please try again later.");
     }
   };
   // FORM HANDLING LIBRARY
@@ -75,7 +88,7 @@ function Login() {
     },
     onSubmit: async (values) => {
       setError(false);
-      setMessage('');
+      setMessage("");
       setVerified(true);
       if (values.email === "" || values.password === "") {
         setOpen(true);
@@ -89,46 +102,53 @@ function Login() {
         setMessage("Please Enter a valid email address");
       } else {
         setLoading(true);
-        let url = "https://c2c-backend.vercel.app/user/login";
-        try{
-        fetch(url, {
-          method: "POST",
-          credentials: "include",
-          // mode:"no-cors",
-          headers:{
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            // "Access-Control-Allow-Credentials": "true"
-          },
-          body: JSON.stringify(formik.values),
-        })
-          .then(response=>response.json())
-          .then((data) => {
-            if (data.success) {
-              setOpen(true);
-              setMessage("Logged In Successfully");
-              // document.cookie='authentication=true;SameSite=none;Secure=true;';
-              setTimeout(()=>{navigate('/dashboard/user')},1000);
-            }else if(data.data.error==="Email Not verified"){
-              setLoading(false);
-              setVerified(false);
-              setError(data.data.error);
-              setOpen(true); 
-            }else if(data.data.error){
-              setLoading(false);
-              setError(data.data.error);
-              setOpen(true); 
-            }
-            else{
-              setError("Some error occurred while logging you in. Please Try again Later");
-              setOpen(true);
-            }
+        let url = `https://${process.env.REACT_APP_BASE_URL}/user/login/`;
+        try {
+          fetch(url, {
+            method: "POST",
+            credentials: "include",
+            // mode:"no-cors",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              // "Access-Control-Allow-Credentials": "true"
+            },
+            body: JSON.stringify(formik.values),
           })
-          .catch((err) => {
-            setLoading(false);
-            console.log(err);
-          });
-      }catch(err){console.log(err)}}
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                setOpen(true);
+                setMessage("Logged In Successfully");
+                // document.cookie='authentication=true;SameSite=none;Secure=true;';
+                setTimeout(() => {
+                  navigate("/dashboard/user");
+                }, 1000);
+              } else if (data.data.error === "Email Not verified") {
+                setLoading(false);
+                setVerified(false);
+                setError(data.data.error);
+                setOpen(true);
+              } else if (data.data.error) {
+                setLoading(false);
+                setError(data.data.error);
+                setOpen(true);
+              } else {
+                setError(
+                  "Some error occurred while logging you in. Please Try again Later"
+                );
+                setOpen(true);
+              }
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
+        } catch (err) {
+          console.log(err);
+          setLoading(false);
+        }
+      }
     },
   });
   // JSX
@@ -180,7 +200,12 @@ function Login() {
         }}
         InputProps={{
           type: "email",
-        }}
+            startAdornment: (
+              <InputAdornment position="start">
+                  <EmailIcon/>
+              </InputAdornment>
+            ),
+          }}
         autoComplete="username"
       />
       {/* PASSWORD */}
@@ -200,6 +225,11 @@ function Login() {
           shrink: true,
         }}
         InputProps={{
+          startAdornment:(
+            <InputAdornment position="start">
+            <KeyIcon/>
+            </InputAdornment>
+          ),
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
@@ -256,7 +286,18 @@ function Login() {
           sx={{ display: "flex", alignItems: "center" }}
         >
           <Button size="small" color="warning" onClick={resendEmail}>
-            Resend Verification Link
+            {!loading2 && "Resend Verification Link"}
+            {loading2 && (
+              <>
+                <CircularProgress thickness={6} color="inherit" size="1.2rem" />
+                <Typography
+                  variant="subtitle2"
+                  style={{ marginLeft: "0.5rem" }}
+                >
+                  Sending Mail..
+                </Typography>
+              </>
+            )}
           </Button>
         </Alert>
       )}
@@ -283,7 +324,7 @@ function Login() {
         component="button"
         style={{ cursor: "pointer", width: "fit-content", color: "#CC0707" }}
         onClick={() => {
-          matches?navigate("/register"):navigate('/form/register');
+          matches ? navigate("/register") : navigate("/form/register");
         }}
         underline="always"
       >

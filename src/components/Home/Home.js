@@ -19,8 +19,8 @@ function Home() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const { data, error } = useFetch(
-    "https://c2c-backend.vercel.app/user/checkauth"
-  );
+    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth`
+    );
   useEffect(() => {
     if (data && !error) {
       navigate("/dashboard/user");

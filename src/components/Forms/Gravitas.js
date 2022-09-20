@@ -1,4 +1,4 @@
-import { Fade, Link, Typography } from '@mui/material'
+import { Link, Typography } from '@mui/material'
 import React from 'react'
 import './style.css'
 function Gravitas() {

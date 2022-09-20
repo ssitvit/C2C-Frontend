@@ -43,7 +43,7 @@ function TestStarter() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
-  const round1Time = new Date("Sep 20, 2022 00:05:00");
+  const round1Time = new Date("Sep 20, 2022 13:00:00");
   const round2Time = new Date("Sep 30, 2022 16:00:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
 
@@ -67,7 +67,6 @@ function TestStarter() {
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-
     return {
       total,
       days,
@@ -104,11 +103,11 @@ function TestStarter() {
     if (total >= 0) {
       setTimer(
         (days > 9 ? days : "0" + days) +
-          ` d : ` +
+          `d : ` +
           (hours > 9 ? hours : "0" + hours) +
-          ` h : ` +
+          `h : ` +
           (minutes > 9 ? minutes : "0" + minutes) +
-          ` m : ` +
+          `m : ` +
           (seconds > 9 ? seconds : "0" + seconds) + "s"
       );
     }
@@ -128,7 +127,7 @@ function TestStarter() {
     }, 1000);
     Ref.current = id;
   };
-
+  
   const getDeadTime = (n) => {
     let deadline = round1Time;
     if (n === 1) deadline = round1Time;
