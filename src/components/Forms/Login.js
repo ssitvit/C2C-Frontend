@@ -21,7 +21,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 
-function Login() {
+function Login(props) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -53,7 +53,7 @@ function Login() {
     setLoading2(true);
     setError("");
     setMessage("");
-    let url = `https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`;
+    let url = props.admin?`https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`:`https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`;
     try {
       let response = await fetch(url, {
         method: "POST",

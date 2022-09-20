@@ -19,6 +19,7 @@ function Form() {
           <Route exact path="form/register/:id" element={<Register />} />
           <Route exact path="login" element={<Login />} />
           <Route exact path="form/login" element={<Login />} />
+          <Route exact path="admin/login" element={<Login admin={true} />} />
           <Route path="*" element={<NotFound />} />
       </Routes>
     </Stack>

@@ -96,6 +96,7 @@ function Home() {
               }
             />
             <Route exact path="/form/login" element={<Login/>}/>
+            <Route exact path="admin/login" element={<Login admin={true} />} />
             <Route exact path="/login" element={<Login/>}/>
             <Route exact path="/form/register" element={<Register/>}/>
             <Route exact path="/register" element={<Register/>}/>

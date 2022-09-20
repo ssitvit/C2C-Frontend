@@ -91,9 +91,11 @@ function Profile() {
     return {
       sx: {
         bgcolor: stringToColor(name),
-        border: "none",
+        border: "2px solid white",
+        padding:"20px",
         cursor: "pointer",
         color: "white",
+        fontFamily:"Audiowide"
       },
       children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
     };
@@ -125,6 +127,8 @@ function Profile() {
                 alignItems: "center",
                 justifyContent: "center",
                 flexDirection: "column",
+                background:"black",
+                color:"white"
               }}
             >
               <Typography
@@ -133,7 +137,8 @@ function Profile() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding:"1.2rem"
+                  padding:"1.2rem",
+                  fontFamily: "Audiowide"
                 }}
               >
                 {!isLoading && (
@@ -146,8 +151,8 @@ function Profile() {
               <Divider />
               <Button
                 variant="contained"
-                color="grey"
-                sx={{ width: "100%", borderRadius: "0" }}
+                color="error"
+                sx={{ width: "100%", borderRadius: "0",fontFamily:"Audiowide" }}
                 onClick={(event) => {
                   setOpen((prev) => !prev);
                   navigate("/dashboard/user");
@@ -160,7 +165,7 @@ function Profile() {
                 variant="contained"
                 disabled={deleting}
                 color="error"
-                sx={{ width: "100%", borderRadius: "0" }}
+                sx={{ width: "100%", borderRadius: "0",fontFamily:"Audiowide" }}
                 onClick={onLogout}
               >
                 {!deleting && "Logout"}

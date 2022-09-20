@@ -170,9 +170,9 @@ function TestStarter() {
         minHeight={matches ? "80vh" : "100vh"}
         width="50%"
         color="white"
-        sx={{ fontFamily: "Vercel", textAlign: "center" }}
+        sx={{ fontFamily: "Audiowide", textAlign: "center" }}
       >
-        <Typography variant="h2" sx={{fontFamily: "Audiowide"}}>Welcome to Code2Clone!</Typography>
+        <Typography variant={matches?"h2":"h4"} sx={{fontFamily: "Audiowide"}}>Welcome to Code2Clone!</Typography>
         <Box
           sx={{
             display: "flex",
@@ -189,7 +189,7 @@ function TestStarter() {
                 label={timer}
                 color="error"
                 sx={{
-                  fontSize: "30px",
+                  fontSize: matches?"30px":"20px",
                   padding: "2rem",
                   fontFamily: "Audiowide"
                 }}
@@ -408,7 +408,7 @@ function TestStarter() {
         color="white"
       >
         {/* <Confetti height={height} width={width}/> */}
-        <Typography variant="h4" sx={{ fontFamily: "Vercel" }}>
+        <Typography variant="h4" sx={{ fontFamily: "Audiowide" }}>
           Leaderboard
         </Typography>
         {/* <ExamIcon /> */}
