@@ -3,9 +3,12 @@ import {
   Button,
   Chip,
   Fade,
+  IconButton,
+  Link,
   Modal,
   Skeleton,
   Stack,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -18,6 +21,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
+import LanguageSharpIcon from '@mui/icons-material/LanguageSharp';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import HelpIcon from '@mui/icons-material/Help';
 // import useWindowSize from "react-use/lib/useWindowSize";
 // import Confetti from "react-confetti";
 // import ExamIcon from "../Icons/ExamIcon";
@@ -89,13 +96,13 @@ function TestStarter() {
       new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
       new Date().getTime() > round1Time.getTime()
         ? "1"
-        : (new Date().getTime() < round2Time.getTime() + 60000 * 45 &&
+        : new Date().getTime() < round2Time.getTime() + 60000 * 45 &&
           new Date().getTime() > round2Time.getTime()
         ? "2"
         : new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
           new Date().getTime() > round1Time.getTime()
         ? "3"
-        : "0");
+        : "0";
     return currentRound;
   };
   const startTimer = (e) => {
@@ -108,7 +115,8 @@ function TestStarter() {
           `h : ` +
           (minutes > 9 ? minutes : "0" + minutes) +
           `m : ` +
-          (seconds > 9 ? seconds : "0" + seconds) + "s"
+          (seconds > 9 ? seconds : "0" + seconds) +
+          "s"
       );
     }
   };
@@ -127,7 +135,7 @@ function TestStarter() {
     }, 1000);
     Ref.current = id;
   };
-  
+
   const getDeadTime = (n) => {
     let deadline = round1Time;
     if (n === 1) deadline = round1Time;
@@ -151,7 +159,6 @@ function TestStarter() {
           : 3
       )
     );
-
   }, [data]);
 
   return (
@@ -172,7 +179,12 @@ function TestStarter() {
         color="white"
         sx={{ fontFamily: "Audiowide", textAlign: "center" }}
       >
-        <Typography variant={matches?"h2":"h4"} sx={{fontFamily: "Audiowide"}}>Welcome to Code2Clone!</Typography>
+        <Typography
+          variant={matches ? "h2" : "h4"}
+          sx={{ fontFamily: "Audiowide" }}
+        >
+          Welcome to Code2Clone!
+        </Typography>
         <Box
           sx={{
             display: "flex",
@@ -184,14 +196,16 @@ function TestStarter() {
         >
           {data && getCurrentRound() === "0" && (
             <>
-              <div style={{fontFamily: "Audiowide"}}>Next Round Begins in </div>
+              <div style={{ fontFamily: "Audiowide" }}>
+                Next Round Begins in{" "}
+              </div>
               <Chip
                 label={timer}
                 color="error"
                 sx={{
-                  fontSize: matches?"30px":"20px",
+                  fontSize: matches ? "30px" : "20px",
                   padding: "2rem",
-                  fontFamily: "Audiowide"
+                  fontFamily: "Audiowide",
                 }}
               ></Chip>
             </>
@@ -386,7 +400,11 @@ function TestStarter() {
                     </Typography>
                     <Instructions />
                     <Box sx={{ width: "100%", textAlign: "center" }}>
-                      <Button variant="contained" color="error" onClick={handleCloning}>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleCloning}
+                      >
                         Start Now
                       </Button>
                     </Box>
@@ -395,6 +413,25 @@ function TestStarter() {
               </Box>
             </Fade>
           </Modal>
+        </Stack>
+
+        <Stack direction="row">
+          <IconButton area-label="web">
+            <Tooltip title="Web Page" arrow>
+            <Link href="https://nandurijv.codes" target="_blank"><LanguageSharpIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
+          </IconButton>
+          <IconButton area-label="insta">
+            <Tooltip title="Instagram" arrow>
+            <Link href="https://nandurijv.codes" target="_blank"><InstagramIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
+          </IconButton>
+          <IconButton area-label="twitter">
+            <Tooltip title="Twitter" arrow>
+            <Link href="https://nandurijv.codes" target="_blank"><TwitterIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
+          </IconButton>
+          <IconButton area-label="help">
+            <Tooltip title="HelpDesk" arrow>
+            <Link href="https://help.com" target="_blank"><HelpIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
+          </IconButton>
         </Stack>
       </Stack>
 

@@ -39,6 +39,8 @@
   }
 }
 
+
+
 @keyframes anim4 {
   50% {
     transform: translate(0, -6%);

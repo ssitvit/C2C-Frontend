@@ -34,14 +34,14 @@ function Home() {
           spacing={2}
           minHeight="100vh"
           alignItems="center"
-          justifyContent="space-around"
+          justifyContent="space-between"
         >
-
           <Stack
             spacing={2}
             alignItems="center"
             justifyContent="center"
             height={matches ? "" : "100vh"}
+            width="50%"
           >
             <Logo width={220} height={95} />
             <Illustration />

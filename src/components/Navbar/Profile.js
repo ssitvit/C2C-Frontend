@@ -6,7 +6,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import {
   Alert,
   Avatar,
@@ -156,7 +157,7 @@ function Profile() {
                   navigate("/dashboard/user");
                 }}
               >
-                Go To Dashboard
+                <DashboardIcon sx={{marginRight:"20px"}}/>Go To Dashboard
               </Button>
               <Divider sx={{ backgroundColor: "white" }} />
               <Button
@@ -166,7 +167,10 @@ function Profile() {
                 sx={{ width: "100%", borderRadius: "0",fontFamily:"Audiowide" }}
                 onClick={onLogout}
               >
-                {!deleting && "Logout"}
+                {!deleting && 
+                <>
+                <LogoutIcon sx={{marginRight:"20px"}}/>Logout
+                </>}
                 {deleting && (
                   <>
                     <CircularProgress

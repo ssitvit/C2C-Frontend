@@ -8,12 +8,11 @@ import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import CoodDashboard from "./components/Dashboard/CoodDashboard";
 import { Box } from "@mui/material";
 import Verify from "./components/Verification/Verify";
-import { CookiesProvider } from "react-cookie";
 import NotFound from "./components/Notfound/NotFound";
 function App() {
   return (
-    <CookiesProvider>
-      <Box minHeight="100vh" sx={{ background: 'url("/background.svg")',backgroundSize:"cover" }}>
+
+      <Box minHeight="100vh" sx={{ background: 'url("/Background.svg")',backgroundSize:"cover" }}>
         <Routes>
           <Route exact path="/*" element={<Home />} />
           <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
@@ -24,7 +23,6 @@ function App() {
           <Route exact path="/*" element={<NotFound/>} />
         </Routes>
       </Box>
-    </CookiesProvider>
   );
 }
 

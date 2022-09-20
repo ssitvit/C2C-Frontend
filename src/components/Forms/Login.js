@@ -53,7 +53,7 @@ function Login(props) {
     setLoading2(true);
     setError("");
     setMessage("");
-    let url = props.admin?`https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`:`https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`;
+    let url = `https://${process.env.REACT_APP_BASE_URL}/user/sendEmailAgain`;
     try {
       let response = await fetch(url, {
         method: "POST",
@@ -95,14 +95,14 @@ function Login(props) {
         setError(true);
         setMessage("Please fill all the fields");
       } else if (
-        !values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/)
+        !values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/) && !props.admin
       ) {
         setOpen(true);
         setError(true);
         setMessage("Please Enter a valid email address");
       } else {
         setLoading(true);
-        let url = `https://${process.env.REACT_APP_BASE_URL}/user/login/`;
+        let url = props.admin?`https://${process.env.REACT_APP_BASE_URL}/admin/user/login`:`https://${process.env.REACT_APP_BASE_URL}/user/login/`;
         try {
           fetch(url, {
             method: "POST",
@@ -122,7 +122,8 @@ function Login(props) {
                 setMessage("Logged In Successfully");
                 // document.cookie='authentication=true;SameSite=none;Secure=true;';
                 setTimeout(() => {
-                  navigate("/dashboard/user");
+                  props.admin?
+                  navigate("/dashboard/admin"):navigate("/dashboard/user");
                 }, 1000);
               } else if (data.data.error === "Email Not verified") {
                 setLoading(false);

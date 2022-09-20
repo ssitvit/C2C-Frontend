@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { Box } from "@mui/material";
 
 // document.onkeydown = function(e) {
 //   if(e.keyCode === 123) {
@@ -27,7 +28,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <Box backgroundColor="#C00000">
       <App />
+    </Box>
     </BrowserRouter>
   </React.StrictMode>
 );
