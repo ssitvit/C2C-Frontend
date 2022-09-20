@@ -43,8 +43,8 @@ function TestStarter() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   // const round1Time = new Date();
-  const round1Time = new Date("Sep 20, 2022 13:00:00");
-  const round2Time = new Date("Sep 30, 2022 16:00:00");
+  const round1Time = new Date("Sep 20, 2022 12:00:00");
+  const round2Time = new Date("Sep 20, 2022 15:00:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
 
   // store (current time - current round time) in sessionStorage
@@ -89,13 +89,13 @@ function TestStarter() {
       new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
       new Date().getTime() > round1Time.getTime()
         ? "1"
-        : new Date().getTime() < round2Time.getTime() + 60000 * 45 &&
+        : (new Date().getTime() < round2Time.getTime() + 60000 * 45 &&
           new Date().getTime() > round2Time.getTime()
         ? "2"
         : new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
           new Date().getTime() > round1Time.getTime()
         ? "3"
-        : "0";
+        : "0");
     return currentRound;
   };
   const startTimer = (e) => {
@@ -172,7 +172,7 @@ function TestStarter() {
         color="white"
         sx={{ fontFamily: "Vercel", textAlign: "center" }}
       >
-        <Typography variant="h2">Welcome to Code2Clone!</Typography>
+        <Typography variant="h2" sx={{fontFamily: "Audiowide"}}>Welcome to Code2Clone!</Typography>
         <Box
           sx={{
             display: "flex",
@@ -184,14 +184,14 @@ function TestStarter() {
         >
           {data && getCurrentRound() === "0" && (
             <>
-              <div>Next Round Begins in </div>
+              <div style={{fontFamily: "Audiowide"}}>Next Round Begins in </div>
               <Chip
                 label={timer}
-                color="primary"
+                color="error"
                 sx={{
                   fontSize: "30px",
                   padding: "2rem",
-                  fontFamily: "monospace",
+                  fontFamily: "Audiowide"
                 }}
               ></Chip>
             </>
@@ -203,7 +203,7 @@ function TestStarter() {
           {!isLoading && getCurrentRound() !== "0" && (
             <>
               <Button
-                color="primary"
+                color="warning"
                 variant="contained"
                 size="large"
                 onClick={handleOpen2}
@@ -217,7 +217,7 @@ function TestStarter() {
             !getCurrentRound() === "1" && (
               <>
                 <Button
-                  color="secondary"
+                  color="warning"
                   variant="contained"
                   size="large"
                   onClick={handleOpen}
@@ -386,7 +386,7 @@ function TestStarter() {
                     </Typography>
                     <Instructions />
                     <Box sx={{ width: "100%", textAlign: "center" }}>
-                      <Button variant="contained" onClick={handleCloning}>
+                      <Button variant="contained" color="error" onClick={handleCloning}>
                         Start Now
                       </Button>
                     </Box>

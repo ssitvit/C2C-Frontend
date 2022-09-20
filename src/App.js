@@ -13,7 +13,7 @@ import NotFound from "./components/Notfound/NotFound";
 function App() {
   return (
     <CookiesProvider>
-      <Box minHeight="100vh" sx={{ background: 'url("https://wallpapercave.com/wp/wp6994803.jpg")',backgroundSize:"cover" }}>
+      <Box minHeight="100vh" sx={{ background: 'url("/background.svg")',backgroundSize:"cover" }}>
         <Routes>
           <Route exact path="/*" element={<Home />} />
           <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
