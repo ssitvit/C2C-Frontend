@@ -25,6 +25,7 @@ import LanguageSharpIcon from '@mui/icons-material/LanguageSharp';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import HelpIcon from '@mui/icons-material/Help';
+import Leaderboard from '../Dashboard/Leaderboard';
 // import useWindowSize from "react-use/lib/useWindowSize";
 // import Confetti from "react-confetti";
 // import ExamIcon from "../Icons/ExamIcon";
@@ -43,22 +44,14 @@ const style = {
 };
 function TestStarter() {
   const navigate = useNavigate();
-  // const { width, height } = useWindowSize();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const { data, isLoading } = useFetch(
     "https://c2c-backend.vercel.app/user/checkauth"
   );
-  // const round1Time = new Date();
   const round1Time = new Date("Sep 30, 2022 14:00:00");
-  const round2Time = new Date("Sep 30, 2022 16:00:00");
+  const round2Time = new Date("Sep 30, 2022 16:20:00");
   const round3Time = new Date("Sep 30, 2022 18:00:00");
-
-  // store (current time - current round time) in sessionStorage
-
-  sessionStorage.setItem("round1Time", round1Time);
-  sessionStorage.setItem("round2Time", round2Time);
-  sessionStorage.setItem("round3Time", round3Time);
 
   const [timer, setTimer] = useState(0);
   const [open, setOpen] = useState(false);
@@ -93,14 +86,14 @@ function TestStarter() {
   };
   const getCurrentRound = () => {
     const currentRound =
-      new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
+      new Date().getTime() < round1Time.getTime() + 60000 * 60 &&
       new Date().getTime() > round1Time.getTime()
         ? "1"
-        : new Date().getTime() < round2Time.getTime() + 60000 * 45 &&
+        : new Date().getTime() < round2Time.getTime() + 60000 * 60 &&
           new Date().getTime() > round2Time.getTime()
         ? "2"
-        : new Date().getTime() < round1Time.getTime() + 60000 * 45 &&
-          new Date().getTime() > round1Time.getTime()
+        : new Date().getTime() < round3Time.getTime() + 60000 * 60 &&
+          new Date().getTime() > round3Time.getTime()
         ? "3"
         : "0";
     return currentRound;
@@ -122,13 +115,7 @@ function TestStarter() {
   };
 
   const clearTimer = (e) => {
-    // If you adjust it you should also need to
-    // adjust the Endtime formula we are about
-    // to code next
     setTimer("00 : 00 : 00 : 00");
-    // If you try to remove this line the
-    // updating of timer Variable will be
-    // after 1000ms or 1sec
     if (Ref.current) clearInterval(Ref.current);
     const id = setInterval(() => {
       startTimer(e);
@@ -141,15 +128,13 @@ function TestStarter() {
     if (n === 1) deadline = round1Time;
     else if (n === 2) deadline = round2Time;
     else if (n === 3) deadline = round3Time;
-    else deadline = new Date();
+    else deadline = Date.now();
     sessionStorage.setItem("startTime", deadline);
-    // This is where you need to adjust if
-    // you entend to add more time
-    // deadline.setSeconds(deadline.getSeconds());
     return deadline;
   };
 
   useEffect(() => {
+
     clearTimer(
       getDeadTime(
         new Date().getTime() < round1Time.getTime()
@@ -185,6 +170,7 @@ function TestStarter() {
         >
           Welcome to Code2Clone!
         </Typography>
+        
         <Box
           sx={{
             display: "flex",
@@ -213,6 +199,7 @@ function TestStarter() {
           {!data && <Skeleton height="100px" width="500px" />}
         </Box>
 
+        {/* start cloning button */}
         <Stack direction="row" spacing={4}>
           {!isLoading && getCurrentRound() !== "0" && (
             <>
@@ -228,7 +215,7 @@ function TestStarter() {
           )}
           {!isLoading &&
             getCurrentRound() === "0" &&
-            !getCurrentRound() === "1" && (
+            (
               <>
                 <Button
                   color="warning"
@@ -415,21 +402,22 @@ function TestStarter() {
           </Modal>
         </Stack>
 
+        {/* view results button */}
         <Stack direction="row">
           <IconButton area-label="web">
-            <Tooltip title="Web Page" arrow>
+            <Tooltip title="Web Site" followCursor={true} arrow>
             <Link href="https://nandurijv.codes" target="_blank"><LanguageSharpIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
           </IconButton>
           <IconButton area-label="insta">
-            <Tooltip title="Instagram" arrow>
+            <Tooltip title="Instagram" followCursor={true} arrow>
             <Link href="https://nandurijv.codes" target="_blank"><InstagramIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
           </IconButton>
           <IconButton area-label="twitter">
-            <Tooltip title="Twitter" arrow>
+            <Tooltip title="Twitter" followCursor={true} arrow>
             <Link href="https://nandurijv.codes" target="_blank"><TwitterIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
           </IconButton>
           <IconButton area-label="help">
-            <Tooltip title="HelpDesk" arrow>
+            <Tooltip title="HelpDesk" followCursor={true} arrow>
             <Link href="https://help.com" target="_blank"><HelpIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
           </IconButton>
         </Stack>
@@ -444,11 +432,10 @@ function TestStarter() {
         width="50%"
         color="white"
       >
-        {/* <Confetti height={height} width={width}/> */}
         <Typography variant="h4" sx={{ fontFamily: "Audiowide" }}>
           Leaderboard
         </Typography>
-        {/* <ExamIcon /> */}
+        <Leaderboard/>
       </Stack>
     </Stack>
   );

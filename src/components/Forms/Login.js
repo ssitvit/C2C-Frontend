@@ -113,7 +113,7 @@ function Login(props) {
               "Content-Type": "application/json",
               // "Access-Control-Allow-Credentials": "true"
             },
-            body: JSON.stringify(formik.values),
+            body: props.admin?JSON.stringify({ username:formik.values.email, password:formik.values.password}):JSON.stringify(formik.values),
           })
             .then((response) => response.json())
             .then((data) => {

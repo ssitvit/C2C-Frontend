@@ -5,9 +5,7 @@ function AdminDashboard() {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    if(!sessionStorage.getItem('token')){
-      navigate('/');
-    }
+    // add admin check here too.
   })
   
   return (

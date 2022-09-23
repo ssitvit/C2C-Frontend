@@ -24,6 +24,8 @@ function Home() {
   useEffect(() => {
     if (data && !error) {
       navigate("/dashboard/user");
+    }else{
+      // enter admin check here
     }
   });
   return (

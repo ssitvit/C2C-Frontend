@@ -21,6 +21,7 @@ function Exam(props) {
   const round = params.id;
   const navigate = useNavigate();
   const theme = useTheme();
+  const Ref = useRef(null);
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -30,6 +31,51 @@ function Exam(props) {
   const [qnum, setQnum] = useState(0);
   const [qLinks, setQlinks] = useState([]);
   const [timer, setTimer] = useState();
+
+  const round1Time = new Date("Sep 30, 2022 15:00:00");
+  const round2Time = new Date("Sep 30, 2022 17:20:00");
+  const round3Time = new Date("Sep 30, 2022 19:00:00");
+
+  const getTimeRemaining = (e) => {
+    const total = Date.parse(e) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return {
+      total,
+      minutes,
+      seconds,
+    };
+  };
+  const startTimer = (e) => {
+    let { total, minutes, seconds } = getTimeRemaining(e);
+    if (total >= 0) {
+      setTimer(
+          (minutes > 9 ? minutes : "0" + minutes) +
+          `m : ` +
+          (seconds > 9 ? seconds : "0" + seconds) +
+          "s"
+      );
+    }
+  };
+
+  const clearTimer = (e) => {
+    setTimer(" 00m : 00s");
+    if (Ref.current) clearInterval(Ref.current);
+    const id = setInterval(() => {
+      startTimer(e);
+    }, 1000);
+    Ref.current = id;
+  };
+
+  const getDeadTime = (n) => {
+    let deadline = round1Time;
+    if (n === 1) deadline = round1Time;
+    else if (n === 2) deadline = round2Time;
+    else if (n === 3) deadline = round3Time;
+    else deadline = Date().now;
+    return deadline;
+  };
+
   const htmlTemplate = `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -69,6 +115,7 @@ function Exam(props) {
     setOpen((prev) => !prev);
   };
   const handleSubmit = async () => {
+    setOpen(false);
     setLoading(true);
     setMessage("");
     setErrorMessage("");
@@ -106,9 +153,18 @@ function Exam(props) {
       console.log(data);
     }
   };
-  
+
   useEffect(() => {
-    console.log(data);
+
+    clearTimer(
+      getDeadTime(
+        parseInt(round)
+      )
+    );
+    console.log(
+        (new Date(sessionStorage.getItem(`round${round}Time`)).getTime() +
+          60000 * 60)
+    );
     setErrorMessage("");
     setMessage("");
     if (error) {
@@ -117,7 +173,17 @@ function Exam(props) {
       setTimeout(() => {
         navigate("/dashboard/user");
       }, 2000);
-    } else {
+    } else if (
+      new Date().getTime() > round1Time.getTime()
+    ) {
+      setLoading(true);
+      setErrorMessage("Test Unavailable");
+      setOpen(true);
+      setTimeout(() => {
+        navigate("/dashboard/user");
+      }, 2000);
+    }
+    else {
       const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
       setUserObj(finalObj);
       setLoading2(true);
@@ -145,7 +211,7 @@ function Exam(props) {
   }, [htmlObj, cssObj, data, error, navigate, round]);
   return (
     <>
-      {(isLoading || error) && (
+      {(isLoading || error || loading) && (
         <Stack>
           <Stack direction="row" spacing={2}>
             <Skeleton animation="wave" height="50vh" width="50%" />
@@ -155,7 +221,7 @@ function Exam(props) {
           <Skeleton animation="wave" height="30vh" />
         </Stack>
       )}
-      {!isLoading && !error && (
+      {!isLoading && !error && !loading && (
         <Stack direction="column" alignItems="center" spacing={2}>
           <Stack width="100%">
             <Box
@@ -166,7 +232,7 @@ function Exam(props) {
                 marginRight: "2rem",
               }}
             >
-              <Typography>{timer}</Typography>
+              <Typography>{timer}{timer==="00m : 00s" ? handleSubmit():''}</Typography>
             </Box>
             <Stack
               direction={matches ? "row" : "column"}

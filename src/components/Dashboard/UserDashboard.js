@@ -11,7 +11,7 @@ function UserDashboard() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   useEffect(()=>{
-    if(error){
+    if(data && error){
       navigate('/login');
     }
   })
