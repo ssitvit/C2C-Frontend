@@ -1,14 +1,13 @@
 import {
+  Alert,
   Box,
   Button,
   Chip,
   Fade,
-  IconButton,
-  Link,
   Modal,
   Skeleton,
+  Snackbar,
   Stack,
-  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -21,24 +20,23 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
-import LanguageSharpIcon from '@mui/icons-material/LanguageSharp';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import HelpIcon from '@mui/icons-material/Help';
-import Leaderboard from '../Dashboard/Leaderboard';
+
+import Leaderboard from "../Dashboard/Leaderboard";
 // import useWindowSize from "react-use/lib/useWindowSize";
 // import Confetti from "react-confetti";
 // import ExamIcon from "../Icons/ExamIcon";
 import Instructions from "./Exam/Instructions";
+import Socials from "../Home/Socials";
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 300,
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "1.2rem",
+  fontFamily: "Audiowide",
   boxShadow: 24,
   p: 4,
 };
@@ -49,19 +47,50 @@ function TestStarter() {
   const { data, isLoading } = useFetch(
     "https://c2c-backend.vercel.app/user/checkauth"
   );
-  const round1Time = new Date("Sep 30, 2022 14:00:00");
-  const round2Time = new Date("Sep 30, 2022 16:20:00");
-  const round3Time = new Date("Sep 30, 2022 18:00:00");
+  const round1StartTime = new Date(process.env.REACT_APP_ROUND1_S);
+  const round2StartTime = new Date(process.env.REACT_APP_ROUND2_S);
+  const round3StartTime = new Date(process.env.REACT_APP_ROUND3_S);
 
-  const [timer, setTimer] = useState(0);
+  const round1EndTime = new Date(process.env.REACT_APP_ROUND1_E);
+  const round2EndTime = new Date(process.env.REACT_APP_ROUND2_E);
+  const round3EndTime = new Date(process.env.REACT_APP_ROUND3_E);
+
+  const [timer, setTimer] = useState("00d : 00h : 00m : 00s");
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
+ 
   const Ref = useRef(null);
+
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => setOpen(false);
+
   const handleOpen2 = () => setOpen2(true);
+
   const handleClose2 = () => setOpen2(false);
-  const getTimeRemaining = (e) => {
+
+  const handleOpen3 = () => setOpen3(true);
+
+  const handleClose3 = () => setOpen3(false);
+
+  
+  // to not allow if not qualified.
+  const handleCloning = () => {
+    setErrorMessage('');
+    setMessage('');
+    if (data.data.data[`round${getCurrentRound()}`]) {
+      navigate(`exam/${getCurrentRound()}`);
+    } else {
+      setOpen3(true);
+      setErrorMessage("You are not allowed to give the test");
+    }
+  };
+
+  // timer
+  const getTimeRemaining = async (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const days = Math.floor(total / 1000 / 60 / 60 / 24);
     const seconds = Math.floor((total / 1000) % 60);
@@ -75,31 +104,23 @@ function TestStarter() {
       seconds,
     };
   };
-  const handleCloning = () => {
-    console.log(data.data.data[`round${getCurrentRound()}`]);
 
-    if (data.data.data[`round${getCurrentRound()}`]) {
-      navigate(`exam/${getCurrentRound()}`);
-    } else {
-      console.log("not allowed");
-    }
-  };
   const getCurrentRound = () => {
     const currentRound =
-      new Date().getTime() < round1Time.getTime() + 60000 * 60 &&
-      new Date().getTime() > round1Time.getTime()
+      new Date().getTime() <= round1EndTime.getTime()
         ? "1"
-        : new Date().getTime() < round2Time.getTime() + 60000 * 60 &&
-          new Date().getTime() > round2Time.getTime()
+        : new Date().getTime() <= round2EndTime.getTime()
         ? "2"
-        : new Date().getTime() < round3Time.getTime() + 60000 * 60 &&
-          new Date().getTime() > round3Time.getTime()
+        : new Date().getTime() <= round3EndTime.getTime()
         ? "3"
         : "0";
     return currentRound;
   };
-  const startTimer = (e) => {
-    let { total, days, hours, minutes, seconds } = getTimeRemaining(e);
+
+  const round = getCurrentRound();
+  
+  const startTimer = async (e) => {
+    let { total, days, hours, minutes, seconds } = await getTimeRemaining(e);
     if (total >= 0) {
       setTimer(
         (days > 9 ? days : "0" + days) +
@@ -115,7 +136,6 @@ function TestStarter() {
   };
 
   const clearTimer = (e) => {
-    setTimer("00 : 00 : 00 : 00");
     if (Ref.current) clearInterval(Ref.current);
     const id = setInterval(() => {
       startTimer(e);
@@ -123,28 +143,34 @@ function TestStarter() {
     Ref.current = id;
   };
 
-  const getDeadTime = (n) => {
-    let deadline = round1Time;
-    if (n === 1) deadline = round1Time;
-    else if (n === 2) deadline = round2Time;
-    else if (n === 3) deadline = round3Time;
-    else deadline = Date.now();
-    sessionStorage.setItem("startTime", deadline);
+  const getDeadTime = () => {
+    let deadline = getCurrentRoundStartTime();
     return deadline;
   };
 
-  useEffect(() => {
+  const getCurrentRoundEndTime = ()=>{
+    
+    if (round === '1'){
+      return round1EndTime;
+    }else if(round === '2'){
+      return round2EndTime;
+    }else{
+      return round3EndTime;
+    }
+  }
 
-    clearTimer(
-      getDeadTime(
-        new Date().getTime() < round1Time.getTime()
-          ? 1
-          : new Date().getTime() < round2Time.getTime()
-          ? 2
-          : 3
-      )
-    );
-  }, [data]);
+  const getCurrentRoundStartTime = ()=>{
+    if (round === '1'){
+      return round1StartTime;
+    }else if(round === '2'){
+      return round2StartTime;
+    }else if(round==='3'){
+      return round3StartTime;
+    }
+  }
+  useEffect(() => {
+    clearTimer(getDeadTime());
+  }, [data, round1StartTime, round2StartTime]);
 
   return (
     <Stack
@@ -170,7 +196,7 @@ function TestStarter() {
         >
           Welcome to Code2Clone!
         </Typography>
-        
+
         <Box
           sx={{
             display: "flex",
@@ -180,7 +206,7 @@ function TestStarter() {
             flexDirection: "column",
           }}
         >
-          {data && getCurrentRound() === "0" && (
+          {data && !(timer==="00d : 00h : 00m : 00s") && (
             <>
               <div style={{ fontFamily: "Audiowide" }}>
                 Next Round Begins in{" "}
@@ -201,32 +227,31 @@ function TestStarter() {
 
         {/* start cloning button */}
         <Stack direction="row" spacing={4}>
-          {!isLoading && getCurrentRound() !== "0" && (
+          {!isLoading && (new Date().getTime() >= getCurrentRoundStartTime() && (new Date()).getTime() < getCurrentRoundEndTime()) && (
             <>
               <Button
                 color="warning"
                 variant="contained"
                 size="large"
+                sx={!matches && {width:"180px"}}
                 onClick={handleOpen2}
               >
                 Start Cloning
               </Button>
             </>
           )}
-          {!isLoading &&
-            getCurrentRound() === "0" &&
-            (
-              <>
-                <Button
-                  color="warning"
-                  variant="contained"
-                  size="large"
-                  onClick={handleOpen}
-                >
-                  View Results
-                </Button>
-              </>
-            )}
+          {!isLoading && !(new Date().getTime()> getCurrentRoundStartTime() && (new Date()).getTime() < getCurrentRoundEndTime()) && (
+            <>
+              <Button
+                color="warning"
+                variant="contained"
+                size="large"
+                onClick={handleOpen}
+              >
+                View Results
+              </Button>
+            </>
+          )}
 
           {/* MODAL */}
           {/* RESULTS */}
@@ -242,9 +267,13 @@ function TestStarter() {
               <Box sx={style}>
                 <Typography
                   id="transition-modal-title"
-                  variant="h4"
+                  variant="h5"
                   component="h2"
-                  sx={{ width: "100%", textAlign: "center" }}
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
+                    fontFamily: "Audiowide",
+                  }}
                 >
                   Round-Wise Results
                 </Typography>
@@ -271,19 +300,20 @@ function TestStarter() {
                         alignItems: "center",
                         gap: "1.2rem",
                         width: "100%",
+                        fontFamily: "Audiowide",
                       }}
                     >
                       <Typography variant="h6">Round 1</Typography>
                       <Typography>
                         {new Date().getTime() >
-                        round1Time.getTime() + 60000 * 65
+                        round1EndTime.getTime() + 60000 * 30
                           ? data.data.data.round2
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
                       {new Date().getTime() >
-                      round1Time.getTime() + 60000 * 65 ? (
+                      round1EndTime.getTime() + 60000 * 30 ? (
                         data.data.data.round2 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
@@ -307,14 +337,14 @@ function TestStarter() {
                       <Typography variant="h6">Round 2</Typography>
                       <Typography>
                         {new Date().getTime() >
-                        round2Time.getTime() + 60000 * 65
+                        round2EndTime.getTime() + 60000 * 30
                           ? data.data.data.round3
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
                       {new Date().getTime() >
-                      round2Time.getTime() + 60000 * 65 ? (
+                      round2EndTime.getTime() + 60000 * 30 ? (
                         data.data.data.round3 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
@@ -339,14 +369,14 @@ function TestStarter() {
                       <Typography variant="h6">Round 3</Typography>
                       <Typography>
                         {new Date().getTime() >
-                        round3Time.getTime() + 60000 * 65
+                        round3EndTime.getTime() + 60000 * 30
                           ? data.data.data.round3
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
                       {new Date().getTime() >
-                      round3Time.getTime() + 60000 * 65 ? (
+                      round3EndTime.getTime() + 60000 * 30 ? (
                         data.data.data.round3 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
@@ -402,25 +432,8 @@ function TestStarter() {
           </Modal>
         </Stack>
 
-        {/* view results button */}
-        <Stack direction="row">
-          <IconButton area-label="web">
-            <Tooltip title="Web Site" followCursor={true} arrow>
-            <Link href="https://nandurijv.codes" target="_blank"><LanguageSharpIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
-          </IconButton>
-          <IconButton area-label="insta">
-            <Tooltip title="Instagram" followCursor={true} arrow>
-            <Link href="https://nandurijv.codes" target="_blank"><InstagramIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
-          </IconButton>
-          <IconButton area-label="twitter">
-            <Tooltip title="Twitter" followCursor={true} arrow>
-            <Link href="https://nandurijv.codes" target="_blank"><TwitterIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
-          </IconButton>
-          <IconButton area-label="help">
-            <Tooltip title="HelpDesk" followCursor={true} arrow>
-            <Link href="https://help.com" target="_blank"><HelpIcon sx={{fontSize:"3rem",color:"gray",'&:hover':{color:"white"}}}/></Link></Tooltip>
-          </IconButton>
-        </Stack>
+        {/* socials */}
+        <Socials/>
       </Stack>
 
       {/* right side */}
@@ -429,14 +442,22 @@ function TestStarter() {
         alignItems="center"
         justifyContent="center"
         minHeight="80vh"
-        width="50%"
+        width={matches?"50%":'100%'}
         color="white"
       >
-        <Typography variant="h4" sx={{ fontFamily: "Audiowide" }}>
-          Leaderboard
+        <Typography variant="h4" sx={{ fontFamily: "Audiowide",width:"100%",textAlign:"center" }}>
+          Leaderboard {`for Round ${round}`}
         </Typography>
-        <Leaderboard/>
+        <Leaderboard />
       </Stack>
+      
+      {/* snackbar */}
+      <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'center' }} open={open3} autoHideDuration={3000} onClose={handleClose3} key="bottom center">
+        <Alert onClose={handleClose3} severity={errorMessage?"error":"success"} sx={{ width: "100%" }}>
+          {errorMessage? errorMessage:message}
+        </Alert>
+      </Snackbar>
+
     </Stack>
   );
 }

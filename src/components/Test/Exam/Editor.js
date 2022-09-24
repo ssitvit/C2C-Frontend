@@ -15,7 +15,7 @@ function Editor(props) {
   const [value, setValue] = useState(obj);
   useEffect(() => {
     setObj(value);
-  });
+  },[setObj,value]);
   const onChange = React.useCallback(
     (value, viewUpdate) => {
       sessionStorage.setItem(type, value);
@@ -25,14 +25,6 @@ function Editor(props) {
   );
   return (
     <Stack width="100%" style={{ paddingTop: "0" }}>
-      <Typography
-        variant="h4"
-        color="white"
-        margin="0.5rem"
-        sx={{ fontFamily: "Audiowide" }}
-      >
-        {type.toUpperCase()}
-      </Typography>
       {/* <TextareaAutosize
         className="outline"
         rows={50}
@@ -52,8 +44,7 @@ function Editor(props) {
       <CodeMirror
         className="outline"
         value={value ? value : ""}
-        maxHeight="50vh"
-        minHeight="50vh"
+        height="100%"
         width="100%"
         extensions={[
           type === "html" ? html({ jsx: true }) : css({ jsx: true }),
