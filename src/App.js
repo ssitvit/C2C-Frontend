@@ -12,7 +12,7 @@ import NotFound from "./components/Notfound/NotFound";
 function App() {
   return (
 
-      <Box minHeight="100vh" sx={{ background:"url('/Background.svg')",backgroundSize:"cover" }}>
+      <Box minHeight="100vh" sx={{ background:"url('/Background.png')",backgroundSize:"cover" }}>
         <Routes>
           <Route exact path="/*" element={<Home />} />
           <Route exact path="/dashboard/user/*" element={<UserDashboard />} />
@@ -20,7 +20,7 @@ function App() {
           <Route exact path="/dashboard/cood" element={<CoodDashboard />} />
           <Route exact path="/contact" element={<Contact />} />
           <Route exact path="/user/verify/:id/:token" element={<Verify />} />
-          {/* <Route exact path="/*" element={<NotFound/>} /> */}
+          <Route exact path="/*" element={<NotFound/>} />
         </Routes>
       </Box>
   );
