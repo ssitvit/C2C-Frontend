@@ -20,7 +20,7 @@ function App() {
           <Route exact path="/dashboard/cood" element={<CoodDashboard />} />
           <Route exact path="/contact" element={<Contact />} />
           <Route exact path="/user/verify/:id/:token" element={<Verify />} />
-          <Route exact path="/*" element={<NotFound/>} />
+          {/* <Route exact path="/*" element={<NotFound/>} /> */}
         </Routes>
       </Box>
   );
