@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, Skeleton, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
@@ -37,15 +37,15 @@ function Attendance() {
         data &&
         data.data.data.map((user, index) => {
             return (
-            <Stack sx={{background:"white",padding:"1.2rem",borderRadius:"1rem"}} direction="row" alignItems="center" justifyContent="space-between" key={user._id} >
-              <Typography>{index + 1}.</Typography>
-              <Typography>{user.first_name}</Typography>
-              <Typography> {user[`round${round}`]?"Present":"Absent"}</Typography>
-              <Button variant="contained" onClick={()=>{handleSubmit(user._id,round,true)}}>Mark Present</Button>
-              <Button variant="contained" onClick={()=>{handleSubmit(user._id,round,false)}}color="error">Mark Absent</Button>
+            <Stack sx={{background:"white",padding:"1.2rem",borderRadius:"1rem",boxShadow:"10px 10px 4px 0 #250101",'&:hover':{boxShadow:"5px 5px 4px 0 #250101"}}} direction="row" alignItems="center" justifyContent="space-between" key={user._id} >
+              <Typography sx={{fontFamily:"Audiowide"}}>{index + 1}.</Typography>
+              <Typography sx={{fontFamily:"Audiowide"}}>{user.first_name}</Typography>
+              <Typography sx={{fontFamily:"Audiowide"}}> {user[`round${round}`]?"Present":"Absent"}</Typography>
+              <Button sx={{fontFamily:"Audiowide"}} variant="contained" onClick={()=>{handleSubmit(user._id,round,true)}}>Mark Present</Button>
             </Stack>
           );
         })}
+        {isLoading && <Skeleton height="50vh"/>}
     </Stack>
   );
 }

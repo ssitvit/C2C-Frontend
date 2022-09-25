@@ -29,7 +29,7 @@ function AdminDashboard() {
       <Routes>
         <Route exact path="/" element={<Typography variant="h4" color="white">CHOOSE A ROUND TO START</Typography>}/>
         <Route exact path="round/:id/*" element={<Actions />}>
-          <Route index element={<Attendance/>}/>
+          <Route exact path="" element={<Attendance/>}/>
           <Route
             path="submitAttendance"
             element={<Attendance/>}
