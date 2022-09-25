@@ -10,9 +10,9 @@ export const useFetch = (url, method, body) => {
       let response = await fetch(url, {
         method: method,
         credentials: "include",
+        cache:"no-cache",
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": "true",
+          "Content-Type": "application/json"
         },
         body: method === "GET" ? null : body,
       });
@@ -25,7 +25,7 @@ export const useFetch = (url, method, body) => {
         setLoading(false);
       }
     };
-    try{fetchData()}catch(err){setError(err)};
+    try{if(url)fetchData()}catch(err){console.log(error);setError(err)};
   }, [url, method, body]);
   return { data, isLoading, error };
 };

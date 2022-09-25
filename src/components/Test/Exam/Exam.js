@@ -112,10 +112,9 @@ function Exam(props) {
     setLoading(true);
     setMessage("");
     setErrorMessage("");
-    let url = "https://c2c-backend.vercel.app/save/submit";
+    let url = `https://${process.env.REACT_APP_BASE_URL}/save/submit`;
     let response = await fetch(url, {
       method: "POST",
-      
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -127,7 +126,7 @@ function Exam(props) {
         round: qLinks.length === 1 ? round : 10 * round + qnum,
       }),
     });
-    
+
     let data = await response.json();
     if (data.success) {
       setOpen(true);
@@ -135,8 +134,8 @@ function Exam(props) {
       setLoading(false);
       if (qLinks.length === 1 || (qnum + 1) % qLinks.length === 0) {
         setTimeout(() => {
-          navigate("/dashbord/user");
-        });
+          navigate("/dashboard/user");
+        }, 2000);
         sessionStorage.clear();
       } else {
         setHtmlObj(htmlTemplate);
@@ -149,9 +148,10 @@ function Exam(props) {
       setOpen(true);
       setErrorMessage(data.data.error);
       setLoading(false);
-      console.log(data);
       if (qLinks.length === 1 || (qnum + 1) % qLinks.length === 0) {
-        navigate("/dashboard/user");
+        setTimeout(() => {
+          navigate("/dashboard/user");
+        }, 2000);
       } else {
         setQnum((prev) => prev + 1);
       }
@@ -230,26 +230,22 @@ function Exam(props) {
     }
   };
 
-  const checkSubmitted = async (n)=>{
+  const checkSubmitted = async (n) => {
     let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
-    let response = await fetch(url,{
-      method: 'POST',
-      headers:{"Content-Type": "application/json"},
-      body: JSON.stringify({round:round})});
+    let response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ round: round }),
+    });
     let data = await response.json();
-    if(data.success){
-      let success = data.success;
-      let message = data.data.message;
-      return  {success,message};
-    } else{
-      let success = data.success;
-      let message = data.data.message;
-      return  {success,message};
-    }
-    }
+    let success = data.success;
+    let message = data.data.data.message;
+    return { success, message };
+  };
   useEffect(() => {
     setErrorMessage("");
     setMessage("");
+    setOpen(false);
     // check if the user has already submitted the test;
     if (error) {
       setErrorMessage(error);
@@ -271,6 +267,9 @@ function Exam(props) {
         navigate("/dashboard/user");
       }, 2000);
     } else {
+      setErrorMessage("");
+      setMessage("");
+      setOpen(false);
       const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
       setUserObj(finalObj);
       //  to set the timer
@@ -290,21 +289,40 @@ function Exam(props) {
         let data = await response.json();
 
         if (data.success) {
+          setErrorMessage("");
+          setMessage("");
+          setOpen(false);
           setLoading2(false);
           setQlinks(data.data.data);
-          console.log(data.data.data);
-          const {success, message} = qLinks.length>1?checkSubmitted(parseInt(round)*10+qnum):checkSubmitted(parseInt(round));
-          if(success){
+          const { success, message } =
+            qLinks.length > 1
+              ? checkSubmitted(parseInt(round) * 10 + qnum)
+              : checkSubmitted(parseInt(round));
+          if (success) {
             setOpen(true);
             setMessage(message);
-          }else{
-            if((qnum+1)%qLinks.length===0){
+          } else if (!success && (qnum + 1) % qLinks.length === 0) {
+            setErrorMessage("");
+            setMessage("");
             setOpen(true);
             setErrorMessage(message);
-            setTimeout(()=>{navigate('/dashboard/user')},2000);}else{
-              const {success,message} = checkSubmitted(parseInt(round)*10+qnum+1);
-              if(!success){
-                setTimeout(()=>{navigate('/dashboard/user')},2000);
+            setTimeout(() => {
+              navigate("/dashboard/user");
+            }, 2000);
+          } else {
+            const { success, message } = checkSubmitted(
+              parseInt(round) * 10 + qnum + 1
+            );
+            if (success) {
+              setMessage(message);
+              setOpen(true);
+            } else {
+              setErrorMessage(message);
+              setOpen(true);
+              if ((qnum + 1) % qLinks.length === 0) {
+                setTimeout(() => {
+                  navigate("/dashboard/user");
+                }, 2000);
               }
             }
           }
@@ -450,7 +468,6 @@ function Exam(props) {
                     Your Output
                   </Typography>
                   <ButtonGroup>
-                  
                     <Button
                       variant="contained"
                       color="error"

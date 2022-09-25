@@ -27,25 +27,27 @@ import Leaderboard from "../Dashboard/Leaderboard";
 // import ExamIcon from "../Icons/ExamIcon";
 import Instructions from "./Exam/Instructions";
 import Socials from "../Home/Socials";
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 300,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  borderRadius: "1.2rem",
-  fontFamily: "Audiowide",
-  boxShadow: 24,
-  p: 4,
-};
+
 function TestStarter() {
   const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: matches?500:300,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    borderRadius: "1.2rem",
+    fontFamily: "Audiowide",
+    boxShadow: 24,
+    p: 4,
+  };
   const { data, isLoading, error } = useFetch(
-    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth`);
+    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth/`);
+
   const round1StartTime = new Date(process.env.REACT_APP_ROUND1_S);
   const round2StartTime = new Date(process.env.REACT_APP_ROUND2_S);
   const round3StartTime = new Date(process.env.REACT_APP_ROUND3_S);
@@ -70,8 +72,6 @@ function TestStarter() {
   const handleOpen2 = () => setOpen2(true);
 
   const handleClose2 = () => setOpen2(false);
-
-  const handleOpen3 = () => setOpen3(true);
 
   const handleClose3 = () => setOpen3(false);
 
@@ -169,7 +169,7 @@ function TestStarter() {
   }
   useEffect(() => {
     clearTimer(getDeadTime());
-  }, [data, round1StartTime, round2StartTime]);
+  }, []);
 
   return (
     <Stack

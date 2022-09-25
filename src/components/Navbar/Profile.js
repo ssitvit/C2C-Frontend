@@ -102,8 +102,7 @@ function Profile() {
     };
   }
   const { data, isLoading, error } = useFetch(
-    "https://c2c-backend.vercel.app/user/checkauth"
-  );
+    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth`);
   useEffect(() => {
     if ((data && !data.success) || error) {
       navigate("/login");

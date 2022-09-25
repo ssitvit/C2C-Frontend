@@ -18,14 +18,10 @@ function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const { data, error } = useFetch(
-    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth`
-    );
+  const { data, error } = useFetch(`https://${process.env.REACT_APP_BASE_URL}/user/checkauth`);
   useEffect(() => {
     if (data && !error) {
       navigate("/dashboard/user");
-    }else{
-      // enter admin check here
     }
   });
   return (

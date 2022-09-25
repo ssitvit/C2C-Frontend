@@ -4,24 +4,29 @@ import Navbar from "../Navbar/Navbar";
 import TestStarter from "../Test/TestStarter";
 import Exam from "../Test/Exam/Exam";
 import { useFetch } from "../Hooks/useFetch";
-import { Skeleton } from "@mui/material";
 function UserDashboard() {
   const navigate = useNavigate();
   const { data, isLoading, error } = useFetch(
-    "https://c2c-backend.vercel.app/user/checkauth");
+    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth`);
   useEffect(()=>{
     if(data && error){
       navigate('/login');
     }
   })
-  return (<>
-      <Navbar />
+
+  return (
+    <>
+
+    {!isLoading && 
+    <>
+    <Navbar />
       <div>
       <Routes>
-        <Route exact path="/" element={<TestStarter />} />
+      <Route index element = {<TestStarter/>}/>
         <Route exact path="exam/:id" element={<Exam />} />
       </Routes>
     </div>
+    </>}
     </>
   );
 }

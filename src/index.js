@@ -26,12 +26,10 @@ document.onkeydown = function(e) {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
     <BrowserRouter>
     <Box backgroundColor="#C00000">
       <App />
     </Box>
     </BrowserRouter>
-  </React.StrictMode>
 );
 reportWebVitals();
