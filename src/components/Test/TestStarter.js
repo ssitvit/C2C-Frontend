@@ -44,9 +44,8 @@ function TestStarter() {
   const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const { data, isLoading } = useFetch(
-    "https://c2c-backend.vercel.app/user/checkauth"
-  );
+  const { data, isLoading, error } = useFetch(
+    `https://${process.env.REACT_APP_BASE_URL}/user/checkauth`);
   const round1StartTime = new Date(process.env.REACT_APP_ROUND1_S);
   const round2StartTime = new Date(process.env.REACT_APP_ROUND2_S);
   const round3StartTime = new Date(process.env.REACT_APP_ROUND3_S);
@@ -233,7 +232,7 @@ function TestStarter() {
                 color="warning"
                 variant="contained"
                 size="large"
-                sx={!matches && {width:"180px"}}
+                
                 onClick={handleOpen2}
               >
                 Start Cloning

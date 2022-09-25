@@ -1,12 +1,11 @@
 import { Stack } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useFetch } from "../Hooks/useFetch";
 
 function Leaderboard() {
   
-  const array = [
-    { id: 1, name: "Aryan" },
-    { id: 2, name: "Satvik" },
-  ];
+  const [array,setArray] = useState([]);
+  const {data, isLoading, error} = useFetch();
   return (
     <div style={{ fontFamily: "Audiowide" }}>
       {array.map((user) => {

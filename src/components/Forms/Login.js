@@ -13,13 +13,13 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import "react-phone-input-2/lib/material.css";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import EmailIcon from '@mui/icons-material/Email';
-import KeyIcon from '@mui/icons-material/Key';
+import EmailIcon from "@mui/icons-material/Email";
+import KeyIcon from "@mui/icons-material/Key";
 
 function Login(props) {
   const theme = useTheme();
@@ -95,14 +95,17 @@ function Login(props) {
         setError(true);
         setMessage("Please fill all the fields");
       } else if (
-        !values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/) && !props.admin
+        !values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/) &&
+        !props.admin
       ) {
         setOpen(true);
         setError(true);
         setMessage("Please Enter a valid email address");
       } else {
         setLoading(true);
-        let url = props.admin?`https://${process.env.REACT_APP_BASE_URL}/admin/user/login`:`https://${process.env.REACT_APP_BASE_URL}/user/login/`;
+        let url = props.admin
+          ? `https://${process.env.REACT_APP_BASE_URL}/admin/user/login`
+          : `https://${process.env.REACT_APP_BASE_URL}/user/login/`;
         try {
           fetch(url, {
             method: "POST",
@@ -113,7 +116,12 @@ function Login(props) {
               "Content-Type": "application/json",
               // "Access-Control-Allow-Credentials": "true"
             },
-            body: props.admin?JSON.stringify({ username:formik.values.email, password:formik.values.password}):JSON.stringify(formik.values),
+            body: props.admin
+              ? JSON.stringify({
+                  username: formik.values.email,
+                  password: formik.values.password,
+                })
+              : JSON.stringify(formik.values),
           })
             .then((response) => response.json())
             .then((data) => {
@@ -122,8 +130,9 @@ function Login(props) {
                 setMessage("Logged In Successfully");
                 // document.cookie='authentication=true;SameSite=none;Secure=true;';
                 setTimeout(() => {
-                  props.admin?
-                  navigate("/dashboard/admin"):navigate("/dashboard/user");
+                  props.admin
+                    ? navigate("/dashboard/admin")
+                    : navigate("/dashboard/user");
                 }, 1000);
               } else if (data.data.error === "Email Not verified") {
                 setLoading(false);
@@ -201,12 +210,12 @@ function Login(props) {
         }}
         InputProps={{
           type: "email",
-            startAdornment: (
-              <InputAdornment position="start">
-                  <EmailIcon/>
-              </InputAdornment>
-            ),
-          }}
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmailIcon />
+            </InputAdornment>
+          ),
+        }}
         autoComplete="username"
       />
       {/* PASSWORD */}
@@ -226,9 +235,9 @@ function Login(props) {
           shrink: true,
         }}
         InputProps={{
-          startAdornment:(
+          startAdornment: (
             <InputAdornment position="start">
-            <KeyIcon/>
+              <KeyIcon />
             </InputAdornment>
           ),
           endAdornment: (

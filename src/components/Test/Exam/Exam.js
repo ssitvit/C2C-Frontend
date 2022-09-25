@@ -98,7 +98,7 @@ function Exam(props) {
   const [cssObj, setCssObj] = useState(
     sessionStorage.getItem("css") ? sessionStorage.getItem("css") : cssTemplate
   );
-  const [userObj, setUserObj] = useState("Hi everyone");
+  const [userObj, setUserObj] = useState("");
 
   const { data, isLoading, error } = useFetch(
     "https://c2c-backend.vercel.app/save/check",
@@ -115,6 +115,7 @@ function Exam(props) {
     let url = "https://c2c-backend.vercel.app/save/submit";
     let response = await fetch(url, {
       method: "POST",
+      
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -126,6 +127,7 @@ function Exam(props) {
         round: qLinks.length === 1 ? round : 10 * round + qnum,
       }),
     });
+    
     let data = await response.json();
     if (data.success) {
       setOpen(true);
@@ -248,7 +250,6 @@ function Exam(props) {
   useEffect(() => {
     setErrorMessage("");
     setMessage("");
-
     // check if the user has already submitted the test;
     if (error) {
       setErrorMessage(error);

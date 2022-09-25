@@ -8,8 +8,7 @@ import { Skeleton } from "@mui/material";
 function UserDashboard() {
   const navigate = useNavigate();
   const { data, isLoading, error } = useFetch(
-    "https://c2c-backend.vercel.app/user/checkauth"
-  );
+    "https://c2c-backend.vercel.app/user/checkauth");
   useEffect(()=>{
     if(data && error){
       navigate('/login');

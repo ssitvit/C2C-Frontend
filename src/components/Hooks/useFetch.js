@@ -9,7 +9,6 @@ export const useFetch = (url, method, body) => {
       setLoading(true);
       let response = await fetch(url, {
         method: method,
-        // mode:"no-cors",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
