@@ -228,13 +228,30 @@ function Exam(props) {
     }
   };
 
+  const checkSubmitted = async (n)=>{
+    let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
+    let response = await fetch(url,{
+      method: 'POST',
+      headers:{"Content-Type": "application/json"},
+      body: JSON.stringify({round:round})});
+    let data = await response.json();
+    if(data.success){
+      let success = data.success;
+      let message = data.data.message;
+      return  {success,message};
+    } else{
+      let success = data.success;
+      let message = data.data.message;
+      return  {success,message};
+    }
+    }
   useEffect(() => {
     setErrorMessage("");
     setMessage("");
 
     // check if the user has already submitted the test;
     if (error) {
-      setErrorMessage(error + "Cannot submit again.");
+      setErrorMessage(error);
       setOpen(true);
       setTimeout(() => {
         navigate("/dashboard/user");
@@ -275,6 +292,21 @@ function Exam(props) {
           setLoading2(false);
           setQlinks(data.data.data);
           console.log(data.data.data);
+          const {success, message} = qLinks.length>1?checkSubmitted(parseInt(round)*10+qnum):checkSubmitted(parseInt(round));
+          if(success){
+            setOpen(true);
+            setMessage(message);
+          }else{
+            if((qnum+1)%qLinks.length===0){
+            setOpen(true);
+            setErrorMessage(message);
+            setTimeout(()=>{navigate('/dashboard/user')},2000);}else{
+              const {success,message} = checkSubmitted(parseInt(round)*10+qnum+1);
+              if(!success){
+                setTimeout(()=>{navigate('/dashboard/user')},2000);
+              }
+            }
+          }
         } else {
           setLoading2(false);
           setOpen(true);

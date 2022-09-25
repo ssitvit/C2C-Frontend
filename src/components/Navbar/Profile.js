@@ -105,7 +105,6 @@ function Profile() {
     "https://c2c-backend.vercel.app/user/checkauth"
   );
   useEffect(() => {
-    console.log(error,data);
     if ((data && !data.success) || error) {
       navigate("/login");
     }
