@@ -3,7 +3,7 @@ import {
   Skeleton,
   Stack,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
 import Submission from "./Submission";
@@ -21,6 +21,11 @@ function Evaluation() {
     "POST",
     JSON.stringify({ round:round })
   );
+  useEffect(()=>{
+    if(error){
+      console.log('Error getting codes');
+    }
+  })
   return (
     <Stack spacing={4} style={{ padding: "2rem", margin: "2rem" }}>
       {round===1&&<Button>Hello</Button>}

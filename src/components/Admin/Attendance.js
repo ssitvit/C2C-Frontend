@@ -1,5 +1,6 @@
 import {  Skeleton, Stack} from "@mui/material";
 import React from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
 import Attended from "./Attended";
@@ -17,6 +18,11 @@ function Attendance() {
     "POST",
     JSON.stringify({ round: round>10?1:1 })
   );
+  useEffect(()=>{
+    if(error){
+      console.log(error);
+    }
+  })
   return (
     <Stack spacing={4} style={{padding:"2rem",margin:"2rem"}}>
       {!isLoading &&

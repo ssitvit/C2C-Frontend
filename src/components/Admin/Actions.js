@@ -1,6 +1,6 @@
 import { Alert, Button, CircularProgress, Snackbar, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 function Actions() {
   const navigate = useNavigate();
