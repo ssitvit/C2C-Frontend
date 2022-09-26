@@ -1,9 +1,7 @@
 import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useFetch } from "../Hooks/useFetch";
 
 function Leaderboard(props) {
-  const round = props.round;
   const [array,setArray] = useState([]);
   useEffect(() => {
     let url = `https://${process.env.REACT_APP_BASE_URL}/user/getScoreSort`;

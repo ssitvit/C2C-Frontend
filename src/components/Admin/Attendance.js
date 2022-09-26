@@ -20,7 +20,7 @@ function Attendance() {
     if(error){
       console.log(error);
     }
-  },[])
+  },[error])
   return (
     <Stack spacing={4} style={{padding:"2rem",margin:"2rem"}}>
       {!isLoading &&
