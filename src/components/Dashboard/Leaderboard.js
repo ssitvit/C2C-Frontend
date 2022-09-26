@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
 function Leaderboard() {
-  
+
   const [array,setArray] = useState([]);
-  const {data, isLoading, error} = useFetch();
   return (
     <div style={{ fontFamily: "Audiowide" }}>
-      {array.map((user) => {
+      {array.length===0?"Nothing to show yet":array.map((user) => {
         return (
           <Stack direction="row" key={user.id}>
           <div style={{textAlign:"center",width:"100px"}}>

@@ -64,24 +64,13 @@ function Exam(props) {
   const [qnum, setQnum] = useState(0);
   const [qLinks, setQlinks] = useState([]);
   const [timer, setTimer] = useState();
-  const iframeRef = useRef(null);
   // for modal
   const [open2, setOpen2] = React.useState(false);
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
-  const htmlTemplate = `<!DOCTYPE html>
-  <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-      <!-- Start writing your code here -->
-        
-    </body>
-    </html>`;
+  const htmlTemplate = `<body>
+    <!-- Start writing your code here -->
+    </body>`;
 
   const cssTemplate = `body{
   height:90vh;
@@ -103,9 +92,8 @@ function Exam(props) {
   const { data, isLoading, error } = useFetch(
     "https://c2c-backend.vercel.app/save/check",
     "POST",
-    JSON.stringify({ round: round })
+    JSON.stringify({ round: qLinks.length>1?round*10+qnum:round })
   );
-
   // submitting the final code.
   const handleSubmit = async () => {
     setOpen(false);
@@ -230,31 +218,34 @@ function Exam(props) {
     }
   };
 
-  const checkSubmitted = async (n) => {
-    let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
-    let response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ round: round }),
-    });
-    let data = await response.json();
-    let success = data.success;
-    let message = data.data.data.message;
-    return { success, message };
-  };
+  // const checkSubmitted = async (n) => {
+  //   let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
+  //   let response = await fetch(url, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ round: round }),
+  //   });
+  //   let data = await response.json();
+  //   if(!data.success){
+  //     setOpen(true);
+  //     setErrorMessage("Code Submitted Already!");
+  //     setTimeout(()=>{navigate('/dashboard/user')},2000);
+  //   }
+  // };
   useEffect(() => {
+    setOpen(false);
     setErrorMessage("");
     setMessage("");
-    setOpen(false);
+    const finalObj = `<html><head><style>${cssObj}</style></head>${htmlObj}</html>`;
+    setUserObj(finalObj);
     // check if the user has already submitted the test;
     if (error) {
-      setErrorMessage(error);
       setOpen(true);
+      setErrorMessage(error);
       setTimeout(() => {
         navigate("/dashboard/user");
       }, 2000);
     }
-
     // check if the test time is over
     else if (
       new Date().getTime() > getCurrentRoundEndTime() ||
@@ -267,14 +258,9 @@ function Exam(props) {
         navigate("/dashboard/user");
       }, 2000);
     } else {
-      setErrorMessage("");
-      setMessage("");
       setOpen(false);
-      const finalObj = `<html><head><style>${cssObj}</style></head><body>${htmlObj}</body>`;
-      setUserObj(finalObj);
       //  to set the timer
       clearTimer(getDeadTime(parseInt(round)));
-
       // get the questions as image string base64
       let getqArray = async () => {
         let url = `https://${process.env.REACT_APP_BASE_URL}/save/getimage`;
@@ -289,47 +275,16 @@ function Exam(props) {
         let data = await response.json();
 
         if (data.success) {
+          setOpen(false);
           setErrorMessage("");
           setMessage("");
-          setOpen(false);
           setLoading2(false);
           setQlinks(data.data.data);
-          const { success, message } =
-            qLinks.length > 1
-              ? checkSubmitted(parseInt(round) * 10 + qnum)
-              : checkSubmitted(parseInt(round));
-          if (success) {
-            setOpen(true);
-            setMessage(message);
-          } else if (!success && (qnum + 1) % qLinks.length === 0) {
-            setErrorMessage("");
-            setMessage("");
-            setOpen(true);
-            setErrorMessage(message);
-            setTimeout(() => {
-              navigate("/dashboard/user");
-            }, 2000);
-          } else {
-            const { success, message } = checkSubmitted(
-              parseInt(round) * 10 + qnum + 1
-            );
-            if (success) {
-              setMessage(message);
-              setOpen(true);
-            } else {
-              setErrorMessage(message);
-              setOpen(true);
-              if ((qnum + 1) % qLinks.length === 0) {
-                setTimeout(() => {
-                  navigate("/dashboard/user");
-                }, 2000);
-              }
-            }
-          }
+          // checkSubmitted();
         } else {
           setLoading2(false);
-          setOpen(true);
           setErrorMessage("Could not fetch Question");
+          setOpen(true);
           setTimeout(() => {
             navigate("/dashboard/user");
           }, 2000);
@@ -436,13 +391,15 @@ function Exam(props) {
                           backgroundColor: "white",
                           height: "500px",
                         }}
-                      >
+                      >{loading2 && <Skeleton height="50vh"/>}
+                        
+                        {!loading2 &&
                         <img
                           src={qLinks[qnum]}
                           alt=""
                           height="100%"
                           width="100%"
-                        />
+                        />}
                       </Box>
                     </Stack>
                   </TabPanel>
@@ -480,7 +437,6 @@ function Exam(props) {
                 </Stack>
                 <iframe
                   sandbox="allow-scripts"
-                  ref={iframeRef}
                   style={{
                     width: "100%",
                     border: "none",
