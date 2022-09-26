@@ -2,7 +2,7 @@ import { Link, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 function Verify() {
   const params = useParams();
   const navigate = useNavigate();
@@ -18,26 +18,40 @@ function Verify() {
       .then((data) => {
         console.log(data);
         if (data.success) {
-            setLoading(false);
+          setLoading(false);
           setVerified(true);
-        }else{
-            setLoading(false);
-            setVerified(false);
+        } else {
+          setLoading(false);
+          setVerified(false);
         }
       })
       .catch((err) => console.log(err));
-  },[id,token]);
+  }, [id, token]);
   return (
-    <Stack color="white" minHeight="100vh" alignItems="center" justifyContent="center">
-        {loading && <CircularProgress />}
-        {verified && !loading &&
-        <Typography>
-            "Verified Successfully!"
-            <Link component="button" variant="filled" onClick={()=>{navigate('/login')}}>Login Now</Link>
-            </Typography>}
-        {!verified &&!loading && <Typography>"Invalid Link!"</Typography>}
+    <Stack
+      color="white"
+      minHeight="100vh"
+      alignItems="center"
+      justifyContent="center"
+    >
+      {loading && <CircularProgress />}
+      {verified && !loading && (
+        <>
+          <Typography>"Verified Successfully!"</Typography>
+          <Link
+            component="button"
+            variant="filled"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Login Now
+          </Link>
+        </>
+      )}
+      {!verified && !loading && <Typography>"Invalid Link!"</Typography>}
     </Stack>
-  )
+  );
 }
 
 export default Verify;

@@ -12,10 +12,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useFetch } from "../../Hooks/useFetch";
 import Editor from "./Editor";
 import ErrorIcon from "@mui/icons-material/Error";
 import Tab from "@mui/material/Tab";
@@ -89,13 +88,13 @@ function Exam(props) {
   );
   const [userObj, setUserObj] = useState("");
 
-  const { data, isLoading, error } = useFetch(
-    "https://c2c-backend.vercel.app/save/check",
-    "POST",
-    JSON.stringify({ round: qLinks.length>1?round*10+qnum:round })
-  );
+  // const { data, isLoading, error } = useFetch(
+  //   "https://c2c-backend.vercel.app/save/check",
+  //   "POST",
+  //   JSON.stringify({ round: qLinks.length>1?round*10+qnum:round })
+  // );
   // submitting the final code.
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     setOpen(false);
     setLoading(true);
     setMessage("");
@@ -123,7 +122,7 @@ function Exam(props) {
       if (qLinks.length === 1 || (qnum + 1) % qLinks.length === 0) {
         setTimeout(() => {
           navigate("/dashboard/user");
-        }, 2000);
+        }, 800);
         sessionStorage.clear();
       } else {
         setHtmlObj(htmlTemplate);
@@ -145,7 +144,7 @@ function Exam(props) {
       }
     }
     handleClose2();
-  };
+  },[cssObj,cssTemplate,htmlObj, htmlTemplate, navigate, qLinks, qnum,round]);
   // setting deadline times
   const round1StartTime = new Date(process.env.REACT_APP_ROUND1_S);
   const round2StartTime = new Date(process.env.REACT_APP_ROUND2_S);
@@ -218,36 +217,38 @@ function Exam(props) {
     }
   };
 
-  // const checkSubmitted = async (n) => {
-  //   let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
-  //   let response = await fetch(url, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ round: round }),
-  //   });
-  //   let data = await response.json();
-  //   if(!data.success){
-  //     setOpen(true);
-  //     setErrorMessage("Code Submitted Already!");
-  //     setTimeout(()=>{navigate('/dashboard/user')},2000);
-  //   }
-  // };
+  const checkSubmitted = useCallback(async (n) => {
+    let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
+    let response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ round: round }),
+    });
+    let data = await response.json();
+    if(!data.success){
+      setMessage('');
+      setErrorMessage('');
+      handleSubmit();
+    }
+  },[round,handleSubmit]);
   useEffect(() => {
     setOpen(false);
     setErrorMessage("");
     setMessage("");
     const finalObj = `<html><head><style>${cssObj}</style></head>${htmlObj}</html>`;
     setUserObj(finalObj);
+    checkSubmitted();
     // check if the user has already submitted the test;
-    if (error) {
-      setOpen(true);
-      setErrorMessage(error);
-      setTimeout(() => {
-        navigate("/dashboard/user");
-      }, 2000);
-    }
+    // if (error) {
+    //   setOpen(true);
+    //   setErrorMessage(error);
+    //   qnum===0?setQnum((prev) => prev + 1):
+    //   setTimeout(() => {
+    //     navigate("/dashboard/user");
+    //   }, 2000);
+    // }
     // check if the test time is over
-    else if (
+    if (
       new Date().getTime() > getCurrentRoundEndTime() ||
       new Date().getTime() < getCurrentRoundStartTime()
     ) {
@@ -292,10 +293,10 @@ function Exam(props) {
       };
       getqArray();
     }
-  }, [htmlObj, cssObj, data, error, round]);
+  }, [htmlObj, cssObj, round,qnum]);
   return (
     <>
-      {(isLoading || error || loading) && (
+      {(loading2 || loading) && (
         <Stack>
           <Stack direction="row" spacing={2}>
             <Skeleton animation="wave" height="50vh" width="50%" />
@@ -305,7 +306,7 @@ function Exam(props) {
           <Skeleton animation="wave" height="30vh" />
         </Stack>
       )}
-      {!isLoading && !error && !loading && (
+      {!loading2 && !loading && (
         <Stack direction="column" alignItems="center">
           <Stack
             width="100%"

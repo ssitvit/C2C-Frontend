@@ -21,7 +21,7 @@ function Attended({user,index,round}) {
         headers:{
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userDetails,roundno:parseInt(round/10)%10,round})
+        body: JSON.stringify({userDetails,roundno:(parseInt(roundno)/10)%10,round})
     });
     let data = await response.json();
     if(data.success){

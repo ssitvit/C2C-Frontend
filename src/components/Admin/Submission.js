@@ -65,6 +65,7 @@ function Submission({ user, index, round }) {
     }
   };
   useEffect(() => {
+    console.log(user);
     let url = `https://${process.env.REACT_APP_BASE_URL}/admin/user/getUserDetails`;
     fetch(url, {
       method: "POST",
