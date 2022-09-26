@@ -21,13 +21,14 @@ function Attended({user,index,round}) {
         headers:{
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userDetails,roundno:parseInt(round),round})
+        body: JSON.stringify({userDetails,roundno:parseInt(round/10)%10,round})
     });
     let data = await response.json();
     if(data.success){
       setLoading(false);
       setOpen(true);
       setMessage(data.data.data);
+      console.log(data);
     }else{
       setLoading(false);
       setOpen(true);
@@ -54,7 +55,7 @@ function Attended({user,index,round}) {
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
         {" "}
-        {user[`round${round}`] ? "Present" : "Absent"}
+        {user[`round${parseInt(round/10)%10}`] ? "Present" : "Absent"}
       </Typography>
       <Button
         sx={{ fontFamily: "Audiowide" }}

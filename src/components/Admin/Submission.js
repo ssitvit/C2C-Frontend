@@ -75,7 +75,7 @@ function Submission({ user, index, round }) {
       .then((response) => response.json())
       .then((data) => {
         setInitialScore(
-          data.data.data[`round${parseInt(round / 10) % 10}Score`]
+          data.data.data[`round${parseInt(round)}Score`]
         );
       });
   }, [round, user.userDetails]);

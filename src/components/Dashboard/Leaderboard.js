@@ -1,24 +1,37 @@
 import { Stack } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
-function Leaderboard() {
-
+function Leaderboard(props) {
+  const round = props.round;
   const [array,setArray] = useState([]);
+  useEffect(() => {
+    let url = `https://${process.env.REACT_APP_BASE_URL}/user/getScoreSort`;
+    fetch(url,{
+      method:'POST',
+      credentials:'include',
+      cache:'reload',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ round: props.round })
+    }).then(res => res.json()).then(data => {
+      setArray(data.data.data);
+      console.log(array);
+    })
+  }, [props.round]);
   return (
     <div style={{ fontFamily: "Audiowide" }}>
-      {array.length===0?"Nothing to show yet":array.map((user) => {
-        return (
-          <Stack direction="row" key={user.id}>
-          <div style={{textAlign:"center",width:"100px"}}>
-            {user.id}
-          </div>
-          <div style={{width:"100%"}}>
-          {user.name}
-          </div>
-          </Stack>
-        );
-      })}
+      {array.length === 0
+        ? "Nothing to show yet :/"
+        : array.map((user,index) => {
+            return (
+              <Stack direction="row" key={user._id}>
+                <div style={{ textAlign: "center", width: "100px" }}>
+                  {index+1}
+                </div>
+                <div style={{ width: "100%" }}>{user.first_name} {user.last_name}</div>
+              </Stack>
+            );
+          })}
     </div>
   );
 }

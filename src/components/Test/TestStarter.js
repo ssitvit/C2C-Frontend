@@ -447,7 +447,7 @@ function TestStarter() {
         <Typography variant="h4" sx={{ fontFamily: "Audiowide",width:"100%",textAlign:"center" }}>
           Leaderboard {`for Round ${round}`}
         </Typography>
-        <Leaderboard />
+        <Leaderboard round={round}/>
       </Stack>
       
       {/* snackbar */}

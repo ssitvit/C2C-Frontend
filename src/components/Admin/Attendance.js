@@ -14,15 +14,13 @@ function Attendance() {
   const params = useParams();
   const round = params.id;
   const { data, isLoading, error } = useFetch(
-    `https://${process.env.REACT_APP_BASE_URL}/admin/getScoreSort`,
-    "POST",
-    JSON.stringify({ round: round>10?1:1 })
+    `https://${process.env.REACT_APP_BASE_URL}/admin/getAllUsersData`
   );
   useEffect(()=>{
     if(error){
       console.log(error);
     }
-  })
+  },[])
   return (
     <Stack spacing={4} style={{padding:"2rem",margin:"2rem"}}>
       {!isLoading &&
