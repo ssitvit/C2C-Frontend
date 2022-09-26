@@ -171,7 +171,7 @@ function Register() {
   // to check if there are any errors in
   const checkHandler = () => {
     for (let i in validationObj) {
-      if (validationObj[i].error === "true" || formik.values[i] === "") {
+      if (validationObj[i].error === true || formik.values[i] === "") {
         return false;
       }
     }

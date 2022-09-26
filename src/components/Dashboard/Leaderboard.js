@@ -20,11 +20,11 @@ function Leaderboard(props) {
     <div style={{ fontFamily: "Audiowide" }}>
       {array.length === 0
         ? "Nothing to show yet :/"
-        : array.map((user,index) => {
+        : array.slice(0,10).map((user,index) => {
             return (
               <Stack direction="row" key={user._id}>
                 <div style={{ textAlign: "center", width: "100px" }}>
-                  {index+1}
+                  {index+1}.
                 </div>
                 <div style={{ width: "100%" }}>{user.first_name} {user.last_name}</div>
               </Stack>
