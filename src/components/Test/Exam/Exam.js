@@ -228,9 +228,8 @@ function Exam(props) {
     if(!data.success){
       setMessage('');
       setErrorMessage('');
-      handleSubmit();
     }
-  },[round,handleSubmit]);
+  },[round]);
   useEffect(() => {
     setOpen(false);
     setErrorMessage("");
