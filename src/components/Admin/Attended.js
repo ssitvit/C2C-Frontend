@@ -61,6 +61,27 @@ function Attended({user,index,round}) {
         sx={{ fontFamily: "Audiowide" }}
         variant="contained"
         onClick={() => {
+          handleSubmit(user._id, round, false);
+        }}
+      >
+        {!loading && "MARK ABSENT"}
+        {loading && (
+          <>
+            <CircularProgress thickness={6} color="inherit" size="1.2rem" />
+            <Typography
+              variant="subtitle2"
+              style={{ marginLeft: "0.5rem" }}
+              sx={{ fontFamily: "Audiowide" }}
+            >
+              Marking Absent...
+            </Typography>
+          </>
+        )}
+      </Button>
+      <Button
+        sx={{ fontFamily: "Audiowide" }}
+        variant="contained"
+        onClick={() => {
           handleSubmit(user._id, round, true);
         }}
       >
