@@ -218,9 +218,11 @@ function Exam(props) {
   };
 
   const checkSubmitted = useCallback(async (n) => {
-    let url = `https://${process.env.REACT_APP_BASE_URL}/save/check`;
+    let url = `https://${process.env.REACT_APP_BASE_URL}/save/getsavedCode`;
     let response = await fetch(url, {
       method: "POST",
+      credentials:'include',
+      cache:'reload',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ round: round }),
     });
@@ -228,8 +230,9 @@ function Exam(props) {
     if(!data.success){
       setMessage('');
       setErrorMessage('');
+      handleSubmit();
     }
-  },[round]);
+  },[round,handleSubmit]);
   useEffect(() => {
     setOpen(false);
     setErrorMessage("");
