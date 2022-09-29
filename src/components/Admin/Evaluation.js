@@ -1,4 +1,13 @@
-import { Alert, Button, CircularProgress, Skeleton, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Skeleton,
+  Snackbar,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
@@ -21,29 +30,37 @@ function Evaluation() {
     "POST",
     JSON.stringify({ round: round })
   );
-  const handleThreshold = async (round)=>{
-    setErrorMessage('');
-    setMessage('');
+  const handleThreshold = async (round) => {
+    setErrorMessage("");
+    setMessage("");
     setLoading(true);
     let url = `https://${process.env.REACT_APP_BASE_URL}/admin/setThresold`;
-    fetch(url,{
-      method:'POST',
-      credentials:'include',
-      headers:{"Content-Type": "application/json"},
-      body:JSON.stringify({round: Math.floor(parseInt(round)/10),value: threshold})
-    }).then(response=>response.json()).then(data=>{
-      setLoading(false);
-      setOpen(true);
-      console.log(JSON.stringify({round: round,value: threshold}));
-      if(data.success){
-      setMessage("Successfully Commited");}else{setErrorMessage('Something Went Wrong!')}
+    fetch(url, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        round: round>=1?Math.floor(parseInt(round) / 10):parseInt(round),
+        value: parseInt(threshold),
+      }),
     })
-  }
+      .then((response) => response.json())
+      .then((data) => {
+        setLoading(false);
+        setOpen(true);
+        console.log(JSON.stringify({ round: round, value: threshold }));
+        if (data.success) {
+          setMessage("Successfully Commited");
+        } else {
+          setErrorMessage("Something Went Wrong!");
+        }
+      });
+  };
   useEffect(() => {
     if (error) {
       console.log("Error getting codes");
     }
-  },[error]);
+  }, [error]);
   return (
     <Stack spacing={4} style={{ padding: "2rem" }}>
       <Stack direction="row" spacing={4} alignItems="center">
@@ -54,15 +71,20 @@ function Evaluation() {
           }}
           label="Set Threshold"
           InputLabelProps={{
-            style: { color: "#fff",background:'black',paddingLeft:'10px',paddingRight:'10px' },
+            style: {
+              color: "#fff",
+              background: "black",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            },
           }}
           autoFocus
           sx={{
             input: {
               color: "white",
               borderRadius: "2px",
-              outline:'2px solid white',
-              "&:focus": { border: "none", },
+              outline: "2px solid white",
+              "&:focus": { border: "none" },
               "&:hover": { outlineColor: "orange" },
             },
           }}
@@ -70,18 +92,20 @@ function Evaluation() {
         <Button
           variant="contained"
           color="success"
-          onClick={()=>{handleThreshold(round)}}
+          onClick={() => {
+            handleThreshold(round);
+          }}
           sx={{ width: "fit-content" }}
         >
-          {!loading && 'Commit Threshold'}
+          {!loading && "Commit Threshold"}
           {loading && (
-          <>
-            <CircularProgress thickness={6} color="inherit" size="1.2rem" />
-            <Typography variant="subtitle2" style={{ marginLeft: "0.5rem" }}>
-              Commiting...
-            </Typography>
-          </>
-        )}
+            <>
+              <CircularProgress thickness={6} color="inherit" size="1.2rem" />
+              <Typography variant="subtitle2" style={{ marginLeft: "0.5rem" }}>
+                Commiting...
+              </Typography>
+            </>
+          )}
         </Button>
       </Stack>
       {!isLoading &&
