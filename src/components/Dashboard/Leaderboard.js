@@ -2,7 +2,6 @@ import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-import { Error, Propane } from "@mui/icons-material";
 function Leaderboard(props) {
   const [array, setArray] = useState([]);
   const {width,height} = useWindowSize();
@@ -25,7 +24,7 @@ function Leaderboard(props) {
     <div style={{ fontFamily: "Audiowide" }}>
       {/* {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
                           ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>} */}
-      {props.round==='3'&&<Confetti width={width} height={height} tweenDuration={5000}/>}
+      {props.round==='0'&&<Confetti width={width} height={height} tweenDuration={5000}/>}
       {array &&
         (array.length === 0
           ? "Nothing to show yet :/"
