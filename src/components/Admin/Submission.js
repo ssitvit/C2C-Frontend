@@ -107,11 +107,7 @@ function Submission({
     >
       <Typography sx={{ fontFamily: "Audiowide" }}>{index + 1}.</Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
-        {"..." +
-          user.userDetails.slice(
-            user.userDetails.length - 4,
-            user.userDetails.length
-          )}
+        {user.first_name + user.last_name}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
         {new Date(user.time).toISOString()}

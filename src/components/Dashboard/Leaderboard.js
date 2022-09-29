@@ -17,7 +17,6 @@ function Leaderboard(props) {
       .then((res) => res.json())
       .then((data) => {
         setArray(data.data.data);
-        console.log(array);
       });
   }, [props.round]);
   return (

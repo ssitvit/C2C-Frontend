@@ -74,7 +74,6 @@ function Login(props) {
         setError(data.data.error);
       }
     } catch (err) {
-      console.log(err);
       setLoading2(false);
       setOpen(true);
       setError("Something Went Wrong. Please try again later.");

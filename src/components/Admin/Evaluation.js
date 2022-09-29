@@ -48,10 +48,6 @@ function Evaluation() {
       .then((data) => {
         setLoading(false);
         setOpen(true);
-        console.log(JSON.stringify({
-          round: round>=10?Math.floor(parseInt(round) / 10):parseInt(round),
-          value: parseInt(threshold),
-        }));
         if (data.success) {
           setMessage("Successfully Commited");
         } else {

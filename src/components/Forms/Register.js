@@ -123,7 +123,6 @@ function Register() {
         setOpen(true);
       }
     } catch (err) {
-      console.log(err);
       setLoading(false);
       setOpen(true);
       setError("Something went wrong. Please try again later.");

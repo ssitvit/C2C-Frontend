@@ -25,7 +25,7 @@ export const useFetch = (url, method, body) => {
         setLoading(false);
       }
     };
-    try{if(url)fetchData()}catch(err){console.log(error);setError(err)};
+    try{if(url)fetchData()}catch(err){setError(err)};
   }, [url, method, body]);
   return { data, isLoading, error };
 };
