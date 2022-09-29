@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-import { Error } from "@mui/icons-material";
+import { Error, Propane } from "@mui/icons-material";
 function Leaderboard(props) {
   const [array, setArray] = useState([]);
   const {width,height} = useWindowSize();
@@ -13,7 +13,7 @@ function Leaderboard(props) {
       credentials: "include",
       cache: "no-cache",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ round: props.round }),
+      body: JSON.stringify({ round: props.round==='0'?3:props.round }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -25,7 +25,7 @@ function Leaderboard(props) {
     <div style={{ fontFamily: "Audiowide" }}>
       {/* {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
                           ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>} */}
-      {/* <Confetti width={width} height={height} tweenDuration={5000}/>*/}
+      {props.round==='3'&&<Confetti width={width} height={height} tweenDuration={5000}/>}
       {array &&
         (array.length === 0
           ? "Nothing to show yet :/"
