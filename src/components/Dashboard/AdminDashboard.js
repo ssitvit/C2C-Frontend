@@ -23,7 +23,7 @@ function AdminDashboard() {
     //check if logged in
     if ((data && !data.success) || error) {
       setOpen(true);
-      setErrorMessage(data.data.error);
+      setErrorMessage(error);
       setTimeout(()=>{navigate("/admin/login")},2000);
     }
   },[open,data,error,navigate]);
