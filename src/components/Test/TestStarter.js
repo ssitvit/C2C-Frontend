@@ -375,7 +375,8 @@ function TestStarter() {
                       </Typography>
                       {new Date().getTime() >
                       new Date(process.env.REACT_APP_RESULT3 )? (
-                        data.data.data.round3 ? (
+                        data.data.data.position!==-1
+                            ? (
                           <CheckCircleIcon color="success" />
                         ) : (
                           <CancelIcon color="error" />
