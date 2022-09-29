@@ -34,7 +34,7 @@ function Attended({ user, index, round }) {
       },
       body: JSON.stringify({
         userDetails,
-        roundno: Math.floor(roundno/10),
+        roundno: round>=10?Math.floor(roundno/10):round,
         round,
       }),
     });
@@ -69,11 +69,6 @@ function Attended({ user, index, round }) {
         round,
       }),
     });
-    console.log(JSON.stringify({
-      userDetails,
-      roundno: round>=10?Math.floor(roundno/10):round,
-      round,
-    }));
     let data = await response.json();
     if (data.success) {
       setLoading2(false);
