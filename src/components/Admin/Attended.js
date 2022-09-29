@@ -38,7 +38,6 @@ function Attended({ user, index, round }) {
         round,
       }),
     });
-    
     let data = await response.json();
     if (data.success) {
       setLoading(false);
@@ -65,7 +64,7 @@ function Attended({ user, index, round }) {
       },
       body: JSON.stringify({
         userDetails,
-        roundno: round>=10?Math.floor(roundno/10):round,
+        roundno: roundno>=10?Math.floor(roundno/10):roundno,
         round,
       }),
     });
@@ -78,7 +77,7 @@ function Attended({ user, index, round }) {
     } else {
       setLoading2(false);
       setOpen(true);
-      setMessage(data.data.error);
+      setErrorMessage(data.data.error);
     }
   };
   // https://c2c-backend.vercel.app/admin/user/getUserDetails
