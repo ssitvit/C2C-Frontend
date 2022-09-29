@@ -239,7 +239,7 @@ function TestStarter() {
               </Button>
             </>
           )}
-          {!isLoading && !(new Date().getTime()> getCurrentRoundStartTime() && (new Date()).getTime() < getCurrentRoundEndTime()) && (
+          {!isLoading && (
             <>
               <Button
                 color="warning"

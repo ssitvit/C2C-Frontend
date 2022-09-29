@@ -110,6 +110,7 @@ function Login(props) {
           fetch(url, {
             method: "POST",
             credentials: "include",
+            cache:'no-cache',
             // mode:"no-cors",
             headers: {
               'Accept': "application/json",
