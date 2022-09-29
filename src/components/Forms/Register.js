@@ -278,7 +278,7 @@ function Register() {
   // to fetch universities name from
   useEffect(() => {
     setFetching(true);
-    fetch("./universities.json")
+    fetch("/universities.json")
       .then((response) => response.json())
       .then((data) => {
         let array = [];

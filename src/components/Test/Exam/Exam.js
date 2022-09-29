@@ -48,6 +48,7 @@ function Exam(props) {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [value, setValue] = React.useState("1");
+  const [qText, setQtext] = useState('');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -86,7 +87,6 @@ function Exam(props) {
   const [cssObj, setCssObj] = useState(
     sessionStorage.getItem("css") ? sessionStorage.getItem("css") : cssTemplate
   );
-  const [userObj, setUserObj] = useState("");
 
   // const { data, isLoading, error } = useFetch(
   //   "https://c2c-backend.vercel.app/save/check",
@@ -145,6 +145,7 @@ function Exam(props) {
     }
     handleClose2();
   },[cssObj,cssTemplate,htmlObj, htmlTemplate, navigate, qLinks, qnum,round]);
+
   // setting deadline times
   const round1StartTime = new Date(process.env.REACT_APP_ROUND1_S);
   const round2StartTime = new Date(process.env.REACT_APP_ROUND2_S);
@@ -217,39 +218,63 @@ function Exam(props) {
     }
   };
 
-  const checkSubmitted = useCallback(async (n) => {
+  const checkSubmitted = useCallback(async (array) => {
     let url = `https://${process.env.REACT_APP_BASE_URL}/save/getsavedCode`;
     let response = await fetch(url, {
       method: "POST",
       credentials:'include',
       cache:'reload',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ round: round }),
+      body: JSON.stringify({ round: array.length>1?round*10+qnum:round }),
     });
     let data = await response.json();
-    if(!data.success){
+    console.log(JSON.stringify({ round: array.length>1?round*10+qnum:round }))
+    console.log(data);
+    console.log(array.length);
+    if(data.success){
       setMessage('');
       setErrorMessage('');
       handleSubmit();
     }
   },[round,handleSubmit]);
+
   useEffect(() => {
+
+    // clear snackbar
     setOpen(false);
     setErrorMessage("");
     setMessage("");
-    const finalObj = `<html><head><style>${cssObj}</style></head>${htmlObj}</html>`;
-    setUserObj(finalObj);
-    checkSubmitted();
-    // check if the user has already submitted the test;
-    // if (error) {
-    //   setOpen(true);
-    //   setErrorMessage(error);
-    //   qnum===0?setQnum((prev) => prev + 1):
-    //   setTimeout(() => {
-    //     navigate("/dashboard/user");
-    //   }, 2000);
-    // }
-    // check if the test time is over
+
+    // get the questions as image string base64
+    let getqArray = async () => {
+      let url = `https://${process.env.REACT_APP_BASE_URL}/save/getimage`;
+
+      let response = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ round: round }),
+      });
+
+      let data = await response.json();
+      if (data.success) {
+        setOpen(false);
+        setErrorMessage("");
+        setMessage("");
+        setLoading2(false);
+        checkSubmitted(data.data.data);
+        setQlinks(data.data.data);
+        setQtext(data.data.body);
+      } else {
+        setLoading2(false);
+        setErrorMessage("Could not fetch Question");
+        setOpen(true);
+        setTimeout(() => {
+          navigate("/dashboard/user");
+        }, 2000);
+      }
+    };
+    getqArray();
     if (
       new Date().getTime() > getCurrentRoundEndTime() ||
       new Date().getTime() < getCurrentRoundStartTime()
@@ -264,38 +289,8 @@ function Exam(props) {
       setOpen(false);
       //  to set the timer
       clearTimer(getDeadTime(parseInt(round)));
-      // get the questions as image string base64
-      let getqArray = async () => {
-        let url = `https://${process.env.REACT_APP_BASE_URL}/save/getimage`;
-
-        let response = await fetch(url, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ round: round }),
-        });
-
-        let data = await response.json();
-
-        if (data.success) {
-          setOpen(false);
-          setErrorMessage("");
-          setMessage("");
-          setLoading2(false);
-          setQlinks(data.data.data);
-          // checkSubmitted();
-        } else {
-          setLoading2(false);
-          setErrorMessage("Could not fetch Question");
-          setOpen(true);
-          setTimeout(() => {
-            navigate("/dashboard/user");
-          }, 2000);
-        }
-      };
-      getqArray();
     }
-  }, [htmlObj, cssObj, round,qnum]);
+  }, [round,qnum]);
   return (
     <>
       {(loading2 || loading) && (
@@ -386,7 +381,12 @@ function Exam(props) {
                       >
                         Question {qnum + 1}
                       </Typography>
-
+                      <Typography
+                        variant="h5"
+                        sx={{ color: "white", fontFamily: "Audiowide" }}
+                      >
+                        {qText}
+                      </Typography>
                       <Box
                         style={{
                           width: "100%",
@@ -448,7 +448,7 @@ function Exam(props) {
                     background: "white",
                     // margin: "2rem",
                   }}
-                  srcDoc={userObj}
+                  srcDoc={`<html><head><style>${cssObj}</style></head>${htmlObj}</html>`}
                   title="userResponse"
                 />
               </Stack>

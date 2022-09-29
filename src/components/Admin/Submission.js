@@ -9,9 +9,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import ReactCodeMirror from "@uiw/react-codemirror";
 import React, { useEffect, useState } from "react";
+import { color } from "@uiw/codemirror-extensions-color";
+import { githubDark } from "@uiw/codemirror-theme-github";
+import { html } from "@codemirror/lang-html";
+import { css } from "@codemirror/lang-css";
 
-function Submission({ user, index, round }) {
+function Submission({
+  user,
+  index,
+  round,
+  threshold,
+  setQualified,
+  qualified,
+}) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -24,6 +36,7 @@ function Submission({ user, index, round }) {
     boxShadow: 24,
     borderRadius: "2rem",
     p: 4,
+    overflow: "scroll",
   };
   const [initialScore, setInitialScore] = useState(0);
   const [score, setScore] = useState(0);
@@ -58,6 +71,7 @@ function Submission({ user, index, round }) {
       setLoading(false);
       setMessage(data.data.data);
       setOpen(true);
+      setInitialScore(score);
     } else {
       setLoading(false);
       setErrorMessage("Something went wrong. Please try again later.");
@@ -65,7 +79,6 @@ function Submission({ user, index, round }) {
     }
   };
   useEffect(() => {
-    console.log(user);
     let url = `https://${process.env.REACT_APP_BASE_URL}/admin/user/getUserDetails`;
     fetch(url, {
       method: "POST",
@@ -75,18 +88,16 @@ function Submission({ user, index, round }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setInitialScore(
-          data.data.data[`round${parseInt(round)}Score`]
-        );
-      });
-  }, [round, user.userDetails]);
+        setInitialScore(data.data.data[`round${parseInt(round)}Score`]);});
+  }, [round, user.userDetails, threshold]);
   return (
     <Stack
       sx={{
-        background: "white",
+        background: "rgb(255,255,255,0.6)",
         padding: "1.2rem",
-        borderRadius: "1rem",
-        boxShadow: "10px 10px 4px 0 #250101",
+        margin: "2rem",
+        borderRadius: "0.5rem",
+
         "&:hover": { boxShadow: "5px 5px 4px 0 #250101" },
       }}
       direction="row"
@@ -105,7 +116,9 @@ function Submission({ user, index, round }) {
       <Typography sx={{ fontFamily: "Audiowide" }}>
         {new Date(user.time).toISOString()}
       </Typography>
-      <Typography sx={{ fontFamily: "Audiowide" }}>Round Score: {initialScore}</Typography>
+      <Typography sx={{ fontFamily: "Audiowide" }}>
+        Round Score: {initialScore}
+      </Typography>
       <Button
         sx={{ fontFamily: "Audiowide" }}
         variant="contained"
@@ -139,6 +152,19 @@ function Submission({ user, index, round }) {
           </>
         )}
       </Button>
+      <Typography
+        sx={{
+          fontFamily: "Audiowide",
+          color: "white",
+          background: "black",
+          padding: "0.5rem",
+          borderRadius: "1rem",
+        }}
+      >
+        {initialScore >= parseInt(threshold)
+          ? "Qualified"
+          : "Not Qualified"}
+      </Typography>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={open}
@@ -159,6 +185,7 @@ function Submission({ user, index, round }) {
         onClose={handleClose2}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{ overflow: "scroll" }}
       >
         <Box sx={style}>
           <Typography
@@ -213,15 +240,41 @@ function Submission({ user, index, round }) {
               )}
             </Button>
           </Stack>
-
-          <Box>
-            <iframe
-              title="userresponse"
-              srcDoc={`<html><head><style>${user.css}</style></head>${user.html}</html>`}
-              sandbox="allow-scripts"
-              height="500px"
-              width="100%"
-            ></iframe>
+          <Box height="fit-content" width="100%">
+            <Box>
+              <Typography variant="body">HTML</Typography>
+              <ReactCodeMirror
+                className="outline"
+                value={user.html}
+                height="100%"
+                width="100%"
+                extensions={[html({ jsx: true }), color]}
+                placeholder="html"
+                theme={githubDark}
+              />
+            </Box>
+            <Box>
+              <Typography variant="body">CSS</Typography>
+              <ReactCodeMirror
+                className="outline"
+                value={user.css}
+                height="100%"
+                width="100%"
+                extensions={[css({ jsx: true }), color]}
+                placeholder="css"
+                theme={githubDark}
+              />
+            </Box>
+            <Box>
+              <Typography variant="body">OUTPUT</Typography>
+              <iframe
+                title="userresponse"
+                srcDoc={`<html><head><style>${user.css}</style></head>${user.html}</html>`}
+                sandbox="allow-scripts"
+                height="500px"
+                width="100%"
+              ></iframe>
+            </Box>
           </Box>
         </Box>
       </Modal>

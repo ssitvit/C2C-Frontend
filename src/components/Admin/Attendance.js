@@ -22,7 +22,7 @@ function Attendance() {
     }
   },[error])
   return (
-    <Stack spacing={4} style={{padding:"2rem",margin:"2rem"}}>
+    <Stack spacing={4} style={{padding:"2rem",minHeight:"100vh"}}>
       {!isLoading &&
         data &&
         data.data.data.map((user, index) => {

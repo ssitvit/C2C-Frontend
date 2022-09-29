@@ -22,14 +22,15 @@ import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
 
 import Leaderboard from "../Dashboard/Leaderboard";
-// import useWindowSize from "react-use/lib/useWindowSize";
-// import Confetti from "react-confetti";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 // import ExamIcon from "../Icons/ExamIcon";
 import Instructions from "./Exam/Instructions";
 import Socials from "../Home/Socials";
 
 function TestStarter() {
   const navigate = useNavigate();
+  const {width,height} = useWindowSize();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const style = {
@@ -261,9 +262,10 @@ function TestStarter() {
             onClose={handleClose}
             closeAfterTransition
           >
-            {/* <Confetti width={width} height={height} tweenDuration={2000}/> */}
             <Fade in={open}>
               <Box sx={style}>
+              {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
+                          ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>}
                 <Typography
                   id="transition-modal-title"
                   variant="h5"
@@ -305,14 +307,14 @@ function TestStarter() {
                       <Typography variant="h6">Round 1</Typography>
                       <Typography>
                         {new Date().getTime() >
-                        round1EndTime.getTime() + 60000 * 30
-                          ? data.data.data.round2
+                        new Date(process.env.REACT_APP_RESULT1
+                          )? data.data.data.round2
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
                       {new Date().getTime() >
-                      round1EndTime.getTime() + 60000 * 30 ? (
+                      new Date(process.env.REACT_APP_RESULT1 )? (
                         data.data.data.round2 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
@@ -336,14 +338,14 @@ function TestStarter() {
                       <Typography variant="h6">Round 2</Typography>
                       <Typography>
                         {new Date().getTime() >
-                        round2EndTime.getTime() + 60000 * 30
-                          ? data.data.data.round3
+                        new Date(process.env.REACT_APP_RESULT2
+                          )? data.data.data.round3
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
                       {new Date().getTime() >
-                      round2EndTime.getTime() + 60000 * 30 ? (
+                      new Date(process.env.REACT_APP_RESULT2 )? (
                         data.data.data.round3 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
@@ -368,14 +370,14 @@ function TestStarter() {
                       <Typography variant="h6">Round 3</Typography>
                       <Typography>
                         {new Date().getTime() >
-                        round3EndTime.getTime() + 60000 * 30
-                          ? data.data.data.round3
+                        new Date(process.env.REACT_APP_RESULT3
+                          )? data.data.data.round3
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
                       {new Date().getTime() >
-                      round3EndTime.getTime() + 60000 * 30 ? (
+                      new Date(process.env.REACT_APP_RESULT3 )? (
                         data.data.data.round3 ? (
                           <CheckCircleIcon color="success" />
                         ) : (
