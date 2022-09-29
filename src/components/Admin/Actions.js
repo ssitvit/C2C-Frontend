@@ -22,7 +22,6 @@ function Actions() {
       headers:{"Content-Type": "application/json"}
     })
   .then(response=>response.json()).then((data)=>{
-    console.log(data);
     setLoading(false);
     setOpen(true);
     if(data.success){

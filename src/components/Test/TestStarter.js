@@ -30,7 +30,6 @@ import Socials from "../Home/Socials";
 
 function TestStarter() {
   const navigate = useNavigate();
-  const {width,height} = useWindowSize();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const style = {
@@ -263,9 +262,7 @@ function TestStarter() {
             closeAfterTransition
           >
             <Fade in={open}>
-              <Box sx={style}>
-              {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
-                          ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>}
+              <Box sx={style}>      
                 <Typography
                   id="transition-modal-title"
                   variant="h5"
@@ -403,7 +400,6 @@ function TestStarter() {
             onClose={handleClose2}
             closeAfterTransition
           >
-            {/* <Confetti width={width} height={height} tweenDuration={2000}/> */}
             <Fade in={open2}>
               <Box sx={style}>
                 {data && (

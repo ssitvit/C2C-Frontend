@@ -45,7 +45,6 @@ function Attended({ user, index, round }) {
       setOpen(true);
       setMessage(data.data.data);
       setAttendance('Present');
-      console.log(data);
     } else {
       setLoading(false);
       setOpen(true);
@@ -70,16 +69,11 @@ function Attended({ user, index, round }) {
         round,
       }),
     });
-    console.log(JSON.stringify({
-      userDetails,
-      roundno: Math.floor(roundno/10),
-      round}));
     let data = await response.json();
     if (data.success) {
       setLoading2(false);
       setOpen(true);
       setMessage(data.data.data);
-      console.log(data);
       setAttendance('Absent');
     } else {
       setLoading2(false);
@@ -100,7 +94,6 @@ function Attended({ user, index, round }) {
       .then((response) => response.json())
       .then((data) => {
         setLoading3(true);
-        console.log(data);
         if(round>=10){
         setAttendance(data.data.data[`round${Math.floor(round/10)}`]?'Present':'Absent');}else{
           setAttendance(data.data.data[`round${round}`]?'Present':'Absent');

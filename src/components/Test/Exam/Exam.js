@@ -228,9 +228,6 @@ function Exam(props) {
       body: JSON.stringify({ round: array.length>1?round*10+qnum:round }),
     });
     let data = await response.json();
-    console.log(JSON.stringify({ round: array.length>1?round*10+qnum:round }))
-    console.log(data);
-    console.log(array.length);
     if(data.success){
       setMessage('');
       setErrorMessage('');

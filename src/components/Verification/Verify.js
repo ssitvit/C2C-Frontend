@@ -1,4 +1,4 @@
-import { Link, Stack, Typography } from "@mui/material";
+import { Button, Link, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -37,7 +37,7 @@ function Verify() {
       {loading && <CircularProgress />}
       {verified && !loading && (
         <>
-          <Typography>"Verified Successfully!"</Typography>
+          <Typography sx={{ fontFamily: "Audiowide"}} variant="h3">"Verified Successfully!"</Typography>
           <Link
             component="button"
             variant="filled"
@@ -45,7 +45,7 @@ function Verify() {
               navigate("/login");
             }}
           >
-            Login Now
+            <Button variant="contained" color="success" margin="2rem">Login Now</Button>
           </Link>
         </>
       )}

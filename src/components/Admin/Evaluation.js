@@ -36,7 +36,7 @@ function Evaluation() {
       setOpen(true);
       console.log(JSON.stringify({round: round,value: threshold}));
       if(data.success){
-      setMessage("Successfully Commited");}else{console.log(data);setErrorMessage('Something Went Wrong!')}
+      setMessage("Successfully Commited");}else{setErrorMessage('Something Went Wrong!')}
     })
   }
   useEffect(() => {

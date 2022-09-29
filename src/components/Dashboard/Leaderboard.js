@@ -1,14 +1,17 @@
 import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
+import { Error } from "@mui/icons-material";
 function Leaderboard(props) {
   const [array, setArray] = useState([]);
+  const {width,height} = useWindowSize();
   useEffect(() => {
     let url = `https://${process.env.REACT_APP_BASE_URL}/user/getScoreSort`;
     fetch(url, {
       method: "POST",
       credentials: "include",
-      cache: "reload",
+      cache: "no-cache",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ round: props.round }),
     })
@@ -20,6 +23,9 @@ function Leaderboard(props) {
   }, [props.round]);
   return (
     <div style={{ fontFamily: "Audiowide" }}>
+      {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
+                          ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>}
+      {/* <Confetti width={width} height={height} tweenDuration={5000}/>*/}
       {array &&
         (array.length === 0
           ? "Nothing to show yet :/"
@@ -41,7 +47,7 @@ function Leaderboard(props) {
                     }
                   </Stack>
                 );
-              } else if(user[`round${props.round}Score`]) {
+              } else {
                 return (
                   <Stack direction="row" key={user._id}>
                     <div style={{ textAlign: "center", width: "100px" }}>
