@@ -368,8 +368,8 @@ function TestStarter() {
                       <Typography>
                         {new Date().getTime() >
                         new Date(process.env.REACT_APP_RESULT3
-                          )? data.data.data.round3
-                            ? "Qualified"
+                          )? data.data.data.position!==-1
+                            ? data.data.data.position
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
