@@ -3,9 +3,13 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 function Verify() {
   const params = useParams();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const id = params.id;
   const token = params.token;
   const [verified, setVerified] = useState(true);
@@ -37,7 +41,7 @@ function Verify() {
       {loading && <CircularProgress />}
       {verified && !loading && (
         <>
-          <Typography sx={{ fontFamily: "Audiowide"}} variant="h3">"Verified Successfully!"</Typography>
+          <Typography sx={{ fontFamily: "Audiowide"}} variant={matches?"h3":"h6"}>"Verified Successfully!"</Typography>
           <Link
             component="button"
             variant="filled"
