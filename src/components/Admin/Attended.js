@@ -34,7 +34,7 @@ function Attended({ user, index, round }) {
       },
       body: JSON.stringify({
         userDetails,
-        roundno: round>=10?Math.floor(roundno/10):round,
+        roundno: roundno>=10?Math.floor(roundno/10):round,
         round,
       }),
     });
@@ -64,7 +64,7 @@ function Attended({ user, index, round }) {
       },
       body: JSON.stringify({
         userDetails,
-        roundno: roundno>=10?Math.floor(roundno/10):roundno,
+        roundno: roundno>=10?Math.floor(parseInt(roundno)/10):parseInt(roundno),
         round,
       }),
     });
@@ -108,6 +108,7 @@ function Attended({ user, index, round }) {
         borderRadius: "1rem",
         boxShadow: "10px 10px 4px 0 #250101",
         "&:hover": { boxShadow: "5px 5px 4px 0 #250101" },
+        width:'100%'
       }}
       direction="row"
       alignItems="center"
