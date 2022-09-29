@@ -443,7 +443,7 @@ function TestStarter() {
         color="white"
       >
         <Typography variant="h4" sx={{ fontFamily: "Audiowide",width:"100%",textAlign:"center" }}>
-          Leaderboard {`for Round ${round}`}
+          {round==='0'?'Results': 'Leaderboard'} {!round==='0'&&`for Round ${round}`}
         </Typography>
         <Leaderboard round={round}/>
       </Stack>
