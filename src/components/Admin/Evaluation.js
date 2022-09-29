@@ -40,7 +40,7 @@ function Evaluation() {
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        round: round>=1?Math.floor(parseInt(round) / 10):parseInt(round),
+        round: round>=10?Math.floor(parseInt(round) / 10):parseInt(round),
         value: parseInt(threshold),
       }),
     })
