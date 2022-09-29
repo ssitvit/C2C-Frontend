@@ -34,10 +34,11 @@ function Attended({ user, index, round }) {
       },
       body: JSON.stringify({
         userDetails,
-        roundno: roundno>=10?Math.floor(roundno/10):round,
+        roundno: roundno>=10?Math.floor(roundno/10):roundno,
         round,
       }),
     });
+    
     let data = await response.json();
     if (data.success) {
       setLoading(false);
@@ -92,7 +93,7 @@ function Attended({ user, index, round }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setLoading3(true);
+        setLoading3(false);
         if(round>=10){
         setAttendance(data.data.data[`round${Math.floor(round/10)}`]?'Present':'Absent');}else{
           setAttendance(data.data.data[`round${round}`]?'Present':'Absent');
@@ -101,15 +102,13 @@ function Attended({ user, index, round }) {
   },[round,user._id,attendance]);
   return (
     <Stack
-      sx={{
-        background: "rgb(255,255,255,0.6)",
-        padding: "1.2rem",
-        margin: "2rem",
-        borderRadius: "1rem",
-        boxShadow: "10px 10px 4px 0 #250101",
-        "&:hover": { boxShadow: "5px 5px 4px 0 #250101" },
-        width:'100%'
-      }}
+    sx={{
+      background: "rgb(255,255,255,0.6)",
+      padding: "1.2rem",
+      margin: "2rem",
+      borderRadius: "0.5rem",
+      "&:hover": { boxShadow: "5px 5px 4px 0 #250101" },
+    }}
       direction="row"
       alignItems="center"
       justifyContent="space-between"
@@ -129,13 +128,13 @@ function Attended({ user, index, round }) {
         </Typography>
         <Typography sx={{ fontFamily: "Audiowide" }}>
           {(!loading&&!loading2)&&attendance}
-          {(loading||loading2) && <CircularProgress thickness={6} color="inherit" size="1.2rem" />}
+          {(loading||loading2||loading3) && <CircularProgress thickness={6} color="inherit" size="1.2rem" />}
         </Typography>
         
       </Stack>
       <ButtonGroup>
         <Button
-          sx={{ fontFamily: "Audiowide" }}
+          sx={{ fontFamily: "Audiowide",width:'200px' }}
           variant="contained"
           color="error"
           onClick={() => {
@@ -157,7 +156,7 @@ function Attended({ user, index, round }) {
           )}
         </Button>
         <Button
-          sx={{ fontFamily: "Audiowide" }}
+          sx={{ fontFamily: "Audiowide",width:'200px' }}
           variant="contained"
           onClick={() => {
             handleSubmit(user._id, round, true);

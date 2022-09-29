@@ -30,13 +30,14 @@ function Submission({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "50%",
+    height:'80vh',
     bgcolor: "rgb(0,0,0,0.6)",
     color: "white",
     border: "2px solid #000",
     boxShadow: 24,
     borderRadius: "2rem",
     p: 4,
-    overflow: "scroll",
+    overflowY: "scroll"
   };
   const [initialScore, setInitialScore] = useState(0);
   const [score, setScore] = useState(0);
@@ -97,7 +98,6 @@ function Submission({
         padding: "1.2rem",
         margin: "2rem",
         borderRadius: "0.5rem",
-
         "&:hover": { boxShadow: "5px 5px 4px 0 #250101" },
       }}
       direction="row"
@@ -159,6 +159,8 @@ function Submission({
           background: "black",
           padding: "0.5rem",
           borderRadius: "1rem",
+          width:'200px',
+          textAlign: "center"
         }}
       >
         {initialScore >= parseInt(threshold)
@@ -185,7 +187,6 @@ function Submission({
         onClose={handleClose2}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        sx={{ overflow: "scroll" }}
       >
         <Box sx={style}>
           <Typography

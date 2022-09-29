@@ -23,8 +23,8 @@ function Leaderboard(props) {
   }, [props.round]);
   return (
     <div style={{ fontFamily: "Audiowide" }}>
-      {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
-                          ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>}
+      {/* {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
+                          ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>} */}
       {/* <Confetti width={width} height={height} tweenDuration={5000}/>*/}
       {array &&
         (array.length === 0
