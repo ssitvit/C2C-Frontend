@@ -117,11 +117,11 @@ function Submission({
       <Typography sx={{ fontFamily: "Audiowide",width:'100%' }}>
         {new Date(user.time).toDateString()}
       </Typography>
-      <Typography sx={{ fontFamily: "Audiowide" }}>
+      <Typography sx={{ fontFamily: "Audiowide",width:"100%" }}>
         Round Score: {initialScore}
       </Typography>
       <Button
-        sx={{ fontFamily: "Audiowide" }}
+        sx={{ fontFamily: "Audiowide",width:'100%' }}
         variant="contained"
         onClick={handleOpen2}
       >
@@ -136,7 +136,7 @@ function Submission({
       />
       {/* <TextField  label="Remarks"/> */}
       <Button
-        sx={{ fontFamily: "Audiowide" }}
+        sx={{ fontFamily: "Audiowide",width:'100%' }}
         variant="contained"
         color="error"
         onClick={() => {
@@ -160,8 +160,8 @@ function Submission({
           background: "black",
           padding: "0.5rem",
           borderRadius: "1rem",
-          width:'200px',
-          textAlign: "center"
+          width:'100%',
+          textAlign: "center", 
         }}
       >
         {initialScore >= parseInt(threshold)
