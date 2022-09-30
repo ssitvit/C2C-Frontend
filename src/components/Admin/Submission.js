@@ -40,6 +40,7 @@ function Submission({
     overflowY: "scroll"
   };
   const [initialScore, setInitialScore] = useState(0);
+  const [name,setName] = useState('');
   const [score, setScore] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
@@ -89,7 +90,10 @@ function Submission({
     })
       .then((response) => response.json())
       .then((data) => {
-        setInitialScore(data.data.data[`round${parseInt(round)}Score`]);});
+        setInitialScore(data.data.data[`round${parseInt(round)}Score`]);
+        setName(data.data.data["first_name"]+data.data.data["last_name"]);
+      });
+        
   }, [round, user.userDetails, threshold]);
   return (
     <Stack
@@ -107,7 +111,7 @@ function Submission({
     >
       <Typography sx={{ fontFamily: "Audiowide" }}>{index + 1}.</Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
-        {user.first_name + user.last_name}
+        {name}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
         {new Date(user.time).toISOString()}
