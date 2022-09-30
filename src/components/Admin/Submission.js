@@ -115,7 +115,7 @@ function Submission({
         {name}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
-        {new Date(user.time)}
+        {new Date(user.time).toDateString()}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
         Round Score: {initialScore}
