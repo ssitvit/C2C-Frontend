@@ -108,13 +108,14 @@ function Submission({
       alignItems="center"
       justifyContent="space-between"
       key={user._id}
+      spacing={2}
     >
       <Typography sx={{ fontFamily: "Audiowide" }}>{index + 1}.</Typography>
-      <Typography sx={{ fontFamily: "Audiowide" }}>
+      <Typography sx={{ fontFamily: "Audiowide",width:'100%' }}>
         {name}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
-        {new Date(user.time).toISOString()}
+        {new Date(user.time)}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
         Round Score: {initialScore}
