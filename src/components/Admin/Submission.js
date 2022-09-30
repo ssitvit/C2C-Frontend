@@ -114,7 +114,7 @@ function Submission({
       <Typography sx={{ fontFamily: "Audiowide",width:'100%' }}>
         {name}
       </Typography>
-      <Typography sx={{ fontFamily: "Audiowide" }}>
+      <Typography sx={{ fontFamily: "Audiowide",width:'100%' }}>
         {new Date(user.time).toDateString()}
       </Typography>
       <Typography sx={{ fontFamily: "Audiowide" }}>
