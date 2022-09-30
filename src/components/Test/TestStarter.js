@@ -303,14 +303,14 @@ function TestStarter() {
                     >
                       <Typography variant="h6">Round 1</Typography>
                       <Typography>
-                        {new Date().getTime() >
+                        {new Date().getTime() !==
                         new Date(process.env.REACT_APP_RESULT1
                           )? data.data.data.round2
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
-                      {new Date().getTime() >
+                      {new Date().getTime() !==
                       new Date(process.env.REACT_APP_RESULT1 )? (
                         data.data.data.round2 ? (
                           <CheckCircleIcon color="success" />
@@ -334,14 +334,14 @@ function TestStarter() {
                     >
                       <Typography variant="h6">Round 2</Typography>
                       <Typography>
-                        {new Date().getTime() >
+                        {new Date().getTime() !==
                         new Date(process.env.REACT_APP_RESULT2
                           )? data.data.data.round3
                             ? "Qualified"
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
-                      {new Date().getTime() >
+                      {new Date().getTime() !==
                       new Date(process.env.REACT_APP_RESULT2 )? (
                         data.data.data.round3 ? (
                           <CheckCircleIcon color="success" />
@@ -366,14 +366,14 @@ function TestStarter() {
                     >
                       <Typography variant="h6">Round 3</Typography>
                       <Typography>
-                        {new Date().getTime() >
+                        {new Date().getTime() !==
                         new Date(process.env.REACT_APP_RESULT3
                           )? data.data.data.position!==-1
                             ? data.data.data.position
                             : "Disqualified"
                           : "Yet to be disclosed"}
                       </Typography>
-                      {new Date().getTime() >
+                      {new Date().getTime() !==
                       new Date(process.env.REACT_APP_RESULT3 )? (
                         data.data.data.position!==-1
                             ? (

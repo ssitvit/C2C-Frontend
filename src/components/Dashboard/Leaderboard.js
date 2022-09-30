@@ -23,7 +23,7 @@ function Leaderboard(props) {
     <div style={{ fontFamily: "Audiowide" }}>
       {/* {new Date().getTime()>=new Date(process.env.REACT_APP_RESULT3
                           ).getTime()&&<Confetti width={width} height={height} tweenDuration={2000}/>} */}
-      {props.round==='0'&&<Confetti width={width} height={height} tweenDuration={5000}/>}
+      {/* {props.round==='0'&&<Confetti width={width} height={height} tweenDuration={5000}/>} */}
       {array &&
         (array.length === 0
           ? "Nothing to show yet :/"
