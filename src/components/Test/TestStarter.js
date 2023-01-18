@@ -80,12 +80,13 @@ function TestStarter() {
   const handleCloning = () => {
     setErrorMessage('');
     setMessage('');
-    if (data.data.data[`round${getCurrentRound()}`]) {
-      navigate(`exam/${getCurrentRound()}`);
-    } else {
-      setOpen3(true);
-      setErrorMessage("You are not allowed to give the test");
-    }
+    navigate(`exam/${getCurrentRound()}`);
+    // if (data.data.data[`round${getCurrentRound()}`]) {
+    //   navigate(`exam/${getCurrentRound()}`);
+    // } else {
+    //   setOpen3(true);
+    //   setErrorMessage("You are not allowed to give the test");
+    // }
   };
 
   // timer
@@ -251,7 +252,15 @@ function TestStarter() {
               </Button>
             </>
           )}
-
+          {/* hands-on */}
+          <Button
+                color="error"
+                variant="contained"
+                size="large"
+                onClick={handleOpen2}
+              >
+                Get a Hands-on Our Platform...
+              </Button>
           {/* MODAL */}
           {/* RESULTS */}
           <Modal

@@ -250,7 +250,7 @@ function Exam(props) {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ round: round }),
+      body: JSON.stringify({ round: 1 }),
       });
 
       let data = await response.json();
@@ -272,21 +272,26 @@ function Exam(props) {
       }
     };
     getqArray();
-    if (
-      new Date().getTime() > getCurrentRoundEndTime() ||
-      new Date().getTime() < getCurrentRoundStartTime()
-    ) {
-      setLoading(true);
-      setErrorMessage("Test Unavailable");
-      setOpen(true);
-      setTimeout(() => {
-        navigate("/dashboard/user");
-      }, 2000);
-    } else {
-      setOpen(false);
-      //  to set the timer
-      clearTimer(getDeadTime(parseInt(round)));
-    }
+    //uncomment this code for test validation
+    // if (
+    //   new Date().getTime() > getCurrentRoundEndTime() ||
+    //   new Date().getTime() < getCurrentRoundStartTime()
+    // ) {
+    //   setLoading(true);
+    //   setErrorMessage("Test Unavailable");
+    //   setOpen(true);
+    //   setTimeout(() => {
+    //     navigate("/dashboard/user");
+    //   }, 2000);
+    // } else {
+    //   setOpen(false);
+    //   //  to set the timer
+    //   clearTimer(getDeadTime(parseInt(round)));
+    // }
+    //general audience
+    setOpen(false);
+    //   //  to set the timer
+    //   clearTimer(getDeadTime(parseInt(round)));
   }, [round,qnum]);
   return (
     <>
@@ -382,7 +387,7 @@ function Exam(props) {
                         variant="h5"
                         sx={{ color: "white", fontFamily: "Audiowide" }}
                       >
-                        {qText}
+                        
                       </Typography>
                       <Box
                         style={{
