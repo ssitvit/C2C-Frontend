@@ -8,7 +8,7 @@ function Gravitas() {
         Do not forget to register on 
         </Typography>
         <Link className="gravitas-img" href="https://gravitas.vit.ac.in/">
-        <img  src="/Gravitas2.jpeg" alt="" height="100vh"/>
+        <img  src="/gravitas.jpeg" alt="" height="100vh"/>
         </Link>
     </div>
   )
